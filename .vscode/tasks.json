@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Decap Proxy Server",
+      "type": "shell",
+      "command": "npx decap-server",
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "group": "decap"
+      }
+    }
+  ]
+}

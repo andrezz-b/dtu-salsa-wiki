@@ -1,0 +1,176 @@
+---
+import Base from "@/layouts/Base.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { humanize, markdownify } from "@/lib/utils/textConverter";
+import { render } from "astro:content";
+import DifficultyAccordion from "@/layouts/helpers/DifficultyAccordion.astro";
+import StarRating from "@/layouts/helpers/StarRating.astro";
+import LiteYouTubeEmbed from "react-lite-youtube-embed";
+import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+
+export async function getStaticPaths() {
+  const moves = await getSinglePage("moves");
+  return moves.map((move) => ({
+    params: { slug: move.id },
+    props: { move },
+  }));
+}
+
+const { move } = Astro.props;
+const { Content } = await render(move);
+const {
+  title,
+  type,
+  level,
+  difficulty,
+  leader_difficulty,
+  follower_difficulty,
+  video_url,
+  related_concepts,
+  setup_moves,
+  exit_moves,
+  related_moves,
+  tags,
+} = move.data;
+
+// Helper to extract YouTube ID
+const getYoutubeId = (url: string) => {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
+};
+
+const videoId = getYoutubeId(video_url);
+---
+
+<Base title={title}>
+  <section class="section pt-7">
+    <div class="container">
+      <div class="row justify-center">
+        <article class="lg:col-10">
+          {/* Header */}
+          <div class="mb-8 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <span
+                class={`px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider ${
+                  level === "beginner"
+                    ? "bg-green-100 text-green-800"
+                    : level === "intermediate"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                }`}
+              >
+                {level}
+              </span>
+              <span
+                class="px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-bold uppercase tracking-wider dark:bg-gray-700 dark:text-gray-200"
+              >
+                {type}
+              </span>
+            </div>
+            <h1 set:html={markdownify(title)} class="h2 mb-4" />
+            <div class="flex justify-center mb-6">
+              <StarRating rating={difficulty} />
+            </div>
+          </div>
+
+          {/* Difficulty Accordion */}
+          <DifficultyAccordion
+            overallDifficulty={difficulty}
+            leaderDifficulty={leader_difficulty}
+            followerDifficulty={follower_difficulty}
+          />
+
+          {/* Content */}
+          <div class="content mb-10">
+            <Content />
+          </div>
+
+          {/* Video */}
+          {
+            videoId && (
+              <div class="mb-10 rounded-lg overflow-hidden shadow-lg">
+                <LiteYouTubeEmbed id={videoId} title={title} poster="maxresdefault" />
+              </div>
+            )
+          }
+
+          {/* Relations */}
+          <div class="bg-theme-light dark:bg-darkmode-theme-light p-6 rounded-lg">
+            <h3 class="h5 mb-4">Related Content</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              {
+                related_concepts && related_concepts.length > 0 && (
+                  <div>
+                    <h4 class="h6 mb-2 text-gray-500">Concepts</h4>
+                    <ul class="list-disc pl-5">
+                      {related_concepts.map((concept: string) => (
+                        <li>
+                          <a href={`/concepts/${concept}`} class="text-primary hover:underline">
+                            {humanize(concept)}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              }
+
+              {
+                setup_moves && setup_moves.length > 0 && (
+                  <div>
+                    <h4 class="h6 mb-2 text-gray-500">Setup Moves</h4>
+                    <ul class="list-disc pl-5">
+                      {setup_moves.map((m: string) => (
+                        <li>
+                          <a href={`/moves/${m}`} class="text-primary hover:underline">
+                            {humanize(m)}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              }
+
+              {
+                exit_moves && exit_moves.length > 0 && (
+                  <div>
+                    <h4 class="h6 mb-2 text-gray-500">Exit Moves</h4>
+                    <ul class="list-disc pl-5">
+                      {exit_moves.map((m: string) => (
+                        <li>
+                          <a href={`/moves/${m}`} class="text-primary hover:underline">
+                            {humanize(m)}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              }
+
+              {
+                related_moves && related_moves.length > 0 && (
+                  <div>
+                    <h4 class="h6 mb-2 text-gray-500">Similar Moves</h4>
+                    <ul class="list-disc pl-5">
+                      {related_moves.map((m: string) => (
+                        <li>
+                          <a href={`/moves/${m}`} class="text-primary hover:underline">
+                            {humanize(m)}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</Base>

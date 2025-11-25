@@ -25,20 +25,32 @@ const { banner, features } = homepage.data;
             class="mb-4 text-h3 lg:text-h1"
           />
           <p set:html={markdownify(banner.content)} class="mb-8" />
-          {
-            banner.button.enable && (
-              <a
-                class="btn btn-primary"
-                href={banner.button.link}
-                target={
-                  banner.button.link.startsWith("http") ? "_blank" : "_self"
-                }
-                rel="noopener"
-              >
-                {banner.button.label}
-              </a>
-            )
-          }
+          <div
+            data-search-trigger
+            class="cursor-pointer bg-white dark:bg-darkmode-theme-light rounded-lg px-4 py-3 shadow-lg flex items-center gap-2 max-w-lg mx-auto border border-border dark:border-darkmode-border hover:border-primary transition-colors mt-8"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-gray-500 dark:text-gray-400"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span class="text-gray-500 dark:text-gray-400"
+              >Search moves, concepts...</span
+            >
+            <span
+              class="ml-auto text-xs text-gray-400 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5"
+              >⌘K</span
+            >
+          </div>
         </div>
         {
           banner.image && (
@@ -81,7 +93,7 @@ const { banner, features } = homepage.data;
               <ul>
                 {feature.bulletpoints.map((bullet: string) => (
                   <li class="relative mb-4 pl-6">
-                    <FaCheck className={"absolute left-0 top-1.5"} />
+                    <FaCheck class:list={"absolute left-0 top-1.5"} />
                     <span set:html={markdownify(bullet)} />
                   </li>
                 ))}

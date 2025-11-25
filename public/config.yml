@@ -1,0 +1,45 @@
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "moves"
+    label: "Moves"
+    folder: "src/content/moves"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Aliases", name: "aliases", widget: "list", required: false}
+      - {label: "Type", name: "type", widget: "select", options: ["partner", "rueda", "shine", "solo", "dip", "trick"]}
+      - {label: "Difficulty", name: "difficulty", widget: "number", value_type: "float", min: 1, max: 5, step: 0.5}
+      - {label: "Leader Difficulty", name: "leader_difficulty", widget: "number", value_type: "float", min: 1, max: 5, step: 0.5, required: false}
+      - {label: "Follower Difficulty", name: "follower_difficulty", widget: "number", value_type: "float", min: 1, max: 5, step: 0.5, required: false}
+      - {label: "Level", name: "level", widget: "select", options: ["beginner", "intermediate", "advanced"]}
+
+      - {label: "Video URL", name: "video_url", widget: "string", required: false}
+      - {label: "Related Concepts", name: "related_concepts", widget: "relation", collection: "concepts", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Setup Moves", name: "setup_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Exit Moves", name: "exit_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Related Moves", name: "related_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Tags", name: "tags", widget: "list", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "concepts"
+    label: "Concepts"
+    folder: "src/content/concepts"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Type", name: "type", widget: "select", options: ["hold", "position", "technique", "musicality"]}
+      - {label: "Level", name: "level", widget: "select", options: ["beginner", "intermediate", "advanced"]}
+      - {label: "Video URL", name: "video_url", widget: "string", required: false}
+      - {label: "Related Concepts", name: "related_concepts", widget: "relation", collection: "concepts", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Related Moves", name: "related_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Body", name: "body", widget: "markdown"}

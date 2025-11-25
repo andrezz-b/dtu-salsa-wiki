@@ -1,0 +1,101 @@
+---
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+
+interface Props {
+  leaderDifficulty?: number;
+  followerDifficulty?: number;
+  overallDifficulty: number;
+}
+
+const { leaderDifficulty, followerDifficulty, overallDifficulty } = Astro.props;
+---
+
+<div
+  class="difficulty-accordion border border-border dark:border-darkmode-border rounded-lg mb-6 overflow-hidden"
+>
+  <button
+    class="accordion-trigger w-full flex items-center justify-between p-4 bg-theme-light dark:bg-darkmode-theme-light hover:bg-gray-100 dark:hover:bg-darkmode-theme-dark transition-colors"
+    aria-expanded="false"
+  >
+    <div class="flex items-center gap-3">
+      <span class="font-bold">Difficulty</span>
+      <span
+        class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
+      >
+        {overallDifficulty} / 5
+      </span>
+    </div>
+    <span class="icon-chevron-down"><FaChevronDown /></span>
+    <span class="icon-chevron-up hidden"><FaChevronUp /></span>
+  </button>
+
+  <div
+    class="accordion-content hidden p-4 bg-white dark:bg-darkmode-body border-t border-border dark:border-darkmode-border"
+  >
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <span class="block text-sm text-gray-500 dark:text-gray-400 mb-1"
+          >Leader</span
+        >
+        <div class="flex items-center gap-2">
+          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+            <div
+              class="bg-blue-600 h-2.5 rounded-full"
+              style={`width: ${((leaderDifficulty || overallDifficulty) / 5) * 100}%`}
+            >
+            </div>
+          </div>
+          <span class="text-sm font-medium"
+            >{leaderDifficulty || overallDifficulty}</span
+          >
+        </div>
+      </div>
+      <div>
+        <span class="block text-sm text-gray-500 dark:text-gray-400 mb-1"
+          >Follower</span
+        >
+        <div class="flex items-center gap-2">
+          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+            <div
+              class="bg-pink-600 h-2.5 rounded-full"
+              style={`width: ${((followerDifficulty || overallDifficulty) / 5) * 100}%`}
+            >
+            </div>
+          </div>
+          <span class="text-sm font-medium"
+            >{followerDifficulty || overallDifficulty}</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupAccordions() {
+    const accordions = document.querySelectorAll(".difficulty-accordion");
+
+    accordions.forEach((accordion) => {
+      const trigger = accordion.querySelector(".accordion-trigger");
+      const content = accordion.querySelector(".accordion-content");
+      const iconDown = accordion.querySelector(".icon-chevron-down");
+      const iconUp = accordion.querySelector(".icon-chevron-up");
+
+      if (trigger && content && iconDown && iconUp) {
+        trigger.addEventListener("click", () => {
+          const isExpanded = trigger.getAttribute("aria-expanded") === "true";
+          trigger.setAttribute("aria-expanded", (!isExpanded).toString());
+          content.classList.toggle("hidden");
+          iconDown.classList.toggle("hidden");
+          iconUp.classList.toggle("hidden");
+        });
+      }
+    });
+  }
+
+  // Run on initial load
+  setupAccordions();
+
+  // Run on view transitions navigation
+  document.addEventListener("astro:page-load", setupAccordions);
+</script>

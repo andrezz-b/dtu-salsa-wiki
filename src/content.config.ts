@@ -10,41 +10,80 @@ const commonFields = {
   draft: z.boolean(),
 };
 
-// Post collection schema
-const blogCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/blog" }),
+// Moves collection schema
+const movesCollection = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/moves" }),
   schema: z.object({
     title: z.string(),
-    meta_title: z.string().optional(),
-    description: z.string().optional(),
-    date: z.date().optional(),
-    image: z.string().optional(),
-    author: z.string().default("Admin"),
-    categories: z.array(z.string()).default(["others"]),
-    tags: z.array(z.string()).default(["others"]),
+    aliases: z.array(z.string()).optional(),
+    type: z.enum(["partner", "rueda", "shine", "solo", "dip", "trick"]),
+    difficulty: z.number().min(1).max(5).step(0.5),
+    leader_difficulty: z.number().min(1).max(5).step(0.5).optional(),
+    follower_difficulty: z.number().min(1).max(5).step(0.5).optional(),
+    level: z.enum(["beginner", "intermediate", "advanced"]),
+    video_url: z.string().url().optional(),
+    related_concepts: z.array(z.string()).optional(), // References handled by slug in frontmatter usually, or use reference() if available but simple string array is safer for now with basic loader
+    setup_moves: z.array(z.string()).optional(),
+    exit_moves: z.array(z.string()).optional(),
+    related_moves: z.array(z.string()).optional(),
+    tags: z.array(z.string()).default([]),
+    created_date: z.date().optional(),
+    updated_date: z.date().optional(),
     draft: z.boolean().optional(),
   }),
 });
 
-// Author collection schema
-const authorsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/authors" }),
+// Concepts collection schema
+const conceptsCollection = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/concepts" }),
   schema: z.object({
-    ...commonFields,
-    social: z
-      .array(
-        z
-          .object({
-            name: z.string().optional(),
-            icon: z.string().optional(),
-            link: z.string().optional(),
-          })
-          .optional(),
-      )
-      .optional(),
+    title: z.string(),
+    type: z.enum(["hold", "position", "technique", "musicality"]),
+    level: z.enum(["beginner", "intermediate", "advanced"]),
+    video_url: z.string().url().optional(),
+    related_concepts: z.array(z.string()).optional(),
+    related_moves: z.array(z.string()).optional(),
+    created_date: z.date().optional(),
+    updated_date: z.date().optional(),
     draft: z.boolean().optional(),
   }),
 });
+
+// Post collection schema (Legacy - Disabled)
+// const blogCollection = defineCollection({
+//   loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/blog" }),
+//   schema: z.object({
+//     title: z.string(),
+//     meta_title: z.string().optional(),
+//     description: z.string().optional(),
+//     date: z.date().optional(),
+//     image: z.string().optional(),
+//     author: z.string().default("Admin"),
+//     categories: z.array(z.string()).default(["others"]),
+//     tags: z.array(z.string()).default(["others"]),
+//     draft: z.boolean().optional(),
+//   }),
+// });
+
+// Author collection schema (Legacy - Disabled)
+// const authorsCollection = defineCollection({
+//   loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/authors" }),
+//   schema: z.object({
+//     ...commonFields,
+//     social: z
+//       .array(
+//         z
+//           .object({
+//             name: z.string().optional(),
+//             icon: z.string().optional(),
+//             link: z.string().optional(),
+//           })
+//           .optional(),
+//       )
+//       .optional(),
+//     draft: z.boolean().optional(),
+//   }),
+// });
 
 // Pages collection schema
 const pagesCollection = defineCollection({
@@ -144,8 +183,10 @@ const testimonialSectionCollection = defineCollection({
 export const collections = {
   // Pages
   homepage: homepageCollection,
-  blog: blogCollection,
-  authors: authorsCollection,
+  // blog: blogCollection,
+  // authors: authorsCollection,
+  moves: movesCollection,
+  concepts: conceptsCollection,
   pages: pagesCollection,
   about: aboutCollection,
   contact: contactCollection,

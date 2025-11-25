@@ -51,15 +51,14 @@ try {
   }
 
   // create json files
-  fs.writeFileSync(
-    `${JSON_FOLDER}/posts.json`,
-    JSON.stringify(getData(BLOG_FOLDER, 2)),
-  );
+  const moves = getData("src/content/moves", 2);
+  const concepts = getData("src/content/concepts", 2);
+
+  fs.writeFileSync(`${JSON_FOLDER}/moves.json`, JSON.stringify(moves));
+  fs.writeFileSync(`${JSON_FOLDER}/concepts.json`, JSON.stringify(concepts));
 
   // merger json files for search
-  const postsPath = new URL(`../${JSON_FOLDER}/posts.json`, import.meta.url);
-  const posts = JSON.parse(fs.readFileSync(postsPath, "utf8"));
-  const search = [...posts];
+  const search = [...moves, ...concepts];
   fs.writeFileSync(`${JSON_FOLDER}/search.json`, JSON.stringify(search));
 } catch (err) {
   console.error(err);

@@ -83,7 +83,9 @@ module.exports = plugin.withOptions(() => {
     // Offsets
     addComponents(
       [0, ...columns.slice(0, -1)].map((num) => ({
-        [`.offset-${num}`]: { marginLeft: `${(100 / gridColumns) * num}%` },
+        [`.offset-${num}`]: {
+          marginLeft: `${(100 / gridColumns) * num}%`,
+        },
       })),
       { respectImportant },
     );

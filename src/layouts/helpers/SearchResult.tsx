@@ -10,6 +10,9 @@ export interface ISearchItem {
     description?: string;
     categories?: string[];
     tags?: string[];
+    level?: string;
+    difficulty?: number;
+    type?: string;
   };
   content: string;
 }
@@ -24,6 +27,9 @@ export interface ISearchGroup {
       description?: string;
       categories?: string[];
       tags?: string[];
+      level?: string;
+      difficulty?: number;
+      type?: string;
     };
     content: string;
   }[];
@@ -166,35 +172,39 @@ const SearchResult = ({
                           )}
                         </p>
                       )}
+
+                      <div className="flex flex-wrap gap-2 text-xs mt-1">
+                        {item.frontmatter.level && (
+                          <span
+                            className={`px-2 py-0.5 rounded ${
+                              item.frontmatter.level === "beginner"
+                                ? "bg-green-100 text-green-800"
+                                : item.frontmatter.level === "intermediate"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {item.frontmatter.level}
+                          </span>
+                        )}
+                        {item.frontmatter.type && (
+                          <span className="px-2 py-0.5 rounded bg-gray-100 text-gray-800">
+                            {item.frontmatter.type}
+                          </span>
+                        )}
+                        {item.frontmatter.difficulty && (
+                          <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800">
+                            Diff: {item.frontmatter.difficulty}
+                          </span>
+                        )}
+                      </div>
+
                       {item.content && (
                         <p className="search-result-item-content">
                           {matchContent(item.content, searchString)}
                         </p>
                       )}
                       <div className="search-result-item-taxonomies">
-                        {item.frontmatter.categories && (
-                          <div className="mr-2">
-                            <svg
-                              width="14"
-                              height="14"
-                              fill="currentColor"
-                              viewBox="0 0 16 16"
-                            >
-                              <path d="M11 0H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2 2 2 0 0 0 2-2V4a2 2 0 0 0-2-2 2 2 0 0 0-2-2zm2 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1V3zM2 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2z"></path>
-                            </svg>
-                            {item.frontmatter.categories.map(
-                              (category, index) => (
-                                <span key={category}>
-                                  {matchUnderline(category, searchString)}
-                                  {item.frontmatter.categories &&
-                                    index !==
-                                      item.frontmatter.categories.length -
-                                        1 && <>, </>}
-                                </span>
-                              ),
-                            )}
-                          </div>
-                        )}
                         {item.frontmatter.tags && (
                           <div className="mr-2">
                             <svg
@@ -245,7 +255,8 @@ const SearchResult = ({
                 ></path>
               </svg>
               <p className="mt-4">
-                No results for &quot;<strong>{searchString}</strong>&quot;
+                No results for &quot;
+                <strong>{searchString}</strong>&quot;
               </p>
             </div>
           )}

@@ -1,0 +1,35 @@
+---
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
+
+interface Props {
+  rating: number;
+  max?: number;
+}
+
+const { rating, max = 5 } = Astro.props;
+
+const stars = [];
+for (let i = 1; i <= max; i++) {
+  if (rating >= i) {
+    stars.push("full");
+  } else if (rating >= i - 0.5) {
+    stars.push("half");
+  } else {
+    stars.push("empty");
+  }
+}
+---
+
+<div class="flex items-center gap-1">
+  {
+    stars.map((type) =>
+      type === "full" ? (
+        <FaStar className="text-yellow-400" />
+      ) : type === "half" ? (
+        <FaStarHalfAlt className="text-yellow-400" />
+      ) : (
+        <FaRegStar className="text-gray-300 dark:text-gray-600" />
+      ),
+    )
+  }
+</div>
