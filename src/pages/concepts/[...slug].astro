@@ -48,7 +48,7 @@ const resolvedRelatedConcepts = related_concepts ? await getEntries(related_conc
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Sidebar (Left on Desktop, Bottom on Mobile) */}
         <div class="lg:col-span-3 order-2 lg:order-1">
-          <div class="lg:sticky lg:top-24 h-auto lg:h-[calc(100vh-8rem)]">
+          <div class="h-auto">
             <ExplorerSidebar
               relatedMoves={resolvedRelatedMoves}
               relatedConcepts={resolvedRelatedConcepts}
