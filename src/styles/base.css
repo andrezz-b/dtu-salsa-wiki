@@ -1,5 +1,6 @@
 html {
   @apply text-base-sm md:text-base;
+  overflow-y: scroll;
 }
 
 body {

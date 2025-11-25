@@ -5,12 +5,12 @@
       "url": "/"
     },
     {
-      "name": "About",
-      "url": "/about"
+      "name": "Moves",
+      "url": "/moves"
     },
     {
-      "name": "Elements",
-      "url": "/elements"
+      "name": "Concepts",
+      "url": "/concepts"
     },
     {
       "name": "Pages",
@@ -46,12 +46,12 @@
   ],
   "footer": [
     {
-      "name": "Elements",
-      "url": "/elements"
+      "name": "Moves",
+      "url": "/moves"
     },
     {
-      "name": "Privacy Policy",
-      "url": "/privacy-policy"
+      "name": "Concepts",
+      "url": "/concepts"
     }
   ]
 }

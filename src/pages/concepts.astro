@@ -1,0 +1,18 @@
+---
+import Base from "@/layouts/Base.astro";
+import PageHeader from "@/partials/PageHeader.astro";
+import ConceptsBrowse from "@/layouts/helpers/ConceptsBrowse";
+
+const title = "Browse Concepts";
+const meta_title = "Browse Salsa Concepts";
+const description =
+  "Explore our comprehensive library of salsa concepts, from techniques to musicality.";
+---
+
+<Base title={title} meta_title={meta_title} description={description}>
+  <section class="section pt-6">
+    <div class="container">
+      <ConceptsBrowse client:load />
+    </div>
+  </section>
+</Base>
