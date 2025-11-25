@@ -23,10 +23,10 @@ collections:
       - {label: "Level", name: "level", widget: "select", options: ["beginner", "intermediate", "advanced"]}
 
       - {label: "Video URL", name: "video_url", widget: "string", required: false}
-      - {label: "Related Concepts", name: "related_concepts", widget: "relation", collection: "concepts", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
-      - {label: "Setup Moves", name: "setup_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
-      - {label: "Exit Moves", name: "exit_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
-      - {label: "Related Moves", name: "related_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Related Concepts", name: "related_concepts", widget: "relation", collection: "concepts", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Setup Moves", name: "setup_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Exit Moves", name: "exit_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Related Moves", name: "related_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], multiple: true, required: false}
       - {label: "Tags", name: "tags", widget: "list", required: false}
       - {label: "Body", name: "body", widget: "markdown"}
 
@@ -40,6 +40,6 @@ collections:
       - {label: "Type", name: "type", widget: "select", options: ["hold", "position", "technique", "musicality"]}
       - {label: "Level", name: "level", widget: "select", options: ["beginner", "intermediate", "advanced"]}
       - {label: "Video URL", name: "video_url", widget: "string", required: false}
-      - {label: "Related Concepts", name: "related_concepts", widget: "relation", collection: "concepts", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
-      - {label: "Related Moves", name: "related_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "title", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Related Concepts", name: "related_concepts", widget: "relation", collection: "concepts", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], multiple: true, required: false}
+      - {label: "Related Moves", name: "related_moves", widget: "relation", collection: "moves", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], multiple: true, required: false}
       - {label: "Body", name: "body", widget: "markdown"}
