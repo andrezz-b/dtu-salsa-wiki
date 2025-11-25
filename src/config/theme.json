@@ -6,7 +6,11 @@
         "body": "#fff",
         "border": "#eaeaea",
         "light": "#f6f6f6",
-        "dark": "#040404"
+        "dark": "#040404",
+        "accent": "#A388F5",
+        "level_beginner": "#22c55e",
+        "level_intermediate": "#eab308",
+        "level_advanced": "#ef4444"
       },
       "text_color": {
         "text": "#444444",
@@ -19,8 +23,12 @@
         "primary": "#fff",
         "body": "#1c1c1c",
         "border": "#3E3E3E",
-        "light": "#222222",
-        "dark": "#fff"
+        "light": "#222222", 
+        "dark": "#fff",
+        "accent": "#A388F5",
+        "level_beginner": "#4ade80",
+        "level_intermediate": "#facc15",
+        "level_advanced": "#f87171"
       },
       "text_color": {
         "text": "#B4AFB6",

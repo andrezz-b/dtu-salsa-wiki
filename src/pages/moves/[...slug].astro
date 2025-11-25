@@ -1,10 +1,10 @@
 ---
 import Base from "@/layouts/Base.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
-import { humanize, markdownify } from "@/lib/utils/textConverter";
-import { render } from "astro:content";
+import { render, getEntries } from "astro:content";
 import DifficultyAccordion from "@/layouts/helpers/DifficultyAccordion.astro";
-import StarRating from "@/layouts/helpers/StarRating.astro";
+import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
+import Breadcrumbs from "@/layouts/helpers/Breadcrumbs.astro";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 
@@ -34,7 +34,7 @@ const {
 } = move.data;
 
 // Helper to extract YouTube ID
-const getYoutubeId = (url: string) => {
+const getYoutubeId = (url: string | undefined) => {
   if (!url) return null;
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
@@ -42,23 +42,50 @@ const getYoutubeId = (url: string) => {
 };
 
 const videoId = getYoutubeId(video_url);
+
+// Resolve references
+const resolvedRelatedConcepts = related_concepts ? await getEntries(related_concepts) : [];
+const resolvedSetupMoves = setup_moves ? await getEntries(setup_moves) : [];
+const resolvedExitMoves = exit_moves ? await getEntries(exit_moves) : [];
+const resolvedRelatedMoves = related_moves ? await getEntries(related_moves) : [];
 ---
 
 <Base title={title}>
   <section class="section pt-7">
     <div class="container">
-      <div class="row justify-center">
-        <article class="lg:col-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        {/* Sidebar (Left on Desktop, Bottom on Mobile) */}
+        <div class="lg:col-span-3 order-2 lg:order-1">
+          <div class="lg:sticky lg:top-24 h-auto lg:h-[calc(100vh-8rem)]">
+            <ExplorerSidebar
+              setupMoves={resolvedSetupMoves}
+              relatedMoves={resolvedRelatedMoves}
+              exitMoves={resolvedExitMoves}
+              relatedConcepts={resolvedRelatedConcepts}
+            />
+          </div>
+        </div>
+
+        {/* Main Content (Right on Desktop, Top on Mobile) */}
+        <article class="lg:col-span-9 order-1 lg:order-2">
           {/* Header */}
-          <div class="mb-8 text-center">
-            <div class="flex items-center justify-center gap-3 mb-4">
+          <div class="mb-4">
+            <Breadcrumbs
+              className="mb-4"
+              parts={[
+                { label: "Home", href: "/" },
+                { label: "Moves", href: "/moves" },
+                { label: title },
+              ]}
+            />
+            <div class="flex items-center gap-3 mb-4">
               <span
                 class={`px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider ${
                   level === "beginner"
-                    ? "bg-green-100 text-green-800"
+                    ? "bg-level-beginner/10 text-level-beginner dark:bg-darkmode-level-beginner/10 dark:text-darkmode-level-beginner"
                     : level === "intermediate"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-red-100 text-red-800"
+                      ? "bg-level-intermediate/10 text-level-intermediate dark:bg-darkmode-level-intermediate/10 dark:text-darkmode-level-intermediate"
+                      : "bg-level-advanced/10 text-level-advanced dark:bg-darkmode-level-advanced/10 dark:text-darkmode-level-advanced"
                 }`}
               >
                 {level}
@@ -69,106 +96,32 @@ const videoId = getYoutubeId(video_url);
                 {type}
               </span>
             </div>
-            <h1 set:html={markdownify(title)} class="h2 mb-4" />
-            <div class="flex justify-center mb-6">
-              <StarRating rating={difficulty} />
-            </div>
+            <h1 class="h1">
+              {title}
+            </h1>
           </div>
 
           {/* Difficulty Accordion */}
           <DifficultyAccordion
-            overallDifficulty={difficulty}
             leaderDifficulty={leader_difficulty}
             followerDifficulty={follower_difficulty}
+            overallDifficulty={difficulty}
           />
 
           {/* Content */}
-          <div class="content mb-10">
+          <div
+            class="content mb-10 prose-a:text-accent prose-a:no-underline hover:prose-a:underline"
+          >
             <Content />
           </div>
-
           {/* Video */}
           {
             videoId && (
               <div class="mb-10 rounded-lg overflow-hidden shadow-lg">
-                <LiteYouTubeEmbed id={videoId} title={title} poster="maxresdefault" />
+                <LiteYouTubeEmbed client:idle id={videoId} title={title} poster="maxresdefault" />
               </div>
             )
           }
-
-          {/* Relations */}
-          <div class="bg-theme-light dark:bg-darkmode-theme-light p-6 rounded-lg">
-            <h3 class="h5 mb-4">Related Content</h3>
-            <div class="grid md:grid-cols-2 gap-6">
-              {
-                related_concepts && related_concepts.length > 0 && (
-                  <div>
-                    <h4 class="h6 mb-2 text-gray-500">Concepts</h4>
-                    <ul class="list-disc pl-5">
-                      {related_concepts.map((concept: string) => (
-                        <li>
-                          <a href={`/concepts/${concept}`} class="text-primary hover:underline">
-                            {humanize(concept)}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              }
-
-              {
-                setup_moves && setup_moves.length > 0 && (
-                  <div>
-                    <h4 class="h6 mb-2 text-gray-500">Setup Moves</h4>
-                    <ul class="list-disc pl-5">
-                      {setup_moves.map((m: string) => (
-                        <li>
-                          <a href={`/moves/${m}`} class="text-primary hover:underline">
-                            {humanize(m)}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              }
-
-              {
-                exit_moves && exit_moves.length > 0 && (
-                  <div>
-                    <h4 class="h6 mb-2 text-gray-500">Exit Moves</h4>
-                    <ul class="list-disc pl-5">
-                      {exit_moves.map((m: string) => (
-                        <li>
-                          <a href={`/moves/${m}`} class="text-primary hover:underline">
-                            {humanize(m)}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              }
-
-              {
-                related_moves && related_moves.length > 0 && (
-                  <div>
-                    <h4 class="h6 mb-2 text-gray-500">Similar Moves</h4>
-                    <ul class="list-disc pl-5">
-                      {related_moves.map((m: string) => (
-                        <li>
-                          <a href={`/moves/${m}`} class="text-primary hover:underline">
-                            {humanize(m)}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              }
-            </div>
-          </div>
         </article>
       </div>
     </div>

@@ -1,0 +1,223 @@
+---
+import { FaChevronRight, FaRunning, FaLightbulb } from "react-icons/fa";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  setupMoves?: CollectionEntry<"moves">[];
+  exitMoves?: CollectionEntry<"moves">[];
+  relatedMoves?: CollectionEntry<"moves">[];
+  // usedInMoves?: CollectionEntry<"moves">[]; // Disabled for now
+  relatedConcepts?: CollectionEntry<"concepts">[];
+}
+
+const {
+  setupMoves = [],
+  exitMoves = [],
+  relatedMoves = [],
+  // usedInMoves = [],
+  relatedConcepts = [],
+} = Astro.props;
+
+const hasConnections =
+  setupMoves.length > 0 ||
+  exitMoves.length > 0 ||
+  relatedMoves.length > 0 ||
+  relatedConcepts.length > 0;
+
+// Helper to determine level color for the dot
+const getLevelColor = (level: string) => {
+  switch (level) {
+    case "beginner":
+      return "bg-level-beginner dark:bg-darkmode-level-beginner";
+    case "intermediate":
+      return "bg-level-intermediate dark:bg-darkmode-level-intermediate";
+    case "advanced":
+      return "bg-level-advanced dark:bg-darkmode-level-advanced";
+    default:
+      return "bg-gray-400";
+  }
+};
+---
+
+<aside
+  class="explorer-sidebar w-full bg-theme-light dark:bg-darkmode-theme-light rounded-lg border border-border dark:border-darkmode-border p-6"
+>
+  <div class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-6 px-2">Connections</div>
+
+  {
+    hasConnections ? (
+      <div class="flex flex-col gap-2">
+        {/* Setup Moves Folder */}
+        {setupMoves.length > 0 && (
+          <div class="explorer-folder" data-expanded="true">
+            <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
+              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+                <FaChevronRight />
+              </span>
+              <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
+                Setup Moves
+              </span>
+              <span class="text-sm text-gray-400">{setupMoves.length}</span>
+            </button>
+            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+              {setupMoves.map((move) => (
+                <a
+                  href={`/moves/${move.id}`}
+                  class="flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-text dark:text-darkmode-text transition-colors group"
+                >
+                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent">
+                    <FaRunning />
+                  </span>
+                  <span class="text-base truncate flex-1">{move.data.title}</span>
+                  {move.data.level && (
+                    <span
+                      class={`w-2.5 h-2.5 rounded-full ${getLevelColor(move.data.level)}`}
+                      title={move.data.level}
+                    />
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Exit Moves Folder */}
+        {exitMoves.length > 0 && (
+          <div class="explorer-folder" data-expanded="true">
+            <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
+              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+                <FaChevronRight />
+              </span>
+              <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
+                Exit Moves
+              </span>
+              <span class="text-sm text-gray-400">{exitMoves.length}</span>
+            </button>
+            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+              {exitMoves.map((move) => (
+                <a
+                  href={`/moves/${move.id}`}
+                  class="flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-text dark:text-darkmode-text transition-colors group"
+                >
+                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent">
+                    <FaRunning />
+                  </span>
+                  <span class="text-base truncate flex-1">{move.data.title}</span>
+                  {move.data.level && (
+                    <span
+                      class={`w-2.5 h-2.5 rounded-full ${getLevelColor(move.data.level)}`}
+                      title={move.data.level}
+                    />
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Related Moves Folder */}
+        {relatedMoves.length > 0 && (
+          <div class="explorer-folder" data-expanded="true">
+            <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
+              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+                <FaChevronRight />
+              </span>
+              <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
+                Related Moves
+              </span>
+              <span class="text-sm text-gray-400">{relatedMoves.length}</span>
+            </button>
+            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+              {relatedMoves.map((move) => (
+                <a
+                  href={`/moves/${move.id}`}
+                  class="flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-text dark:text-darkmode-text transition-colors group"
+                >
+                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent">
+                    <FaRunning />
+                  </span>
+                  <span class="text-base truncate flex-1">{move.data.title}</span>
+                  {move.data.level && (
+                    <span
+                      class={`w-2.5 h-2.5 rounded-full ${getLevelColor(move.data.level)}`}
+                      title={move.data.level}
+                    />
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Related Concepts Folder */}
+        {relatedConcepts.length > 0 && (
+          <div class="explorer-folder" data-expanded="true">
+            <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
+              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+                <FaChevronRight />
+              </span>
+              <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
+                Concepts
+              </span>
+              <span class="text-sm text-gray-400">{relatedConcepts.length}</span>
+            </button>
+            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+              {relatedConcepts.map((concept) => (
+                <a
+                  href={`/concepts/${concept.id}`}
+                  class="flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-text dark:text-darkmode-text transition-colors group"
+                >
+                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent">
+                    <FaLightbulb />
+                  </span>
+                  <span class="text-base truncate flex-1">{concept.data.title}</span>
+                  {concept.data.level && (
+                    <span
+                      class={`w-2.5 h-2.5 rounded-full ${getLevelColor(concept.data.level)}`}
+                      title={concept.data.level}
+                    />
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    ) : (
+      <div class="text-sm text-gray-400 italic px-2">No connections found.</div>
+    )
+  }
+</aside>
+
+<script>
+  function setupExplorer() {
+    const folders = document.querySelectorAll(".explorer-folder");
+
+    folders.forEach((folder) => {
+      const trigger = folder.querySelector(".folder-trigger");
+      const content = folder.querySelector(".folder-content");
+      const iconChevron = folder.querySelector(".icon-chevron");
+
+      if (trigger && content && !trigger.hasAttribute("data-initialized")) {
+        trigger.setAttribute("data-initialized", "true");
+
+        trigger.addEventListener("click", () => {
+          const isExpanded = folder.getAttribute("data-expanded") === "true";
+          folder.setAttribute("data-expanded", (!isExpanded).toString());
+
+          content.classList.toggle("hidden");
+
+          if (iconChevron) {
+            iconChevron.classList.toggle("rotate-90");
+          }
+        });
+      }
+    });
+  }
+
+  // Run on initial load
+  setupExplorer();
+
+  // Run on view transitions navigation
+  document.addEventListener("astro:page-load", setupExplorer);
+</script>

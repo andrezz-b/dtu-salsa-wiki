@@ -2,6 +2,8 @@
 title: Cuba
 type: partner
 difficulty: 1
+leader_difficulty: 1
+follower_difficulty: 1
 level: beginner
 created_date: 2025-11-24T21:08:00.000Z
 updated_date: 2025-11-24T21:08:00.000Z

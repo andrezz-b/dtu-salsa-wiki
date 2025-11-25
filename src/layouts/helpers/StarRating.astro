@@ -4,9 +4,10 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 interface Props {
   rating: number;
   max?: number;
+  color?: string;
 }
 
-const { rating, max = 5 } = Astro.props;
+const { rating, max = 5, color = "text-yellow-400" } = Astro.props;
 
 const stars = [];
 for (let i = 1; i <= max; i++) {
@@ -24,9 +25,9 @@ for (let i = 1; i <= max; i++) {
   {
     stars.map((type) =>
       type === "full" ? (
-        <FaStar className="text-yellow-400" />
+        <FaStar className={color} />
       ) : type === "half" ? (
-        <FaStarHalfAlt className="text-yellow-400" />
+        <FaStarHalfAlt className={color} />
       ) : (
         <FaRegStar className="text-gray-300 dark:text-gray-600" />
       ),

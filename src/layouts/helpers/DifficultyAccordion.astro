@@ -1,5 +1,6 @@
 ---
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
+import StarRating from "./StarRating.astro";
 
 interface Props {
   leaderDifficulty?: number;
@@ -8,67 +9,47 @@ interface Props {
 }
 
 const { leaderDifficulty, followerDifficulty, overallDifficulty } = Astro.props;
+const hasBreakdown = leaderDifficulty !== undefined || followerDifficulty !== undefined;
 ---
 
-<div
-  class="difficulty-accordion border border-border dark:border-darkmode-border rounded-lg mb-6 overflow-hidden"
->
+<div class="difficulty-accordion flex flex-wrap items-center gap-4 mb-6">
   <button
-    class="accordion-trigger w-full flex items-center justify-between p-4 bg-theme-light dark:bg-darkmode-theme-light hover:bg-gray-100 dark:hover:bg-darkmode-theme-dark transition-colors"
+    class={`accordion-trigger flex flex-col items-start gap-1 p-2 rounded-lg transition-colors ${
+      hasBreakdown ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5" : "cursor-default"
+    }`}
     aria-expanded="false"
+    disabled={!hasBreakdown}
   >
-    <div class="flex items-center gap-3">
-      <span class="font-bold">Difficulty</span>
-      <span
-        class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
-      >
-        {overallDifficulty} / 5
-      </span>
+    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Difficulty</span>
+    <div class="flex items-center gap-2">
+      <StarRating rating={overallDifficulty} />
+      {
+        hasBreakdown && (
+          <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
+            <FaChevronRight />
+          </span>
+        )
+      }
     </div>
-    <span class="icon-chevron-down"><FaChevronDown /></span>
-    <span class="icon-chevron-up hidden"><FaChevronUp /></span>
   </button>
 
-  <div
-    class="accordion-content hidden p-4 bg-white dark:bg-darkmode-body border-t border-border dark:border-darkmode-border"
-  >
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <span class="block text-sm text-gray-500 dark:text-gray-400 mb-1"
-          >Leader</span
-        >
-        <div class="flex items-center gap-2">
-          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div
-              class="bg-blue-600 h-2.5 rounded-full"
-              style={`width: ${((leaderDifficulty || overallDifficulty) / 5) * 100}%`}
-            >
-            </div>
-          </div>
-          <span class="text-sm font-medium"
-            >{leaderDifficulty || overallDifficulty}</span
-          >
+  {
+    hasBreakdown && (
+      <div class="difficulty-content hidden flex flex-row items-center gap-6 pl-4 border-l border-border dark:border-darkmode-border">
+        {/* Leader Difficulty */}
+        <div class="flex flex-col items-start gap-1">
+          <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Leader</span>
+          <StarRating rating={leaderDifficulty || overallDifficulty} color="text-blue-500" />
+        </div>
+
+        {/* Follower Difficulty */}
+        <div class="flex flex-col items-start gap-1">
+          <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Follower</span>
+          <StarRating rating={followerDifficulty || overallDifficulty} color="text-pink-500" />
         </div>
       </div>
-      <div>
-        <span class="block text-sm text-gray-500 dark:text-gray-400 mb-1"
-          >Follower</span
-        >
-        <div class="flex items-center gap-2">
-          <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div
-              class="bg-pink-600 h-2.5 rounded-full"
-              style={`width: ${((followerDifficulty || overallDifficulty) / 5) * 100}%`}
-            >
-            </div>
-          </div>
-          <span class="text-sm font-medium"
-            >{followerDifficulty || overallDifficulty}</span
-          >
-        </div>
-      </div>
-    </div>
-  </div>
+    )
+  }
 </div>
 
 <script>
@@ -77,19 +58,42 @@ const { leaderDifficulty, followerDifficulty, overallDifficulty } = Astro.props;
 
     accordions.forEach((accordion) => {
       const trigger = accordion.querySelector(".accordion-trigger");
-      const content = accordion.querySelector(".accordion-content");
-      const iconDown = accordion.querySelector(".icon-chevron-down");
-      const iconUp = accordion.querySelector(".icon-chevron-up");
 
-      if (trigger && content && iconDown && iconUp) {
-        trigger.addEventListener("click", () => {
-          const isExpanded = trigger.getAttribute("aria-expanded") === "true";
-          trigger.setAttribute("aria-expanded", (!isExpanded).toString());
-          content.classList.toggle("hidden");
-          iconDown.classList.toggle("hidden");
-          iconUp.classList.toggle("hidden");
-        });
+      // Skip if already initialized or disabled
+      if (
+        !trigger ||
+        trigger.hasAttribute("disabled") ||
+        trigger.hasAttribute("data-initialized")
+      ) {
+        return;
       }
+
+      // Mark as initialized
+      trigger.setAttribute("data-initialized", "true");
+
+      trigger.addEventListener("click", () => {
+        const content = accordion.querySelector(".difficulty-content");
+        const icon = trigger.querySelector(".icon-chevron");
+
+        if (!content) {
+          return;
+        }
+
+        const isExpanded = trigger.getAttribute("aria-expanded") === "true";
+        trigger.setAttribute("aria-expanded", (!isExpanded).toString());
+
+        // Toggle visibility
+        content.classList.toggle("hidden");
+
+        // Rotate icon
+        if (icon) {
+          if (!isExpanded) {
+            icon.classList.add("rotate-90");
+          } else {
+            icon.classList.remove("rotate-90");
+          }
+        }
+      });
     });
   }
 

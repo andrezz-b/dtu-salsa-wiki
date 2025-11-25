@@ -1,0 +1,42 @@
+---
+import { FaChevronRight } from "react-icons/fa";
+
+interface BreadcrumbPart {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  parts: BreadcrumbPart[];
+  className?: string;
+}
+
+const { parts, className = "" } = Astro.props;
+---
+
+<nav
+  aria-label="Breadcrumb"
+  class={`flex items-center text-sm text-gray-500 dark:text-gray-400 ${className}`}
+>
+  <ol class="flex items-center flex-wrap gap-2">
+    {
+      parts.map((part, index) => (
+        <li class="flex items-center gap-2">
+          {index > 0 && <FaChevronRight className="w-3 h-3 text-gray-400" />}
+          {part.href ? (
+            <a
+              href={part.href}
+              class="hover:text-accent dark:hover:text-darkmode-accent transition-colors"
+            >
+              {part.label}
+            </a>
+          ) : (
+            <span class="font-medium text-text dark:text-darkmode-text" aria-current="page">
+              {part.label}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

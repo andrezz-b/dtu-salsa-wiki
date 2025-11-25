@@ -1,5 +1,5 @@
 import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection, reference, z } from "astro:content";
 
 const commonFields = {
   title: z.string(),
@@ -22,10 +22,10 @@ const movesCollection = defineCollection({
     follower_difficulty: z.number().min(1).max(5).step(0.5).optional(),
     level: z.enum(["beginner", "intermediate", "advanced"]),
     video_url: z.string().url().optional(),
-    related_concepts: z.array(z.string()).optional(), // References handled by slug in frontmatter usually, or use reference() if available but simple string array is safer for now with basic loader
-    setup_moves: z.array(z.string()).optional(),
-    exit_moves: z.array(z.string()).optional(),
-    related_moves: z.array(z.string()).optional(),
+    related_concepts: z.array(reference("concepts")).optional(), // References handled by slug in frontmatter usually, or use reference() if available but simple string array is safer for now with basic loader
+    setup_moves: z.array(reference("moves")).optional(),
+    exit_moves: z.array(reference("moves")).optional(),
+    related_moves: z.array(reference("moves")).optional(),
     tags: z.array(z.string()).default([]),
     created_date: z.date().optional(),
     updated_date: z.date().optional(),
@@ -41,8 +41,8 @@ const conceptsCollection = defineCollection({
     type: z.enum(["hold", "position", "technique", "musicality"]),
     level: z.enum(["beginner", "intermediate", "advanced"]),
     video_url: z.string().url().optional(),
-    related_concepts: z.array(z.string()).optional(),
-    related_moves: z.array(z.string()).optional(),
+    related_concepts: z.array(reference("concepts")).optional(),
+    related_moves: z.array(reference("moves")).optional(),
     created_date: z.date().optional(),
     updated_date: z.date().optional(),
     draft: z.boolean().optional(),

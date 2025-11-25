@@ -1,0 +1,58 @@
+---
+import { humanize } from "@/lib/utils/textConverter";
+
+import { type CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"moves"> | CollectionEntry<"concepts">;
+}
+
+const { entry } = Astro.props;
+const { title, type, level } = entry.data;
+const { collection, id } = entry;
+const getLevelColor = (level: string) => {
+  switch (level) {
+    case "beginner":
+      return "bg-level-beginner/10 text-level-beginner border-level-beginner/20 dark:bg-darkmode-level-beginner/10 dark:text-darkmode-level-beginner dark:border-darkmode-level-beginner/20";
+    case "intermediate":
+      return "bg-level-intermediate/10 text-level-intermediate border-level-intermediate/20 dark:bg-darkmode-level-intermediate/10 dark:text-darkmode-level-intermediate dark:border-darkmode-level-intermediate/20";
+    case "advanced":
+      return "bg-level-advanced/10 text-level-advanced border-level-advanced/20 dark:bg-darkmode-level-advanced/10 dark:text-darkmode-level-advanced dark:border-darkmode-level-advanced/20";
+    default:
+      return "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400";
+  }
+};
+---
+
+<a
+  href={`/${collection}/${id}`}
+  class="group block h-full p-4 bg-white dark:bg-darkmode-light rounded-lg border border-border dark:border-darkmode-border hover:border-accent/50 dark:hover:border-darkmode-accent/50 hover:shadow-md transition-all duration-300"
+>
+  <div class="flex flex-col h-full justify-between">
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        {
+          type && (
+            <span class="text-xs font-medium uppercase tracking-wider text-text-light dark:text-darkmode-text-light">
+              {humanize(type)}
+            </span>
+          )
+        }
+        {
+          level && (
+            <span
+              class={`text-[10px] px-2 py-0.5 rounded-full border font-bold uppercase tracking-wide ${getLevelColor(level)}`}
+            >
+              {level}
+            </span>
+          )
+        }
+      </div>
+      <h4
+        class="h6 group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors"
+      >
+        {humanize(title)}
+      </h4>
+    </div>
+  </div>
+</a>

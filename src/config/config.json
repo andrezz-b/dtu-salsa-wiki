@@ -1,6 +1,6 @@
 {
   "site": {
-    "title": "Astroplate",
+    "title": "DTU Salsa Wiki",
     "base_url": "https://astroplate.netlify.app",
     "base_path": "/",
     "trailing_slash": false,
@@ -9,23 +9,17 @@
     "logo_darkmode": "/images/logo-darkmode.png",
     "logo_width": "150",
     "logo_height": "30",
-    "logo_text": "Astroplate"
+    "logo_text": "DTU Salsa Wiki"
   },
 
   "settings": {
     "search": true,
     "sticky_header": true,
     "theme_switcher": true,
-    "default_theme": "system",
+    "default_theme": "dark",
     "pagination": 2,
     "summary_length": 200,
     "blog_folder": "blog"
-  },
-
-  "announcement": {
-    "enable": true,
-    "content": "<span class='text-center block'>♥️ Loving Astroplate? <a class='underline' href='https://github.com/zeon-studio/astroplate' target='_blank' rel='noopener'>Please ⭐️ on Github</a></span>",
-    "expire_days": 7
   },
 
   "params": {
@@ -33,26 +27,14 @@
     "copyright": "Designed And Developed by [Zeon Studio](https://zeon.studio)"
   },
 
-  "navigation_button": {
-    "enable": true,
-    "label": "Get Started",
-    "link": "https://github.com/zeon-studio/astroplate"
-  },
-
   "google_tag_manager": {
     "enable": false,
     "gtm_id": "GTM-XXXXXX"
   },
 
-  "disqus": {
-    "enable": true,
-    "shortname": "themefisher-template",
-    "settings": {}
-  },
-
   "metadata": {
     "meta_author": "zeon.studio",
     "meta_image": "/images/og-image.png",
-    "meta_description": "astro and tailwind boilerplate"
+    "meta_description": "DTU Salsa Wiki"
   }
 }
