@@ -15,7 +15,7 @@ related_concepts:
 related_moves:
   - montadito
   - cubanito
-  - settenta
+  - setenta
   - enchufla
   - alternative-sombrero-finish
 ---
@@ -24,7 +24,7 @@ related_moves:
 - Do [Montadito](/moves/montadito)
 - 567 - When you are finishing the arms stuff, on 67 drop them both back (her left on my left side and her right on my right side)
   - I catch them and we are in a [Cubanito](/moves/cubanito) like position
-- 123 - Start [Settenta](/moves/settenta) from this reversed position
+- 123 - Start [Setenta](/moves/setenta) from this reversed position
   - My left arm goes on my back, as far as it can go to the side
 - 567 - She turns in and we are side to side
   - Very weird position you must be close

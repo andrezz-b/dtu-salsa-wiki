@@ -6,7 +6,7 @@ import { render, getEntries } from "astro:content";
 import Breadcrumbs from "@/layouts/helpers/Breadcrumbs.astro";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
-import RelatedCard from "@/layouts/helpers/RelatedCard.astro";
+import { getYoutubeId } from "@/lib/utils/video";
 import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
 
 export async function getStaticPaths() {
@@ -19,25 +19,12 @@ export async function getStaticPaths() {
 
 const { concept } = Astro.props;
 const { Content } = await render(concept);
-const { title, type, level, video_url, related_concepts, related_moves } = concept.data;
+const { title, type, level, video_urls, related_concepts, related_moves } = concept.data;
 
-// Helper to extract YouTube ID
-const getYoutubeId = (url: string | undefined) => {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-};
+const videoIds = video_urls
+  ? video_urls.map((url) => getYoutubeId(url)).filter((id) => id !== null)
+  : [];
 
-const videoId = getYoutubeId(video_url);
-
-// Fetch all moves to find references
-const allMoves = await getSinglePage("moves");
-const usedInMoves = allMoves.filter((move) =>
-  move.data.related_concepts?.some((ref) => ref.id === concept.id),
-);
-
-// Resolve references
 const resolvedRelatedMoves = related_moves ? await getEntries(related_moves) : [];
 const resolvedRelatedConcepts = related_concepts ? await getEntries(related_concepts) : [];
 ---
@@ -90,22 +77,24 @@ const resolvedRelatedConcepts = related_concepts ? await getEntries(related_conc
               {title}
             </h1>
           </div>
-
-          {/* Video */}
-          {
-            videoId && (
-              <div class="mb-10 rounded-lg overflow-hidden shadow-lg">
-                <LiteYouTubeEmbed client:idle id={videoId} title={title} poster="maxresdefault" />
-              </div>
-            )
-          }
-
           {/* Content */}
           <div
             class="content mb-10 prose-a:text-accent prose-a:no-underline hover:prose-a:underline"
           >
             <Content />
           </div>
+          {/* Videos */}
+          {
+            videoIds.length > 0 && (
+              <div class="grid grid-cols-1 gap-6 mb-10">
+                {videoIds.map((id) => (
+                  <div class="rounded-lg overflow-hidden shadow-lg">
+                    <LiteYouTubeEmbed client:idle id={id} title={title} poster="maxresdefault" />
+                  </div>
+                ))}
+              </div>
+            )
+          }
         </article>
       </div>
     </div>

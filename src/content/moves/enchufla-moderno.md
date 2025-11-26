@@ -11,13 +11,13 @@ related_concepts:
   - crossed-hands
 related_moves:
   - enchufla-doble
-  - runde
+  - ronde
   - enchufla
 ---
 ## ✍️ Description & Execution
 ### Leader
 - Start by doing [Enchufla Doble](/moves/enchufla-doble)
-- 567 - Send her back and I do a [Runde](/moves/runde)
+- 567 - Send her back and I do a [Ronde](/moves/ronde)
   - Swap hands over her head
 - Do another [Enchufla](/moves/enchufla) (unsure if this is actually part of the move)
 #### 🔗 Connections & Transitions

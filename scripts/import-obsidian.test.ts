@@ -9,11 +9,6 @@ describe('Import Obsidian Script', () => {
       const input = '2025-11-06, 20:11';
       const result = parseObsidianDate(input);
       assert.ok(result instanceof Date);
-      assert.strictEqual(result.toISOString(), '2025-11-06T19:11:00.000Z'); // Assuming UTC or local? 
-      // Wait, the script uses new Date('YYYY-MM-DDTHH:mm') which interprets as local time if no Z.
-      // But toISOString() outputs UTC. 
-      // If I run this in a test environment, timezone might vary.
-      // Let's check components instead to be safe against timezone issues in test runner.
       assert.strictEqual(result.getFullYear(), 2025);
       assert.strictEqual(result.getMonth(), 10); // 0-indexed
       assert.strictEqual(result.getDate(), 6);
@@ -99,10 +94,7 @@ describe('Import Obsidian Script', () => {
     it('should recursively clean objects', () => {
       const input = { a: 1, b: { c: null, d: [] } };
       const result = cleanFrontmatter(input);
-      assert.deepStrictEqual(result, { a: 1 }); // b becomes empty object, which is then removed?
-      // Let's check implementation: 
-      // return Object.keys(cleanedObj).length > 0 ? cleanedObj : undefined;
-      // So yes, b should be removed.
+      assert.deepStrictEqual(result, { a: 1 });
     });
 
     it('should preserve Date objects', () => {
@@ -113,10 +105,7 @@ describe('Import Obsidian Script', () => {
     });
 
     it('should clean arrays of objects', () => {
-      const input = { list: [{ a: 1 }, { b: null }] }; // {b: null} -> {} -> removed?
-      // cleanFrontmatter on array: maps, filters null/undefined/empty string.
-      // cleanFrontmatter on {b: null} returns undefined.
-      // So list should be [{a: 1}]
+      const input = { list: [{ a: 1 }, { b: null }] };
       const result = cleanFrontmatter(input);
       assert.deepStrictEqual(result, { list: [{ a: 1 }] });
     });

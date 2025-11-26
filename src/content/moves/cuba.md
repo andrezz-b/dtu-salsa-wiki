@@ -15,7 +15,7 @@ related_moves:
 ### Leader
 - 123567 - [Vuelta](/moves/vuelta)
 - 123 - [Enchufla](/moves/enchufla)
-- 567 - Get her to your side and finish
+- 567 - Get the follower to your side and finish
 ### Follower
 - 
 ## 🎥 Video

@@ -11,12 +11,12 @@ aliases:
   - Caida
 related_moves:
   - dile-que-no
-  - settenta
+  - setenta
   - cuba
 ---
 ## ✍️ Description
 - Position right before a [Dile Que No](/moves/dile-que-no) where the follower is kind of at your side
-- Common after moves like [Settenta](/moves/settenta), [Cuba](/moves/cuba) etc.
+- Common after moves like [Setenta](/moves/setenta), [Cuba](/moves/cuba) etc.
 ## ✨ Examples in Moves
 - 
 ## 🎥 Media

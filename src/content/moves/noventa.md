@@ -8,14 +8,16 @@ updated_date: 2025-11-08T21:26:00.000Z
 tags:
   - salsa/move
 related_moves:
-  - settenta
+  - setenta
   - enchufla
   - espejo
-  - runde
+  - ronde
+video_urls:
+  - 'https://youtu.be/BATJW8epyF8?feature=shared'
 ---
 ## ✍️ Description & Execution
 ### Leader
-- 123 567 - [Settenta](/moves/settenta) start
+- 123 567 - [Setenta](/moves/setenta) start
 - 123 - [Enchufla](/moves/enchufla)
   - On 3 keep the left hand up
 - 567 - Go under with mini [Espejo](/moves/espejo)
@@ -23,7 +25,7 @@ related_moves:
 - 5 - Keep pulling her while I stop
 - 67 - Sharp mini [Espejo](/moves/espejo)
 - 123 - [Enchufla](/moves/enchufla)
-- 567 - Hand on shoulder [Runde](/moves/runde) into finish
+- 567 - Hand on shoulder [Ronde](/moves/ronde) into finish
 ---
 - Watch the video for the complicated part, if the follower knows it will probably work
 ### Follower

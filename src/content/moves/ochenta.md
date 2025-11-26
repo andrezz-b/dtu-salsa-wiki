@@ -13,17 +13,17 @@ related_concepts:
   - crossed-hands
   - cuban-hold
 related_moves:
-  - settenta
+  - setenta
   - enchufla
-  - runde
+  - ronde
 ---
 ## ✍️ Description & Execution
 ### Leader
 - Get into [Crossed Hands](/concepts/crossed-hands)
-- 123567 - [Settenta](/moves/settenta) start but with [Crossed Hands](/concepts/crossed-hands)
+- 123567 - [Setenta](/moves/setenta) start but with [Crossed Hands](/concepts/crossed-hands)
   - Keep my left down (the one that goes behind her back)
 - 123 - [Enchufla](/moves/enchufla)
-- 567 - [Runde](/moves/runde), switch to [Cuban Hold](/concepts/cuban-hold) towards the end
+- 567 - [Ronde](/moves/ronde), switch to [Cuban Hold](/concepts/cuban-hold) towards the end
 ### Follower
 - 
 ## 🎥 Video

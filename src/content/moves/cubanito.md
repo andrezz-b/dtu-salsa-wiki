@@ -8,6 +8,7 @@ updated_date: 2025-11-07T18:25:00.000Z
 tags:
   - salsa/move
 related_concepts:
+  - cubanita
   - crossed-hands
 related_moves:
   - enchufla

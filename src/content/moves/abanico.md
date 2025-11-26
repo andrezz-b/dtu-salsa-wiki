@@ -12,7 +12,7 @@ related_concepts:
 related_moves:
   - sombrero-doble
   - sombrero
-  - runde
+  - ronde
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -23,7 +23,7 @@ related_moves:
 - 2 - Release left hand, using right elbow push on her left shoulderblade
   - Step of course
 - 3 - Step
-- 567 - [Runde](/moves/runde)
+- 567 - [Ronde](/moves/ronde)
 ### Follower
 - 
 ## 🎥 Video

@@ -7,6 +7,7 @@ import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
 import Breadcrumbs from "@/layouts/helpers/Breadcrumbs.astro";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+import { getYoutubeId } from "@/lib/utils/video";
 
 export async function getStaticPaths() {
   const moves = await getSinglePage("moves");
@@ -25,7 +26,7 @@ const {
   difficulty,
   leader_difficulty,
   follower_difficulty,
-  video_url,
+  video_urls,
   related_concepts,
   setup_moves,
   exit_moves,
@@ -33,15 +34,9 @@ const {
   tags,
 } = move.data;
 
-// Helper to extract YouTube ID
-const getYoutubeId = (url: string | undefined) => {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-};
-
-const videoId = getYoutubeId(video_url);
+const videoIds = video_urls
+  ? video_urls.map((url) => getYoutubeId(url)).filter((id) => id !== null)
+  : [];
 
 // Resolve references
 const resolvedRelatedConcepts = related_concepts ? await getEntries(related_concepts) : [];
@@ -114,11 +109,15 @@ const resolvedRelatedMoves = related_moves ? await getEntries(related_moves) : [
           >
             <Content />
           </div>
-          {/* Video */}
+          {/* Videos */}
           {
-            videoId && (
-              <div class="mb-10 rounded-lg overflow-hidden shadow-lg">
-                <LiteYouTubeEmbed client:idle id={videoId} title={title} poster="maxresdefault" />
+            videoIds.length > 0 && (
+              <div class="grid grid-cols-1 gap-6 mb-10">
+                {videoIds.map((id) => (
+                  <div class="rounded-lg overflow-hidden shadow-lg">
+                    <LiteYouTubeEmbed client:idle id={id} title={title} poster="maxresdefault" />
+                  </div>
+                ))}
               </div>
             )
           }

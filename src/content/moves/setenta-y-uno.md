@@ -1,5 +1,5 @@
 ---
-title: Settenta y Uno
+title: Setenta y Uno
 type: partner
 difficulty: 1.5
 level: beginner
@@ -13,12 +13,12 @@ related_concepts:
   - hammerlock
   - corona-finish
 related_moves:
-  - settenta
+  - setenta
   - enchufla
 ---
 ## ✍️ Description & Execution
 ### Leader
-- 123 567 - [Hammerlock](/concepts/hammerlock) start as in [Settenta](/moves/settenta)
+- 123 567 - [Hammerlock](/concepts/hammerlock) start as in [Setenta](/moves/setenta)
 - 123 - [Enchufla](/moves/enchufla)
 - 567 - Finish, she goes to side [Corona Finish](/concepts/corona-finish), hand over my head
 ### Follower

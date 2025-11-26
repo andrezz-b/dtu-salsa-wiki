@@ -12,10 +12,10 @@ related_concepts:
 related_moves:
   - enchufla-moderno
   - espejo
-  - settenta-al-revés
+  - setenta-al-revés
   - candado
   - enchufla-double-spin
-  - settenta
+  - setenta
   - montadito
 ---
 ## ✍️ Description & Execution
@@ -28,15 +28,15 @@ related_moves:
   - 5 - Step, 67 Unroll turn
   - You should end up facing each other, [Both Hands Hold](/concepts/both-hands-hold)
   - You should be in the starting position (you should do a 360°)
-- [Settenta al Revés](/moves/settenta-al-revés)
+- [Setenta al Revés](/moves/setenta-al-revés)
 ## 🔗 Connections & Transitions
-- After the [Espejo](/moves/espejo) do whatever feels good, but [Settenta al Revés](/moves/settenta-al-revés) is official part of the move
+- After the [Espejo](/moves/espejo) do whatever feels good, but [Setenta al Revés](/moves/setenta-al-revés) is official part of the move
 - From the [Both Hands Hold](/concepts/both-hands-hold) you can do [Candado](/moves/candado) into another [Peligrosa](/moves/peligrosa), or [Enchufla Moderno](/moves/enchufla-moderno)
 ### Follower
 - 
 ## ✨ Variations
-- [Peligrosa](/moves/peligrosa), [Candado](/moves/candado), [Peligrosa](/moves/peligrosa), [Settenta al Revés](/moves/settenta-al-revés)
+- [Peligrosa](/moves/peligrosa), [Candado](/moves/candado), [Peligrosa](/moves/peligrosa), [Setenta al Revés](/moves/setenta-al-revés)
 - [Peligrosa](/moves/peligrosa), [Candado](/moves/candado), [Enchufla Moderno](/moves/enchufla-moderno), [Enchufla Double Spin](/moves/enchufla-double-spin)
-- [Peligrosa](/moves/peligrosa), Explosive [Settenta](/moves/settenta), [Montadito](/moves/montadito)
+- [Peligrosa](/moves/peligrosa), Explosive [Setenta](/moves/setenta), [Montadito](/moves/montadito)
 ## 🎥 Video
 - **Video Link:** 

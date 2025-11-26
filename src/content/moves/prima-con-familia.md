@@ -1,5 +1,5 @@
 ---
-title: Prima con la Familia
+title: Prima con Familia
 type: partner
 difficulty: 2.5
 level: intermediate
@@ -8,12 +8,12 @@ updated_date: 2025-11-26T09:26:00.000Z
 tags:
   - salsa/move
 related_moves:
-  - prima-con-la-hermana
+  - prima-con-hermana
   - dile-que-no
 ---
 ## ✍️ Description & Execution
 ### Leader
-- 123 567 123 - [Prima con la Hermana](/moves/prima-con-la-hermana)
+- 123 567 123 - [Prima con Hermana](/moves/prima-con-hermana)
 - 5 - Lock arms into hook, my right over her right
 - 67 123 567 - Walk around in circle waving
   - Add a shoulder shake

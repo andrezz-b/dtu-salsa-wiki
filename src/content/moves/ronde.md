@@ -1,5 +1,5 @@
 ---
-title: Runde
+title: Ronde
 type: solo
 difficulty: 1.5
 level: beginner
@@ -11,7 +11,7 @@ tags:
 ## ✍️ Description & Execution
 ### Leader
 - Right turn on 567, always step it
-- If doing solo preparation on 34 by twisting to the left
+- If doing solo, preparation on 34 by twisting to the left
 - 5 - Start turning
 - 6 - Legs should be in weird A shape pointing back
 - 7 - Finish by completing the turn and facing forward

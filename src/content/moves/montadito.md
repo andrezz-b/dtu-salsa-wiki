@@ -11,13 +11,13 @@ aliases:
   - Sandwich
 related_moves:
   - enchufla
-  - settenta
+  - setenta
   - espejo
-  - runde
+  - ronde
   - dile-que-no
 setup_moves:
   - espejo
-  - settenta
+  - setenta
 exit_moves:
   - enchufla
 ---
@@ -47,18 +47,18 @@ exit_moves:
 - 123 - [Enchufla](/moves/enchufla)
 - 5 - Ask for other hand
 - 67 - Roll in
-- This applies wherever you can do [Enchufla](/moves/enchufla) like [Settenta](/moves/settenta) etc.
+- This applies wherever you can do [Enchufla](/moves/enchufla) like [Setenta](/moves/setenta) etc.
 ### [Espejo](/moves/espejo) way
 - 123 - Basic
 - 567 - Quick [Espejo](/moves/espejo) and you roll in
 ## ✨ Variations
-### [Settenta](/moves/settenta) Montadito
-- 123 567 - [Settenta](/moves/settenta) start
+### [Setenta](/moves/setenta) Montadito
+- 123 567 - [Setenta](/moves/setenta) start
 - 123 - [Enchufla](/moves/enchufla)
 - 567 - Roll in
 - 123 567 - Do the move
 - 123 - [Enchufla](/moves/enchufla)
-- 567 - Hand on shoulder [Runde](/moves/runde) into [Dile Que No](/moves/dile-que-no)
+- 567 - Hand on shoulder [Ronde](/moves/ronde) into [Dile Que No](/moves/dile-que-no)
 ## 🎥 Video
 - **Video Link:** 
 
