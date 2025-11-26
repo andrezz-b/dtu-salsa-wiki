@@ -7,6 +7,7 @@ import Badge from "./Badge";
 import StarRatingDisplay from "./StarRatingDisplay";
 import Card from "./Card";
 import Breadcrumbs from "./Breadcrumbs";
+import Pagination from "./Pagination";
 
 interface IMoveItem {
   slug: string;
@@ -25,6 +26,9 @@ const MovesBrowse = () => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [minDifficulty, setMinDifficulty] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
 
   const allData = movesData as IMoveItem[];
 
@@ -75,11 +79,23 @@ const MovesBrowse = () => {
     });
   }, [selectedLevels, selectedTypes, minDifficulty, searchQuery, allData]);
 
+  // Reset pagination when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedLevels, selectedTypes, minDifficulty, searchQuery]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const currentItems = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   const resetFilters = () => {
     setSelectedLevels([]);
     setSelectedTypes([]);
     setMinDifficulty(0);
     setSearchQuery("");
+    setCurrentPage(1);
   };
 
   return (
@@ -155,8 +171,8 @@ const MovesBrowse = () => {
           </div>
 
           <div className="row">
-            {filteredData.length > 0 ? (
-              filteredData.map((item) => (
+            {currentItems.length > 0 ? (
+              currentItems.map((item) => (
                 <div key={item.slug} className="md:col-6 mb-6">
                   <Card
                     title={item.frontmatter.title}
@@ -182,6 +198,13 @@ const MovesBrowse = () => {
               </div>
             )}
           </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>

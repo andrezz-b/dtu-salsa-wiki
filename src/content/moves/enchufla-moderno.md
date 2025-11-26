@@ -1,0 +1,28 @@
+---
+title: Enchufla Moderno
+type: partner
+difficulty: 2.5
+level: intermediate
+created_date: 2025-11-04T12:22:00.000Z
+updated_date: 2025-11-08T21:26:00.000Z
+tags:
+  - salsa/move
+related_concepts:
+  - crossed-hands
+related_moves:
+  - enchufla-doble
+  - runde
+  - enchufla
+---
+## ✍️ Description & Execution
+### Leader
+- Start by doing [Enchufla Doble](/moves/enchufla-doble)
+- 567 - Send her back and I do a [Runde](/moves/runde)
+  - Swap hands over her head
+- Do another [Enchufla](/moves/enchufla) (unsure if this is actually part of the move)
+#### 🔗 Connections & Transitions
+- We are in [Crossed Hands](/concepts/crossed-hands) so we can do something with that
+### Follower
+- 
+## 🎥 Video
+- **Video Link:** 

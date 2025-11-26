@@ -85,7 +85,7 @@ export const normalizeRelationItems = (items: any[]): string[] => {
 async function main() {
     // Configuration
     const args = process.argv.slice(2);
-    const usage = "Usage: npx tsx scripts/import-obsidian.ts --moves-out <path> --concepts-out <path>";
+    const usage = "Usage: npx tsx scripts/import-obsidian.ts --moves-out <path> --concepts-out <path> [--obsidian-data <path>]";
 
     function getArg(name: string): string | undefined {
       const index = args.indexOf(name);
@@ -97,6 +97,7 @@ async function main() {
 
     const movesOutArg = getArg('--moves-out');
     const conceptsOutArg = getArg('--concepts-out');
+    const obsidianDataArg = getArg('--obsidian-data') || 'obsidian-data';
 
     if (!movesOutArg || !conceptsOutArg) {
       console.error("Error: Missing output paths.");
@@ -104,9 +105,20 @@ async function main() {
       process.exit(1);
     }
 
-    const OBSIDIAN_PATH = path.join(process.cwd(), 'obsidian-data');
+    const OBSIDIAN_PATH = path.resolve(process.cwd(), obsidianDataArg);
     const MOVES_OUT_PATH = path.resolve(process.cwd(), movesOutArg);
     const CONCEPTS_OUT_PATH = path.resolve(process.cwd(), conceptsOutArg);
+
+    // Validate Obsidian Data Path
+    const movesSourceDir = path.join(OBSIDIAN_PATH, 'Moves');
+    const conceptsSourceDir = path.join(OBSIDIAN_PATH, 'Concepts');
+
+    if (!fs.existsSync(movesSourceDir) || !fs.statSync(movesSourceDir).isDirectory()) {
+        throw new Error(`Moves directory not found in ${OBSIDIAN_PATH}`);
+    }
+    if (!fs.existsSync(conceptsSourceDir) || !fs.statSync(conceptsSourceDir).isDirectory()) {
+        throw new Error(`Concepts directory not found in ${OBSIDIAN_PATH}`);
+    }
 
     console.log(`Importing from: ${OBSIDIAN_PATH}`);
     console.log(`Moves output: ${MOVES_OUT_PATH}`);

@@ -1,0 +1,22 @@
+---
+title: Enchufla Doble
+type: partner
+difficulty: 1
+level: beginner
+created_date: 2025-11-04T12:20:00.000Z
+updated_date: 2025-11-25T23:16:00.000Z
+tags:
+  - salsa/move
+related_moves:
+  - enchufla
+---
+## ✍️ Description & Execution
+### Leader
+- Start like [Enchufla](/moves/enchufla)
+- 5 - Stop her from going forward by putting hand on shoulder
+- 67 - Go back to starting position
+- Another [Enchufla](/moves/enchufla) 
+### Follower
+- 
+## 🎥 Video
+- **Video Link:** 

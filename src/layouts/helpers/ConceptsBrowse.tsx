@@ -6,6 +6,8 @@ import Badge from "./Badge";
 import Card from "./Card";
 import Breadcrumbs from "./Breadcrumbs";
 
+import Pagination from "./Pagination";
+
 interface IConceptItem {
   slug: string;
   frontmatter: {
@@ -20,6 +22,8 @@ const ConceptsBrowse = () => {
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
 
   const allData = conceptsData as IConceptItem[];
 
@@ -65,10 +69,22 @@ const ConceptsBrowse = () => {
     });
   }, [selectedLevels, selectedTypes, searchQuery, allData]);
 
+  // Reset pagination when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedLevels, selectedTypes, searchQuery]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const currentItems = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   const resetFilters = () => {
     setSelectedLevels([]);
     setSelectedTypes([]);
     setSearchQuery("");
+    setCurrentPage(1);
   };
 
   return (
@@ -137,8 +153,8 @@ const ConceptsBrowse = () => {
           </div>
 
           <div className="row">
-            {filteredData.length > 0 ? (
-              filteredData.map((item) => (
+            {currentItems.length > 0 ? (
+              currentItems.map((item) => (
                 <div key={item.slug} className="md:col-6 mb-6">
                   <Card
                     title={item.frontmatter.title}
@@ -163,6 +179,13 @@ const ConceptsBrowse = () => {
               </div>
             )}
           </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>

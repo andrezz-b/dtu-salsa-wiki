@@ -37,7 +37,7 @@ collections:
     slug: "{{slug}}"
     fields:
       - {label: "Title", name: "title", widget: "string"}
-      - {label: "Type", name: "type", widget: "select", options: ["hold", "position", "technique", "musicality"]}
+      - {label: "Type", name: "type", widget: "select", options: ["hold", "position", "technique", "musicality", "finish"]}
       - {label: "Level", name: "level", widget: "select", options: ["beginner", "intermediate", "advanced"]}
       - {label: "Video URL", name: "video_url", widget: "string", required: false}
       - {label: "Related Concepts", name: "related_concepts", widget: "relation", collection: "concepts", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], multiple: true, required: false}

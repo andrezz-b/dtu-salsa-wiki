@@ -38,7 +38,7 @@ const conceptsCollection = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/concepts" }),
   schema: z.object({
     title: z.string(),
-    type: z.enum(["hold", "position", "technique", "musicality"]),
+    type: z.enum(["hold", "position", "technique", "musicality", "finish"]),
     level: z.enum(["beginner", "intermediate", "advanced"]),
     video_url: z.string().url().optional(),
     related_concepts: z.array(reference("concepts")).optional(),
