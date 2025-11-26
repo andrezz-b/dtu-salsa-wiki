@@ -4,7 +4,6 @@ import matter from "gray-matter";
 
 const CONTENT_DEPTH = 2;
 const JSON_FOLDER = "./.json";
-const BLOG_FOLDER = "src/content/blog";
 
 // get data from markdown
 const getData = (folder, groupDepth) => {
