@@ -15,14 +15,14 @@ related_concepts:
 related_moves:
   - vuelta
   - enchufla
-  - runde
+  - ronde
 ---
 ## ✍️ Description & Execution
 ### Leader
 - Get into [Crossed Hands](/concepts/crossed-hands)
 - 123 567 - [Vuelta](/moves/vuelta) with [Crossed Hands](/concepts/crossed-hands), both hands go up
 - 123 - [Enchufla](/moves/enchufla)
-- 567 - [Runde](/moves/runde), Bring both hands above head
+- 567 - [Ronde](/moves/ronde), Bring both hands above head
 - 123 - [Enchufla](/moves/enchufla)
 - 567 - [Sombrero Finish](/concepts/sombrero-finish)
 ### Follower

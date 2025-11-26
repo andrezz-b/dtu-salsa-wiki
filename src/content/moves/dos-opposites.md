@@ -1,5 +1,5 @@
 ---
-title: Normal Montaña
+title: Dos opposites
 type: partner
 difficulty: 1.5
 level: intermediate
@@ -8,21 +8,18 @@ updated_date: 2025-11-26T09:19:00.000Z
 tags:
   - salsa/move
 related_concepts:
-  - both-hands-hold
   - corona-finish
 related_moves:
-  - montaña
   - vuelta
   - enchufla
-  - runde
+  - ronde
 ---
 ## ✍️ Description & Execution
 ### Leader
-- [Montaña](/moves/montaña), but [Both Hands Hold](/concepts/both-hands-hold)
 - 123 567 - 2 hand [Vuelta](/moves/vuelta)
-- 123 - [Enchufla](/moves/enchufla)
-- 567 - [Runde](/moves/runde), hands over head
-- 123 - [Enchufla](/moves/enchufla)
+- 123 - [Enchufla](/moves/enchufla) 2 hands
+- 567 - [Ronde](/moves/ronde), hands over head
+- 123 - [Enchufla](/moves/enchufla) 2 hands
 - 567 - [Corona Finish](/concepts/corona-finish)
 ### Follower
 - 

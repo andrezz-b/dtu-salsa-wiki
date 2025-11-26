@@ -9,7 +9,7 @@ tags:
 aliases:
   - hammerhold
 related_moves:
-  - settenta
+  - setenta
 ---
 ## ✍️ Description
 - Left hands normally connected

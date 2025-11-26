@@ -1,5 +1,5 @@
 ---
-title: Prima con la Hermana
+title: Prima con Hermana
 type: partner
 difficulty: 2.5
 level: intermediate

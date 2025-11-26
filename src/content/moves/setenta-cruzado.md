@@ -1,5 +1,5 @@
 ---
-title: Settenta Cruzado
+title: Setenta Cruzado
 type: partner
 difficulty: 2
 level: intermediate
@@ -10,15 +10,15 @@ tags:
 related_concepts:
   - hammerlock
 related_moves:
-  - settenta
+  - setenta
   - cruzado-step
 ---
 ## ✍️ Description & Execution
 ### Leader
-- [Settenta](/moves/settenta) start into [Hammerlock](/concepts/hammerlock)
+- [Setenta](/moves/setenta) start into [Hammerlock](/concepts/hammerlock)
 - 2 x 8 Count - [Cruzado step](/moves/cruzado-step) in [Hammerlock](/concepts/hammerlock)
   - Shake shoulders on 4 and 8
-- Continue with normal [Settenta](/moves/settenta) stuff
+- Continue with normal [Setenta](/moves/setenta) stuff
 ### Follower
 - 
 ## 🎥 Video

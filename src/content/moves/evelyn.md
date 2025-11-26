@@ -11,12 +11,12 @@ related_concepts:
   - crossed-hands
 related_moves:
   - enchufla
-  - runde
+  - ronde
 ---
 ## ✍️ Description & Execution
 ### Leader
 - 123 - [Enchufla](/moves/enchufla)
-- 567 - [Runde](/moves/runde), swap hands during turn
+- 567 - [Ronde](/moves/ronde), swap hands during turn
 #### 🔗 Connections & Transitions
 - We are in [Crossed Hands](/concepts/crossed-hands) at the end
 ### Follower

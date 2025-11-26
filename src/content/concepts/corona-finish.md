@@ -7,7 +7,7 @@ updated_date: 2025-11-04T16:01:00.000Z
 tags:
   - salsa/concept
 related_moves:
-  - settenta-y-uno
+  - setenta-y-uno
 ---
 ## ✍️ Description
 - On 7 put right hand over her head or over my head

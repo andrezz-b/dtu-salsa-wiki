@@ -13,16 +13,16 @@ related_concepts:
   - crossed-hands
 related_moves:
   - vuelta
-  - settenta
+  - setenta
   - enchufla
-  - runde
+  - ronde
 ---
 ## ✍️ Description & Execution
 ### Leader
 - Into [Crossed Hands](/concepts/crossed-hands)
-- 123 567 - [Crossed Hands](/concepts/crossed-hands) [Vuelta](/moves/vuelta), like in [Settenta](/moves/settenta)
+- 123 567 - [Crossed Hands](/concepts/crossed-hands) [Vuelta](/moves/vuelta), like in [Setenta](/moves/setenta)
 - 123 - [Enchufla](/moves/enchufla)
-- 567 - [Runde](/moves/runde), keep left down
+- 567 - [Ronde](/moves/ronde), keep left down
 - 123 - [Enchufla](/moves/enchufla), let go hand behind back
 - 567 -  Switch hands and finish
 ### Follower

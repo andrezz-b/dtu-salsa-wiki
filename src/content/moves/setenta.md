@@ -1,5 +1,5 @@
 ---
-title: Settenta
+title: Setenta
 type: partner
 difficulty: 2
 level: beginner
