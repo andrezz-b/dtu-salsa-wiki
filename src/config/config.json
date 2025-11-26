@@ -15,7 +15,7 @@
   "settings": {
     "search": true,
     "sticky_header": true,
-    "theme_switcher": true,
+    "theme_switcher": false,
     "default_theme": "dark",
     "pagination": 2,
     "summary_length": 200,
