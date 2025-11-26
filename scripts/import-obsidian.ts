@@ -13,6 +13,8 @@ export interface ObsidianFrontmatter {
   exit_moves?: string[];
   created_date?: string;
   updated_date?: string;
+  video_url?: string;
+  video_urls?: string[];
   [key: string]: any;
 }
 
@@ -162,6 +164,20 @@ async function main() {
         title: title,
         ...data,
       };
+
+
+      
+      // Ensure video_urls is an array of strings
+      if (newFrontmatter.video_urls) {
+          if (!Array.isArray(newFrontmatter.video_urls)) {
+               if (typeof newFrontmatter.video_urls === 'string') {
+                   newFrontmatter.video_urls = [newFrontmatter.video_urls];
+               } else {
+                   // Fallback or error? Let's just remove if invalid
+                   delete newFrontmatter.video_urls;
+               }
+          }
+      }
 
       // Fix dates
       if (data.created_date) {

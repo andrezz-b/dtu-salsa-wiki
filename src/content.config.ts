@@ -21,7 +21,7 @@ const movesCollection = defineCollection({
     leader_difficulty: z.number().min(1).max(5).step(0.5).optional(),
     follower_difficulty: z.number().min(1).max(5).step(0.5).optional(),
     level: z.enum(["beginner", "intermediate", "advanced"]),
-    video_url: z.string().url().optional(),
+    video_urls: z.array(z.string().url()).optional(),
     related_concepts: z.array(reference("concepts")).optional(), // References handled by slug in frontmatter usually, or use reference() if available but simple string array is safer for now with basic loader
     setup_moves: z.array(reference("moves")).optional(),
     exit_moves: z.array(reference("moves")).optional(),
@@ -40,7 +40,7 @@ const conceptsCollection = defineCollection({
     title: z.string(),
     type: z.enum(["hold", "position", "technique", "musicality", "finish"]),
     level: z.enum(["beginner", "intermediate", "advanced"]),
-    video_url: z.string().url().optional(),
+    video_urls: z.array(z.string().url()).optional(),
     related_concepts: z.array(reference("concepts")).optional(),
     related_moves: z.array(reference("moves")).optional(),
     created_date: z.date().optional(),
