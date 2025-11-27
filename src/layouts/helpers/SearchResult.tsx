@@ -1,5 +1,7 @@
-import { plainify, titleify } from "@/lib/utils/textConverter";
+import { plainify } from "@/lib/utils/textConverter";
 import React from "react";
+import Badge from "./Badge";
+import StarRatingDisplay from "./StarRatingDisplay";
 
 export interface ISearchItem {
   group: string;
@@ -13,26 +15,9 @@ export interface ISearchItem {
     level?: string;
     difficulty?: number;
     type?: string;
+    aliases?: string[];
   };
   content: string;
-}
-
-export interface ISearchGroup {
-  group: string;
-  groupItems: {
-    slug: string;
-    frontmatter: {
-      title: string;
-      image?: string;
-      description?: string;
-      categories?: string[];
-      tags?: string[];
-      level?: string;
-      difficulty?: number;
-      type?: string;
-    };
-    content: string;
-  }[];
 }
 
 // search result component
@@ -43,40 +28,6 @@ const SearchResult = ({
   searchResult: ISearchItem[];
   searchString: string;
 }) => {
-  // generate search result group
-  const generateSearchGroup = (searchResult: ISearchItem[]) => {
-    const joinDataByGroup: ISearchGroup[] = searchResult.reduce(
-      (groupItems: ISearchGroup[], item: ISearchItem) => {
-        const groupIndex = groupItems.findIndex(
-          (group) => group.group === item.group,
-        );
-        if (groupIndex === -1) {
-          groupItems.push({
-            group: item.group,
-            groupItems: [
-              {
-                frontmatter: { ...item.frontmatter },
-                slug: item.slug,
-                content: item.content,
-              },
-            ],
-          });
-        } else {
-          groupItems[groupIndex].groupItems.push({
-            frontmatter: { ...item.frontmatter },
-            slug: item.slug,
-            content: item.content,
-          });
-        }
-
-        return groupItems;
-      },
-      [],
-    );
-    return joinDataByGroup;
-  };
-  const finalResult = generateSearchGroup(searchResult);
-
   // match marker
   const matchMarker = (text: string, substring: string) => {
     const parts = text.split(new RegExp(`(${substring})`, "gi"));
@@ -110,6 +61,8 @@ const SearchResult = ({
       .toLowerCase()
       .indexOf(substring.toLowerCase());
 
+    if (position === -1) return null;
+
     // Find the start of the word containing the substring
     let wordStart = position;
     while (wordStart > 0 && plainContent[wordStart - 1] !== " ") {
@@ -136,102 +89,75 @@ const SearchResult = ({
     <div className="search-wrapper-body">
       {searchString ? (
         <div className="search-result">
-          {finalResult.length > 0 ? (
-            finalResult.map((result) => (
-              <div className="search-result-group" key={result.group}>
-                <p className="search-result-group-title">
-                  {titleify(result.group)}
-                </p>
-
-                {result.groupItems.map((item) => (
-                  <div
-                    key={item.slug}
-                    id="searchItem"
-                    className="search-result-item"
-                  >
-                    {item.frontmatter.image && (
-                      <div className="search-result-item-image">
-                        <img
-                          src={item.frontmatter.image}
-                          alt={item.frontmatter.title}
-                        />
+          {searchResult.length > 0 ? (
+            <div className="grid grid-cols-1 gap-4">
+              {searchResult.map((item) => (
+                <div
+                  key={item.slug}
+                  id="searchItem"
+                  className="bg-white dark:bg-darkmode-light rounded-lg shadow p-6 border border-border dark:border-darkmode-border transition-colors group relative"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      {item.frontmatter.type || "Item"}
+                    </span>
+                    {item.frontmatter.difficulty !== undefined && (
+                      <StarRatingDisplay rating={item.frontmatter.difficulty} />
+                    )}
+                  </div>
+                  <h3 className="h5 mb-2">
+                    <a
+                      href={`/${item.slug}`}
+                      className="group-hover:text-accent stretched-link dark:text-white transition-colors"
+                    >
+                      {matchUnderline(item.frontmatter.title, searchString)}
+                    </a>
+                  </h3>
+                  {item.frontmatter.description && (
+                    <p className="text-sm opacity-80 line-clamp-2 mb-4">
+                      {matchUnderline(
+                        item.frontmatter.description,
+                        searchString,
+                      )}
+                    </p>
+                  )}
+                  {item.frontmatter.aliases &&
+                    item.frontmatter.aliases.length > 0 && (
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                        <span className="font-semibold">Aliases: </span>
+                        {item.frontmatter.aliases.map((alias, index) => (
+                          <span key={index}>
+                            {matchUnderline(alias, searchString)}
+                            {index < item.frontmatter.aliases!.length - 1 &&
+                              ", "}
+                          </span>
+                        ))}
                       </div>
                     )}
-                    <div className="search-result-item-body">
-                      <a
-                        href={`/${item.slug}`}
-                        className="search-result-item-title search-result-item-link"
-                      >
-                        {matchUnderline(item.frontmatter.title, searchString)}
-                      </a>
-                      {item.frontmatter.description && (
-                        <p className="search-result-item-description">
-                          {matchUnderline(
-                            item.frontmatter.description,
-                            searchString,
-                          )}
-                        </p>
-                      )}
 
-                      <div className="flex flex-wrap gap-2 text-xs mt-1">
-                        {item.frontmatter.level && (
-                          <span
-                            className={`px-2 py-0.5 rounded ${
-                              item.frontmatter.level === "beginner"
-                                ? "bg-green-100 text-green-800"
-                                : item.frontmatter.level === "intermediate"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-red-100 text-red-800"
-                            }`}
-                          >
-                            {item.frontmatter.level}
-                          </span>
-                        )}
-                        {item.frontmatter.type && (
-                          <span className="px-2 py-0.5 rounded bg-gray-100 text-gray-800">
-                            {item.frontmatter.type}
-                          </span>
-                        )}
-                        {item.frontmatter.difficulty && (
-                          <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800">
-                            Diff: {item.frontmatter.difficulty}
-                          </span>
-                        )}
-                      </div>
+                  {item.content && (
+                    <p className="search-result-item-content text-sm text-gray-600 dark:text-gray-300 mb-4">
+                      {matchContent(item.content, searchString)}
+                    </p>
+                  )}
 
-                      {item.content && (
-                        <p className="search-result-item-content">
-                          {matchContent(item.content, searchString)}
-                        </p>
-                      )}
-                      <div className="search-result-item-taxonomies">
-                        {item.frontmatter.tags && (
-                          <div className="mr-2">
-                            <svg
-                              width="14"
-                              height="14"
-                              fill="currentColor"
-                              viewBox="0 0 16 16"
-                            >
-                              <path d="M3 2v4.586l7 7L14.586 9l-7-7H3zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2z"></path>
-                              <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"></path>
-                            </svg>
-                            {item.frontmatter.tags.map((tag, index) => (
-                              <span key={tag}>
-                                {matchUnderline(tag, searchString)}
-                                {item.frontmatter.tags &&
-                                  index !==
-                                    item.frontmatter.tags.length - 1 && <>, </>}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {item.frontmatter.level && (
+                      <Badge
+                        label={item.frontmatter.level}
+                        type={
+                          item.frontmatter.level === "beginner"
+                            ? "success"
+                            : item.frontmatter.level === "intermediate"
+                              ? "warning"
+                              : "danger"
+                        }
+                      />
+                    )}
                   </div>
-                ))}
-              </div>
-            ))
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="search-result-empty">
               <svg

@@ -7,6 +7,8 @@ created_date: 2025-11-06T20:49:00.000Z
 updated_date: 2025-11-08T21:26:00.000Z
 tags:
   - salsa/move
+aliases:
+  - '90'
 related_moves:
   - setenta
   - enchufla

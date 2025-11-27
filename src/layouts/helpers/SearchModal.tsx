@@ -1,5 +1,6 @@
 import searchData from ".json/search.json";
-import React, { useEffect, useState } from "react";
+import MiniSearch from "minisearch";
+import React, { useEffect, useMemo, useState } from "react";
 import SearchResult, { type ISearchItem } from "./SearchResult";
 
 const SearchModal = () => {
@@ -10,40 +11,59 @@ const SearchModal = () => {
     setSearchString(e.currentTarget.value.replace("\\", "").toLowerCase());
   };
 
-  // generate search result
-  const doSearch = (searchData: ISearchItem[]) => {
-    const regex = new RegExp(`${searchString}`, "gi");
+  // Initialize MiniSearch once
+  const miniSearch = useMemo(() => {
+    const ms = new MiniSearch({
+      fields: [
+        "frontmatter.title",
+        "frontmatter.type",
+        "frontmatter.level",
+        "content",
+        "frontmatter.tags",
+        "frontmatter.aliases",
+      ], // fields to index for full-text search
+      storeFields: ["slug", "group", "frontmatter", "content"], // fields to return with search results
+      extractField: (document, fieldName) => {
+        return fieldName
+          .split(".")
+          .reduce((doc, key) => doc && doc[key], document);
+      },
+      searchOptions: {
+        prefix: true,
+        fuzzy: 0.2,
+        boost: {
+          "frontmatter.title": 2,
+        },
+      },
+    });
+
+    // Index all documents
+    ms.addAll(searchData.map((item) => ({ id: item.slug, ...item })));
+    return ms;
+  }, []);
+
+  // Generate search result
+  const { searchResult, totalTime } = useMemo(() => {
+    const startTime = performance.now();
     if (searchString === "") {
-      return [];
-    } else {
-      const searchResult = searchData.filter((item) => {
-        const title = item.frontmatter.title.toLowerCase().match(regex);
-        const description = item.frontmatter.description
-          ?.toLowerCase()
-          .match(regex);
-        const categories = item.frontmatter.categories
-          ?.join(" ")
-          .toLowerCase()
-          .match(regex);
-        const tags = item.frontmatter.tags
-          ?.join(" ")
-          .toLowerCase()
-          .match(regex);
-        const content = item.content.toLowerCase().match(regex);
-
-        if (title || content || description || categories || tags) {
-          return item;
-        }
-      });
-      return searchResult;
+      return { searchResult: [], totalTime: "0.000" };
     }
-  };
 
-  // get search result
-  const startTime = performance.now();
-  const searchResult = doSearch(searchData);
-  const endTime = performance.now();
-  const totalTime = ((endTime - startTime) / 1000).toFixed(3);
+    const results = miniSearch.search(searchString);
+    const endTime = performance.now();
+
+    const mappedResults = results.map((result: any) => ({
+      slug: result.slug,
+      group: result.group,
+      frontmatter: result.frontmatter,
+      content: result.content,
+    })) as ISearchItem[];
+
+    return {
+      searchResult: mappedResults,
+      totalTime: ((endTime - startTime) / 1000).toFixed(3),
+    };
+  }, [searchString, miniSearch]);
 
   // search dom manipulation
   useEffect(() => {

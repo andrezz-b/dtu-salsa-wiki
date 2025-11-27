@@ -4,6 +4,8 @@ import { getCollection } from "astro:content";
 import { FaArrowRight } from "react-icons/fa";
 import Card from "@/helpers/Card";
 
+const LATEST_COUNT = 6;
+
 // Fetch latest moves
 const moves = await getCollection("moves", ({ data }) => !data.draft);
 const latestMoves = moves
@@ -12,7 +14,7 @@ const latestMoves = moves
     const dateB = b.data.created_date ? b.data.created_date.getTime() : 0;
     return dateB - dateA;
   })
-  .slice(0, 5);
+  .slice(0, LATEST_COUNT);
 
 // Fetch latest concepts
 const concepts = await getCollection("concepts", ({ data }) => !data.draft);
@@ -22,7 +24,7 @@ const latestConcepts = concepts
     const dateB = b.data.created_date ? b.data.created_date.getTime() : 0;
     return dateB - dateA;
   })
-  .slice(0, 5);
+  .slice(0, LATEST_COUNT);
 ---
 
 <Base>
@@ -57,7 +59,7 @@ const latestConcepts = concepts
             </svg>
             <span class="text-gray-500 dark:text-gray-400">Search moves, concepts...</span>
             <span
-              class="ml-auto text-xs text-gray-400 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5"
+              class="ml-auto text-xs text-gray-400 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 hidden lg:inline search-shortcut-key"
               >⌘K</span
             >
           </div>
