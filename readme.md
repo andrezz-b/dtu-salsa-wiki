@@ -1,132 +1,77 @@
-<h1 align=center>Astro + Tailwind CSS + TypeScript Starter and Boilerplate</h1>
+# DTU Salsa Wiki
 
-<p align=center>Astroplate is a free starter template built with Astro, TailwindCSS & TypeScript, providing everything you need to jumpstart your Astro project and save valuable time.</p>
-
-<p align=center>Made with ♥ by <a href="https://zeon.studio/">Zeon Studio</a></p>
-
-<p align=center> If you find this project useful, please give it a ⭐ to show your support. </p>
-
-<h2 align="center"> <a target="_blank" href="https://astroplate.netlify.app/" rel="nofollow">👀 Demo</a> | <a target="_blank" href="https://astroplate-multilang.netlify.app/" rel="nofollow">👀 Demo Multilang</a> | <a  target="_blank" href="https://pagespeed.web.dev/analysis/https-astroplate-netlify-app/yzx3foum3w?form_factor=desktop">Page Speed (100%)🚀</a>
-</h2>
-
-<p align=center>
-  <a href="https://github.com/withastro/astro/releases/tag/astro%405.15.9">
-    <img src="https://img.shields.io/static/v1?label=ASTRO&message=5.15&color=000&logo=astro"  alt="Astro Version 5.15"/>
-  </a>
-
-  <a href="https://github.com/zeon-studio/astroplate/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/zeon-studio/astroplate" alt="license"></a>
-
-  <img src="https://img.shields.io/github/languages/code-size/zeon-studio/astroplate" alt="code size">
-
-  <a href="https://github.com/zeon-studio/astroplate/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/zeon-studio/astroplate" alt="contributors"></a>
-</p>
+A community-driven knowledge base for salsa moves and concepts, built for the DTU Salsa community.
 
 ## 📌 Key Features
 
-- 👥 Multi-Authors
-- 🌐 Multilingual
-- 🎯 Similar Posts Suggestion
-- 🔍 Search Functionality
-- 🌑 Dark Mode
-- 🏷️ Tags & Categories
-- 🔗 Netlify setting pre-configured
-- 📞 Support contact form
-- 📱 Fully responsive
-- 📝 Write and update content in Markdown / MDX
-- 📎 Google Tag Manager
-- 💬 Disqus Comment
-- 🔳 Syntax Highlighting
+- **📚 Comprehensive Library:** A growing collection of Salsa moves and concepts, categorized by level and type.
+- **🔍 Fast Search:** Instant client-side fuzzy search powered by `minisearch`, with support for aliases and keyboard shortcuts (`Cmd+K` / `Ctrl+K`).
+- **📱 Mobile-First:** Fully responsive design that looks great on all devices, from phones to desktops.
+- **🌓 Dark Mode:** Built-in dark mode support for comfortable reading in any environment.
+- **⚡ High Performance:** Built with Astro for lightning-fast page loads and optimal SEO.
+- **📝 Easy Content Management:** Integrated with Decap CMS for easy content updates and additions.
+- **🏷️ Organized Content:** Robust tagging and categorization system to help you find exactly what you're looking for.
 
-### 📄 15+ Pre-designed Pages
+## 🛠️ Tech Stack
 
-- 🏠 Homepage
-- 👤 About
-- 📞 Contact
-- 👥 Authors
-- 👤 Author Single
-- 📝 Blog
-- 📝 Blog Single
-- 🚫 Custom 404
-- 💡 Elements
-- 📄 Privacy Policy
-- 🏷️ Tags
-- 🏷️ Tag Single
-- 🗂️ Categories
-- 🗂️ Category Single
-- 🔍 Search
-
-## 🔗 Integrations
-
-- astro/react
-- astro/sitemap
-- astro/tailwind
+- **Framework:** [Astro](https://astro.build/)
+- **UI Library:** [React](https://reactjs.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Search:** [Minisearch](https://lucaong.github.io/minisearch/)
+- **CMS:** [Decap CMS](https://decapcms.org/)
 
 ## 🚀 Getting Started
 
-### 📦 Dependencies
+### 📦 Prerequisites
 
-- astro v5.15+
-- node v20.10+
-- yarn v1.22+
-- tailwind v4+
+- Node.js v20.10+
+- npm or yarn
 
 ### 👉 Install Dependencies
 
 ```bash
+npm install
+# or
 yarn install
 ```
 
-### 👉 Development Command
+### 👉 Development
+
+Start the development server:
 
 ```bash
+npm run dev
+# or
 yarn run dev
 ```
 
-### 👉 Build Command
+Visit `http://localhost:4321` to see the site.
+
+### 👉 Build
+
+Build the project for production:
 
 ```bash
+npm run build
+# or
 yarn run build
 ```
 
-### 👉 Build and Run With Docker
+The output will be in the `dist/` directory.
 
-```bash
-docker build -t astroplate .
-# or
-# docker --build-arg INSTALLER=npm build -t astroplate .
-# or
-# docker --build-arg INSTALLER=pnpm build -t astroplate .
+## 📂 Project Structure
 
-docker run -p 3000:80 astroplate
-# or
-# docker run --rm -p 3000:80 astroplate
-```
+- `src/content/`: Markdown/MDX files for moves and concepts.
+- `src/layouts/`: Astro layouts and components.
+- `src/pages/`: Astro pages and routing.
+- `src/lib/`: Utility functions and helpers.
+- `public/`: Static assets and CMS configuration.
 
-To access the shell within the container:
+## 🤝 Contributing
 
-```bash
-docker run -it --rm astroplate ash
-```
+We welcome contributions! You can contribute by:
 
-<!-- reporting issue -->
-
-## 🐞 Reporting Issues
-
-We use GitHub Issues as the official bug tracker for this Template. Please Search [existing issues](https://github.com/zeon-studio/astroplate/issues). It’s possible someone has already reported the same problem.
-If your problem or idea has not been addressed yet, feel free to [open a new issue](https://github.com/zeon-studio/astroplate/issues).
-
-<!-- licence -->
-
-## 📝 License
-
-Copyright (c) 2023 - Present, Designed & Developed by [Zeon Studio](https://zeon.studio/)
-
-**Code License:** Released under the [MIT](https://github.com/zeon-studio/astroplate/blob/main/LICENSE) license.
-
-**Image license:** The images are only for demonstration purposes. They have their license, we don't have permission to share those images.
-
-## 💻 Need Custom Development Services?
-
-If you need a custom theme, theme customization, or complete website development services from scratch you can [Hire Us](https://zeon.studio/).
+1.  **Adding Content:** Use the `/admin` interface (Decap CMS) to add new moves or concepts.
+2.  **Improving Code:** Fork the repository, make changes, and submit a pull request.
+3.  **Reporting Issues:** Open an issue on GitHub if you find a bug or have a feature request.
