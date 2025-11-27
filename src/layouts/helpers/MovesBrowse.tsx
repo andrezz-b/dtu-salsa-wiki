@@ -1,10 +1,7 @@
 import movesData from ".json/moves.json";
 import React, { useState, useMemo } from "react";
-import { titleify } from "@/lib/utils/textConverter";
 import MultiSelect from "./MultiSelect";
 import StarRatingFilter from "./StarRatingFilter";
-import Badge from "./Badge";
-import StarRatingDisplay from "./StarRatingDisplay";
 import Card from "./Card";
 import Breadcrumbs from "./Breadcrumbs";
 import Pagination from "./Pagination";

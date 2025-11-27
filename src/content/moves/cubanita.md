@@ -26,7 +26,7 @@ related_moves:
   - 567 - into [Sombrero Finish](/concepts/sombrero-finish)
 ### Follower
 - 
-## Connections & Transitions
+## 🔗 Connections & Transitions
 ### To [Cubanito](/moves/cubanito)
 - On 3 of diagonal go under left hand
 - 567 - reposition and ask for the other hand

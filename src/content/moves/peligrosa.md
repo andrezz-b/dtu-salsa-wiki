@@ -29,11 +29,11 @@ related_moves:
   - You should end up facing each other, [Both Hands Hold](/concepts/both-hands-hold)
   - You should be in the starting position (you should do a 360°)
 - [Setenta al Revés](/moves/setenta-al-revés)
+### Follower
+- 
 ## 🔗 Connections & Transitions
 - After the [Espejo](/moves/espejo) do whatever feels good, but [Setenta al Revés](/moves/setenta-al-revés) is official part of the move
 - From the [Both Hands Hold](/concepts/both-hands-hold) you can do [Candado](/moves/candado) into another [Peligrosa](/moves/peligrosa), or [Enchufla Moderno](/moves/enchufla-moderno)
-### Follower
-- 
 ## ✨ Variations
 - [Peligrosa](/moves/peligrosa), [Candado](/moves/candado), [Peligrosa](/moves/peligrosa), [Setenta al Revés](/moves/setenta-al-revés)
 - [Peligrosa](/moves/peligrosa), [Candado](/moves/candado), [Enchufla Moderno](/moves/enchufla-moderno), [Enchufla Double Spin](/moves/enchufla-double-spin)

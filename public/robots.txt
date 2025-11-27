@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Disallow: /api/*
+Disallow: /admin/*
+Sitemap: https://dtu-salsa-wiki.netlify.app/sitemap-index.xml

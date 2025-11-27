@@ -1,6 +1,6 @@
 ---
 import { FaChevronRight } from "react-icons/fa";
-import StarRating from "./StarRating.astro";
+import StarRatingDisplay from "./StarRatingDisplay";
 
 interface Props {
   leaderDifficulty?: number;
@@ -22,7 +22,7 @@ const hasBreakdown = leaderDifficulty !== undefined || followerDifficulty !== un
   >
     <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Difficulty</span>
     <div class="flex items-center gap-2">
-      <StarRating rating={overallDifficulty} />
+      <StarRatingDisplay rating={overallDifficulty} />
       {
         hasBreakdown && (
           <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
@@ -39,13 +39,16 @@ const hasBreakdown = leaderDifficulty !== undefined || followerDifficulty !== un
         {/* Leader Difficulty */}
         <div class="flex flex-col items-start gap-1">
           <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Leader</span>
-          <StarRating rating={leaderDifficulty || overallDifficulty} color="text-blue-500" />
+          <StarRatingDisplay rating={leaderDifficulty || overallDifficulty} color="text-blue-500" />
         </div>
 
         {/* Follower Difficulty */}
         <div class="flex flex-col items-start gap-1">
           <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Follower</span>
-          <StarRating rating={followerDifficulty || overallDifficulty} color="text-pink-500" />
+          <StarRatingDisplay
+            rating={followerDifficulty || overallDifficulty}
+            color="text-pink-500"
+          />
         </div>
       </div>
     )

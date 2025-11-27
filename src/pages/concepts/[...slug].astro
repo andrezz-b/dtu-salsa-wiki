@@ -1,13 +1,12 @@
 ---
 import Base from "@/layouts/Base.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
-import { humanize, markdownify } from "@/lib/utils/textConverter";
 import { render, getEntries } from "astro:content";
-import Breadcrumbs from "@/layouts/helpers/Breadcrumbs.astro";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import { getYoutubeId } from "@/lib/utils/video";
 import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
+import Breadcrumbs from "@/helpers/Breadcrumbs";
 
 export async function getStaticPaths() {
   const concepts = await getSinglePage("concepts");

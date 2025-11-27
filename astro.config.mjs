@@ -2,7 +2,6 @@ import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
-import AutoImport from "astro-auto-import";
 import { defineConfig } from "astro/config";
 import remarkCollapse from "remark-collapse";
 import remarkToc from "remark-toc";
@@ -18,17 +17,8 @@ export default defineConfig({
   vite: { plugins: [tailwindcss()] },
   integrations: [
     react(),
-    sitemap(),
-    AutoImport({
-      imports: [
-        "@/shortcodes/Button",
-        "@/shortcodes/Accordion",
-        "@/shortcodes/Notice",
-        "@/shortcodes/Video",
-        "@/shortcodes/Youtube",
-        "@/shortcodes/Tabs",
-        "@/shortcodes/Tab",
-      ],
+    sitemap({
+      filter: (page) => !page.includes("/admin/"),
     }),
     mdx(),
   ],

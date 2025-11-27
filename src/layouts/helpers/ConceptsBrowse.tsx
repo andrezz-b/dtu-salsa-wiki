@@ -1,8 +1,6 @@
 import conceptsData from ".json/concepts.json";
 import React, { useState, useMemo } from "react";
-import { titleify } from "@/lib/utils/textConverter";
 import MultiSelect from "./MultiSelect";
-import Badge from "./Badge";
 import Card from "./Card";
 import Breadcrumbs from "./Breadcrumbs";
 

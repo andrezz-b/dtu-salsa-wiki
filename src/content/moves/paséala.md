@@ -31,9 +31,9 @@ related_moves:
 ---
 - First 67 - Switch hands
 - 23 - Switch hands
-#### 🔗 Connections & Transitions
-- Ends in [Cuban Hold](/concepts/cuban-hold), good for [Crossed Hands](/concepts/crossed-hands)
 ### Follower
 - 
+## 🔗 Connections & Transitions
+- Ends in [Cuban Hold](/concepts/cuban-hold), good for [Crossed Hands](/concepts/crossed-hands)
 ## 🎥 Video
 - **Video Link:** 

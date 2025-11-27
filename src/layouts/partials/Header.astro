@@ -1,5 +1,4 @@
 ---
-import Logo from "@/components/Logo.astro";
 import config from "@/config/config.json";
 import menu from "@/config/menu.json";
 import { IoSearch } from "react-icons/io5";
@@ -47,7 +46,7 @@ const { pathname } = Astro.url;
     <!-- /navbar toggler -->
     <ul
       id="nav-menu"
-      class="navbar-nav order-3 hidden w-full pb-6 lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8"
+      class="navbar-nav order-3 hidden w-full lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8"
     >
       {
         main.map((menu) => (
@@ -104,15 +103,40 @@ const { pathname } = Astro.url;
     <div class="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
       {
         settings.search && (
-          <button
-            class="border-border text-text-dark hover:text-primary dark:border-darkmode-border mr-5 inline-block text-xl dark:text-white dark:hover:text-darkmode-primary"
-            aria-label="search"
-            data-search-trigger
-          >
-            <IoSearch />
-          </button>
+          <>
+            {/* Mobile Search Icon */}
+            <button
+              class="border-border text-text-dark hover:text-primary dark:border-darkmode-border mr-5 inline-block text-xl dark:text-white dark:hover:text-darkmode-primary lg:hidden"
+              aria-label="search"
+              data-search-trigger
+            >
+              <IoSearch />
+            </button>
+
+            {/* Desktop Search Bar */}
+            <div
+              class="hidden lg:flex items-center bg-theme-light dark:bg-darkmode-theme-light rounded-md border border-border dark:border-darkmode-border px-3 py-1.5 cursor-pointer hover:border-primary dark:hover:border-darkmode-primary transition-colors min-w-[200px]"
+              data-search-trigger
+            >
+              <IoSearch className="text-gray-500 dark:text-gray-400 mr-2" />
+              <span class="text-sm text-gray-500 dark:text-gray-400 mr-auto">Search...</span>
+              <span class="text-xs text-gray-400 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 search-shortcut-key">
+                ⌘K
+              </span>
+            </div>
+          </>
         )
       }
     </div>
   </nav>
 </header>
+
+<script>
+  // OS Detection for Search Shortcut
+  const isMac = typeof navigator !== "undefined" && /mac/i.test(navigator.userAgent);
+  const shortcutKey = isMac ? "⌘K" : "Ctrl+K";
+  const shortcutElements = document.querySelectorAll(".search-shortcut-key");
+  shortcutElements.forEach((el) => {
+    el.textContent = shortcutKey;
+  });
+</script>

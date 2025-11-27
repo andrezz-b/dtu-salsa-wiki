@@ -5,12 +5,14 @@ interface StarRatingDisplayProps {
   rating: number;
   max?: number;
   size?: number;
+  color?: string;
 }
 
 const StarRatingDisplay: React.FC<StarRatingDisplayProps> = ({
   rating,
   max = 5,
   size = 16,
+  color = "text-yellow-400",
 }) => {
   return (
     <div className="flex items-center gap-0.5" title={`Difficulty: ${rating}/${max}`}>
@@ -19,7 +21,7 @@ const StarRatingDisplay: React.FC<StarRatingDisplayProps> = ({
         const halfStar = i + 0.5 === rating;
 
         return (
-          <span key={i} className="text-yellow-400" style={{ fontSize: size }}>
+          <span key={i} className={color} style={{ fontSize: size }}>
             {fullStar ? (
               <FaStar />
             ) : halfStar ? (

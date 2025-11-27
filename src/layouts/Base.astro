@@ -10,6 +10,7 @@ import { GoogleTagmanager, GoogleTagmanagerNoscript } from "@digi4care/astro-goo
 import { AstroFont } from "astro-font";
 import { ClientRouter } from "astro:transitions";
 import SearchModal from "./helpers/SearchModal";
+import defaultOgImageSrc from "@/assets/images/og-image.png";
 
 // font families
 const pf = theme.fonts.font_family.primary;
@@ -39,6 +40,7 @@ export interface Props {
 
 // destructure frontmatter
 const { title, meta_title, description, image, noindex, canonical } = Astro.props;
+const finalImage = image ? image : defaultOgImageSrc.src;
 ---
 
 <!doctype html>
@@ -47,9 +49,14 @@ const { title, meta_title, description, image, noindex, canonical } = Astro.prop
     <!-- google tag manager -->
     {config.google_tag_manager.enable && <GoogleTagmanager id={config.google_tag_manager.gtm_id} />}
     <!-- favicon -->
-    <link rel="shortcut icon" href={config.site.favicon} />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="DTU Salsa Wiki" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
     <!-- theme meta -->
-    <meta name="theme-name" content="astroplate" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="msapplication-TileColor" content="#000000" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
@@ -92,7 +99,7 @@ const { title, meta_title, description, image, noindex, canonical } = Astro.prop
     {canonical && <link rel="canonical" href={canonical} item-prop="url" />}
 
     <!-- noindex robots -->
-    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <meta name="robots" content="noindex,nofollow" />
 
     <!-- meta-description -->
     <meta
@@ -135,16 +142,10 @@ const { title, meta_title, description, image, noindex, canonical } = Astro.prop
     />
 
     <!-- og-image -->
-    <meta
-      property="og:image"
-      content={`${config.site.base_url}${image ? image : config.metadata.meta_image}`}
-    />
+    <meta property="og:image" content={`${config.site.base_url}${finalImage}`} />
 
     <!-- twitter-image -->
-    <meta
-      name="twitter:image"
-      content={`${config.site.base_url}${image ? image : config.metadata.meta_image}`}
-    />
+    <meta name="twitter:image" content={`${config.site.base_url}${finalImage}`} />
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body class="min-h-screen flex flex-col">

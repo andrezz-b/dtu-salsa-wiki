@@ -17,9 +17,9 @@ related_moves:
 ### Leader
 - 123 - [Enchufla](/moves/enchufla)
 - 567 - [Ronde](/moves/ronde), swap hands during turn
-#### 🔗 Connections & Transitions
-- We are in [Crossed Hands](/concepts/crossed-hands) at the end
 ### Follower
 - 
+## 🔗 Connections & Transitions
+- We are in [Crossed Hands](/concepts/crossed-hands) at the end
 ## 🎥 Video
 - **Video Link:** 
