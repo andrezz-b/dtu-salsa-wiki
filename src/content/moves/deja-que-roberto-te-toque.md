@@ -7,6 +7,8 @@ created_date: 2025-11-12T22:00:00.000Z
 updated_date: 2025-11-12T22:08:00.000Z
 tags:
   - salsa/move
+aliases:
+  - Roberto
 related_moves:
   - vuelta
   - enchufla

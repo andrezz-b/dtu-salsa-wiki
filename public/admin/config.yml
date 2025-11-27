@@ -4,8 +4,8 @@ backend:
 
 local_backend: true
 
-media_folder: "public/images"
-public_folder: "/images"
+media_folder: src/content/images/ # Location where files will be stored in the repo - we store them in src so that Astro can optimize them.
+public_folder: src/content/images/
 
 collections:
   - name: "moves"

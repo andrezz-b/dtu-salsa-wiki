@@ -20,9 +20,9 @@ related_moves:
 - 567 - Send her back and I do a [Ronde](/moves/ronde)
   - Swap hands over her head
 - Do another [Enchufla](/moves/enchufla) (unsure if this is actually part of the move)
-#### 🔗 Connections & Transitions
-- We are in [Crossed Hands](/concepts/crossed-hands) so we can do something with that
 ### Follower
 - 
+## 🔗 Connections & Transitions
+- We are in [Crossed Hands](/concepts/crossed-hands) so we can do something with that
 ## 🎥 Video
 - **Video Link:** 

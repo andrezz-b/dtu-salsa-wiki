@@ -1,6 +1,6 @@
 ---
 title: Dame
-type: partner
+type: rueda
 difficulty: 1.5
 level: beginner
 created_date: 2025-11-06T20:49:00.000Z

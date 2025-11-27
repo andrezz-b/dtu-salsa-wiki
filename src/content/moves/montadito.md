@@ -60,15 +60,4 @@ exit_moves:
 - 123 - [Enchufla](/moves/enchufla)
 - 567 - Hand on shoulder [Ronde](/moves/ronde) into [Dile Que No](/moves/dile-que-no)
 ## 🎥 Video
-- **Video Link:** 
-
-# 🚧 MIGRATION ZONE (Sort and Delete)
-> [!WARNING] Data Migration
-> Move the content below into the sections above, then delete everything below this line.
-
-## ✍️ Description & Execution
-
-## 🏁 Potential Finishes
-- 
-## 🎥 Learning & Media
 - **Video Link:**
