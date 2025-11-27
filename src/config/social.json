@@ -1,3 +1,7 @@
 {
-  "main": []
+  "main": [{
+    "name": "Github",
+    "icon": "FaGithub",
+    "link": "https://github.com/andrezz-b/dtu-salsa-wiki"
+  }]
 }

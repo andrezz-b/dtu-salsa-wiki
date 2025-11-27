@@ -24,7 +24,7 @@
 
   "params": {
     "contact_form_action": "#",
-    "copyright": "Designed And Developed by [Zeon Studio](https://zeon.studio)"
+    "copyright": "Designed And Developed by [DTU Salsa ](https://dtu-salsa-wiki.netlify.app)"
   },
 
   "google_tag_manager": {
@@ -33,8 +33,8 @@
   },
 
   "metadata": {
-    "meta_author": "zeon.studio",
+    "meta_author": "DTU Salsa",
     "meta_image": "/images/og-image.png",
-    "meta_description": "DTU Salsa Wiki"
+    "meta_description": "The ultimate guide to Salsa moves and concepts at DTU."
   }
 }

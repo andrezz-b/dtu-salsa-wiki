@@ -4,13 +4,13 @@ const bgImageMod = async (
   src: string,
   format?: "auto" | "avif" | "jpeg" | "png" | "svg" | "webp",
 ) => {
-  src = `/public${src}`;
-  const images = import.meta.glob("/public/images/**/*.{jpeg,jpg,png,gif}");
+  src = src.startsWith("/images") ? `/src/assets${src}` : src;
+  const images = import.meta.glob("/src/assets/images/**/*.{jpeg,jpg,png,gif}");
 
   // Check if the source path is valid
   if (!src || !images[src]) {
     console.error(
-      `\x1b[31mImage not found - ${src}.\x1b[0m Make sure the image is in the /public/images folder.`,
+      `\x1b[31mImage not found - ${src}.\x1b[0m Make sure the image is in the /src/assets/images folder.`,
     );
 
     return ""; // Return an empty string if the image is not found
