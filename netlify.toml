@@ -4,3 +4,16 @@ command = "npm run build"
 
 [build.environment]
 NODE_VERSION = "22.20.0"
+
+[[headers]]
+for = "/manifest.webmanifest"
+[headers.values]
+Content-Type = "application/manifest+json"
+
+[[headers]]
+for = "/_astro/*"
+[headers.values]
+cache-control = '''
+    max-age=31536000,
+    immutable
+    '''
