@@ -1,5 +1,6 @@
 ---
 import TwSizeIndicator from "@/components/TwSizeIndicator.astro";
+import { pwaInfo } from 'virtual:pwa-info';
 import config from "@/config/config.json";
 import theme from "@/config/theme.json";
 import { plainify } from "@/lib/utils/textConverter";
@@ -49,17 +50,16 @@ const finalImage = image ? image : defaultOgImageSrc.src;
     <!-- google tag manager -->
     {config.google_tag_manager.enable && <GoogleTagmanager id={config.google_tag_manager.gtm_id} />}
     <!-- favicon -->
-    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="icon" href="/favicon/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon-180x180.png" />
+    <link rel="mask-icon" href="/favicon/maskable-icon-512x512.png" color="#FFFFFF" />
     <meta name="apple-mobile-web-app-title" content="DTU Salsa Wiki" />
-    <link rel="manifest" href="/favicon/site.webmanifest" />
+    { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
     <!-- theme meta -->
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="msapplication-TileColor" content="#000000" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+    <meta name="theme-color" content="#000000" />
     <meta name="generator" content={Astro.generator} />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -163,5 +163,6 @@ const finalImage = image ? image : defaultOgImageSrc.src;
       <slot />
     </main>
     <Footer />
+    <script src="/src/pwa.ts"></script>
   </body>
 </html>
