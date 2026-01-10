@@ -1,7 +1,8 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import matter from 'gray-matter';
-import Slugger from 'github-slugger';
+import fs from "node:fs";
+import { execSync } from "node:child_process";
+import path from "node:path";
+import matter from "gray-matter";
+import Slugger from "github-slugger";
 
 // Types
 export interface ObsidianFrontmatter {
@@ -21,7 +22,7 @@ export interface ObsidianFrontmatter {
 export interface FileInfo {
   originalTitle: string;
   slug: string;
-  type: 'move' | 'concept';
+  type: "move" | "concept";
   path: string;
 }
 
@@ -31,13 +32,13 @@ export const generateSlug = (title: string) => slugger.slug(title);
 
 export const parseObsidianDate = (val: any): Date | undefined => {
   if (val instanceof Date) return val;
-  if (typeof val !== 'string') return undefined;
-  
+  if (typeof val !== "string") return undefined;
+
   try {
-    const [datePart, timePart] = val.split(', ');
+    const [datePart, timePart] = val.split(", ");
     if (!datePart || !timePart) return undefined;
-    const [hours, minutes] = timePart.split(':');
-    const paddedTime = `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+    const [hours, minutes] = timePart.split(":");
+    const paddedTime = `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
     const date = new Date(`${datePart}T${paddedTime}`);
     if (isNaN(date.getTime())) return undefined;
     return date;
@@ -49,10 +50,12 @@ export const parseObsidianDate = (val: any): Date | undefined => {
 export const cleanFrontmatter = (obj: any): any => {
   if (obj instanceof Date) return obj; // Preserve Date objects
   if (Array.isArray(obj)) {
-    const cleaned = obj.map(cleanFrontmatter).filter(item => item !== null && item !== undefined && item !== '');
+    const cleaned = obj
+      .map(cleanFrontmatter)
+      .filter((item) => item !== null && item !== undefined && item !== "");
     return cleaned.length > 0 ? cleaned : undefined;
   }
-  if (typeof obj === 'object' && obj !== null) {
+  if (typeof obj === "object" && obj !== null) {
     const cleanedObj: any = {};
     for (const [key, value] of Object.entries(obj)) {
       const cleanedValue = cleanFrontmatter(value);
@@ -66,220 +69,289 @@ export const cleanFrontmatter = (obj: any): any => {
 };
 
 export const normalizeRelationItems = (items: any[]): string[] => {
-    const result: string[] = [];
-    for (const item of items) {
-        let itemStr = item;
-        while (Array.isArray(itemStr)) {
-            if (itemStr.length > 0) itemStr = itemStr[0];
-            else {
-              itemStr = undefined;
-              break; 
-            }
-        }
-        
-        if (typeof itemStr === 'string') {
-            result.push(itemStr);
-        }
+  const result: string[] = [];
+  for (const item of items) {
+    let itemStr = item;
+    while (Array.isArray(itemStr)) {
+      if (itemStr.length > 0) itemStr = itemStr[0];
+      else {
+        itemStr = undefined;
+        break;
+      }
     }
-    return result;
-}
+
+    if (typeof itemStr === "string") {
+      result.push(itemStr);
+    }
+  }
+  return result;
+};
 
 async function main() {
-    // Configuration
-    const args = process.argv.slice(2);
-    const usage = "Usage: npx tsx scripts/import-obsidian.ts --moves-out <path> --concepts-out <path> [--obsidian-data <path>]";
+  // Configuration
+  const args = process.argv.slice(2);
+  const usage =
+    "Usage: npx tsx scripts/import-obsidian.ts --moves-out <path> --concepts-out <path> [--obsidian-data <path>]";
 
-    function getArg(name: string): string | undefined {
-      const index = args.indexOf(name);
-      if (index !== -1 && index + 1 < args.length) {
-        return args[index + 1];
-      }
-      return undefined;
+  function getArg(name: string): string | undefined {
+    const index = args.indexOf(name);
+    if (index !== -1 && index + 1 < args.length) {
+      return args[index + 1];
     }
+    return undefined;
+  }
 
-    const movesOutArg = getArg('--moves-out');
-    const conceptsOutArg = getArg('--concepts-out');
-    const obsidianDataArg = getArg('--obsidian-data') || 'obsidian-data';
+  const movesOutArg = getArg("--moves-out");
+  const conceptsOutArg = getArg("--concepts-out");
+  const obsidianDataArg = getArg("--obsidian-data") || "obsidian-data";
 
-    if (!movesOutArg || !conceptsOutArg) {
-      console.error("Error: Missing output paths.");
-      console.error(usage);
-      process.exit(1);
-    }
+  if (!movesOutArg || !conceptsOutArg) {
+    console.error("Error: Missing output paths.");
+    console.error(usage);
+    process.exit(1);
+  }
 
-    const OBSIDIAN_PATH = path.resolve(process.cwd(), obsidianDataArg);
-    const MOVES_OUT_PATH = path.resolve(process.cwd(), movesOutArg);
-    const CONCEPTS_OUT_PATH = path.resolve(process.cwd(), conceptsOutArg);
+  const OBSIDIAN_PATH = path.resolve(process.cwd(), obsidianDataArg);
+  const MOVES_OUT_PATH = path.resolve(process.cwd(), movesOutArg);
+  const CONCEPTS_OUT_PATH = path.resolve(process.cwd(), conceptsOutArg);
 
-    // Validate Obsidian Data Path
-    const movesSourceDir = path.join(OBSIDIAN_PATH, 'Moves');
-    const conceptsSourceDir = path.join(OBSIDIAN_PATH, 'Concepts');
+  // Validate Obsidian Data Path
+  const movesSourceDir = path.join(OBSIDIAN_PATH, "Moves");
+  const conceptsSourceDir = path.join(OBSIDIAN_PATH, "Concepts");
 
-    if (!fs.existsSync(movesSourceDir) || !fs.statSync(movesSourceDir).isDirectory()) {
-        throw new Error(`Moves directory not found in ${OBSIDIAN_PATH}`);
-    }
-    if (!fs.existsSync(conceptsSourceDir) || !fs.statSync(conceptsSourceDir).isDirectory()) {
-        throw new Error(`Concepts directory not found in ${OBSIDIAN_PATH}`);
-    }
+  if (
+    !fs.existsSync(movesSourceDir) ||
+    !fs.statSync(movesSourceDir).isDirectory()
+  ) {
+    throw new Error(`Moves directory not found in ${OBSIDIAN_PATH}`);
+  }
+  if (
+    !fs.existsSync(conceptsSourceDir) ||
+    !fs.statSync(conceptsSourceDir).isDirectory()
+  ) {
+    throw new Error(`Concepts directory not found in ${OBSIDIAN_PATH}`);
+  }
 
-    console.log(`Importing from: ${OBSIDIAN_PATH}`);
-    console.log(`Moves output: ${MOVES_OUT_PATH}`);
-    console.log(`Concepts output: ${CONCEPTS_OUT_PATH}`);
+  console.log(`Importing from: ${OBSIDIAN_PATH}`);
+  console.log(`Moves output: ${MOVES_OUT_PATH}`);
+  console.log(`Concepts output: ${CONCEPTS_OUT_PATH}`);
 
-    // Ensure output directories exist
-    if (!fs.existsSync(MOVES_OUT_PATH)) fs.mkdirSync(MOVES_OUT_PATH, { recursive: true });
-    if (!fs.existsSync(CONCEPTS_OUT_PATH)) fs.mkdirSync(CONCEPTS_OUT_PATH, { recursive: true });
+  // Ensure output directories exist
+  if (!fs.existsSync(MOVES_OUT_PATH))
+    fs.mkdirSync(MOVES_OUT_PATH, { recursive: true });
+  if (!fs.existsSync(CONCEPTS_OUT_PATH))
+    fs.mkdirSync(CONCEPTS_OUT_PATH, { recursive: true });
 
-    // 1. Scan files and build lookup map
-    const fileMap = new Map<string, FileInfo>();
+  // 0. Check for changes in submodule
+  const force = args.includes("--force");
+  const CACHE_FILE = path.resolve(process.cwd(), ".obsidian-import-cache");
 
-    function scanDirectory(dir: string, type: 'move' | 'concept') {
-      if (!fs.existsSync(dir)) return;
-      const files = fs.readdirSync(dir);
-      for (const file of files) {
-        if (file.endsWith('.md')) {
-          const filePath = path.join(dir, file);
-          const originalTitle = path.basename(file, '.md');
-          const slug = generateSlug(originalTitle);
-          fileMap.set(originalTitle, { originalTitle, slug, type, path: filePath });
+  let currentCommit = "";
+  try {
+    currentCommit = execSync("git rev-parse HEAD", {
+      cwd: OBSIDIAN_PATH,
+      encoding: "utf-8",
+    }).trim();
+  } catch (e) {
+    console.warn(
+      "Failed to get git commit hash of obsidian-data. Import will proceed to be safe.",
+    );
+  }
+
+  if (!force && currentCommit) {
+    if (fs.existsSync(CACHE_FILE)) {
+      const lastCommit = fs.readFileSync(CACHE_FILE, "utf-8").trim();
+      if (lastCommit === currentCommit) {
+        // Check if output directories are empty (safety check)
+        const movesEmpty = fs.readdirSync(MOVES_OUT_PATH).length === 0;
+        const conceptsEmpty = fs.readdirSync(CONCEPTS_OUT_PATH).length === 0;
+
+        if (!movesEmpty && !conceptsEmpty) {
+          console.log("No changes detected in obsidian-data. Skipping import.");
+          return;
         }
       }
     }
+  }
 
-    console.log('Scanning Obsidian files...');
-    scanDirectory(path.join(OBSIDIAN_PATH, 'Moves'), 'move');
-    scanDirectory(path.join(OBSIDIAN_PATH, 'Concepts'), 'concept');
-    console.log(`Found ${fileMap.size} files.`);
+  // 1. Scan files and build lookup map
+  const fileMap = new Map<string, FileInfo>();
 
-    // 2. Process files
-    for (const [title, info] of fileMap.entries()) {
-      console.log(`Processing: ${title} (${info.type})`);
-      const content = fs.readFileSync(info.path, 'utf-8');
-      const parsed = matter(content);
-      const data = parsed.data as ObsidianFrontmatter;
-      let body = parsed.content;
-
-      // Transform Frontmatter
-      const newFrontmatter: any = {
-        title: title,
-        ...data,
-      };
-
-
-      
-      // Ensure video_urls is an array of strings
-      if (newFrontmatter.video_urls) {
-          if (!Array.isArray(newFrontmatter.video_urls)) {
-               if (typeof newFrontmatter.video_urls === 'string') {
-                   newFrontmatter.video_urls = [newFrontmatter.video_urls];
-               } else {
-                   // Fallback or error? Let's just remove if invalid
-                   delete newFrontmatter.video_urls;
-               }
-          }
+  function scanDirectory(dir: string, type: "move" | "concept") {
+    if (!fs.existsSync(dir)) return;
+    const files = fs.readdirSync(dir);
+    for (const file of files) {
+      if (file.endsWith(".md")) {
+        const filePath = path.join(dir, file);
+        const originalTitle = path.basename(file, ".md");
+        const slug = generateSlug(originalTitle);
+        fileMap.set(originalTitle, {
+          originalTitle,
+          slug,
+          type,
+          path: filePath,
+        });
       }
+    }
+  }
 
-      // Fix dates
-      if (data.created_date) {
-        const parsed = parseObsidianDate(data.created_date);
-        if (parsed) newFrontmatter.created_date = parsed;
-        else console.warn(`Failed to parse created_date for ${title}: ${data.created_date}`);
-      }
-      if (data.updated_date) {
-        const parsed = parseObsidianDate(data.updated_date);
-        if (parsed) newFrontmatter.updated_date = parsed;
-        else console.warn(`Failed to parse updated_date for ${title}: ${data.updated_date}`);
-      }
+  console.log("Scanning Obsidian files...");
+  scanDirectory(path.join(OBSIDIAN_PATH, "Moves"), "move");
+  scanDirectory(path.join(OBSIDIAN_PATH, "Concepts"), "concept");
+  console.log(`Found ${fileMap.size} files.`);
 
-      // Resolve Relations (convert titles to slugs)
-      const resolveRelations = (items: any[] | undefined) => {
-        if (!items) return undefined;
-        const normalizedItems = normalizeRelationItems(items);
-        const slugs = new Set<string>();
-        for (const cleanItemStr of normalizedItems) {
-            // Clean up [[Link]] syntax if present in frontmatter
-            const cleanItem = cleanItemStr.replace(/^\[\[(.*)\]\]$/, '$1');
-            const target = fileMap.get(cleanItem);
-            if (target) {
-                slugs.add(target.slug);
-            } else {
-                console.warn(`Relation not found: ${cleanItem} in ${title}`);
-            }
-        }
-        return Array.from(slugs);
-      };
+  // 2. Process files
+  for (const [title, info] of fileMap.entries()) {
+    console.log(`Processing: ${title} (${info.type})`);
+    const content = fs.readFileSync(info.path, "utf-8");
+    const parsed = matter(content);
+    const data = parsed.data as ObsidianFrontmatter;
+    let body = parsed.content;
 
-      if (newFrontmatter.related_moves) newFrontmatter.related_moves = resolveRelations(newFrontmatter.related_moves);
-      if (newFrontmatter.related_concepts) newFrontmatter.related_concepts = resolveRelations(newFrontmatter.related_concepts);
-      if (newFrontmatter.setup_moves) newFrontmatter.setup_moves = resolveRelations(newFrontmatter.setup_moves);
-      if (newFrontmatter.exit_moves) newFrontmatter.exit_moves = resolveRelations(newFrontmatter.exit_moves);
+    // Transform Frontmatter
+    const newFrontmatter: any = {
+      title: title,
+      ...data,
+    };
 
-      // Transform Content
-      const referencedMoves = new Set<string>();
-      const referencedConcepts = new Set<string>();
-
-      body = body.replace(/\[\[([^\]]+)\]\]/g, (match, linkText) => {
-        // Handle [[Link|Alias]]
-        const [linkTarget, linkAlias] = linkText.split('|');
-        const targetTitle = linkTarget.trim();
-        const alias = linkAlias ? linkAlias.trim() : targetTitle;
-
-        const targetInfo = fileMap.get(targetTitle);
-        if (targetInfo) {
-          if (targetInfo.type === 'move') {
-            referencedMoves.add(targetInfo.slug);
-            return `[${alias}](/moves/${targetInfo.slug})`;
-          } else {
-            referencedConcepts.add(targetInfo.slug);
-            return `[${alias}](/concepts/${targetInfo.slug})`;
-          }
+    // Ensure video_urls is an array of strings
+    if (newFrontmatter.video_urls) {
+      if (!Array.isArray(newFrontmatter.video_urls)) {
+        if (typeof newFrontmatter.video_urls === "string") {
+          newFrontmatter.video_urls = [newFrontmatter.video_urls];
         } else {
-          console.warn(`Broken link: [[${linkText}]] in ${title}`);
-          return match; 
+          // Fallback or error? Let's just remove if invalid
+          delete newFrontmatter.video_urls;
         }
-      });
-
-      // Add referenced items to frontmatter
-      if (referencedMoves.size > 0) {
-        const existing = new Set(newFrontmatter.related_moves || []);
-        for (const move of referencedMoves) {
-            if (move !== info.slug) existing.add(move); 
-        }
-        newFrontmatter.related_moves = Array.from(existing);
       }
-
-      if (referencedConcepts.size > 0) {
-        const existing = new Set(newFrontmatter.related_concepts || []);
-        for (const concept of referencedConcepts) {
-            if (concept !== info.slug) existing.add(concept);
-        }
-        newFrontmatter.related_concepts = Array.from(existing);
-      }
-
-      // Convert tabs to spaces
-      body = body.replace(/\t/g, '  ');
-
-      // Ensure numeric fields are numbers
-      if (newFrontmatter.difficulty) newFrontmatter.difficulty = Number(newFrontmatter.difficulty);
-      if (newFrontmatter.leader_difficulty) newFrontmatter.leader_difficulty = Number(newFrontmatter.leader_difficulty);
-      if (newFrontmatter.follower_difficulty) newFrontmatter.follower_difficulty = Number(newFrontmatter.follower_difficulty);
-
-      const finalFrontmatter = cleanFrontmatter(newFrontmatter);
-
-      // Write file
-      const outDir = info.type === 'move' ? MOVES_OUT_PATH : CONCEPTS_OUT_PATH;
-      const outPath = path.join(outDir, `${info.slug}.md`);
-      
-      const newContent = matter.stringify(body, finalFrontmatter);
-      fs.writeFileSync(outPath, newContent);
-      console.log(`Wrote: ${outPath}`);
     }
 
-    console.log('Import complete.');
+    // Fix dates
+    if (data.created_date) {
+      const parsed = parseObsidianDate(data.created_date);
+      if (parsed) newFrontmatter.created_date = parsed;
+      else
+        console.warn(
+          `Failed to parse created_date for ${title}: ${data.created_date}`,
+        );
+    }
+    if (data.updated_date) {
+      const parsed = parseObsidianDate(data.updated_date);
+      if (parsed) newFrontmatter.updated_date = parsed;
+      else
+        console.warn(
+          `Failed to parse updated_date for ${title}: ${data.updated_date}`,
+        );
+    }
+
+    // Resolve Relations (convert titles to slugs)
+    const resolveRelations = (items: any[] | undefined) => {
+      if (!items) return undefined;
+      const normalizedItems = normalizeRelationItems(items);
+      const slugs = new Set<string>();
+      for (const cleanItemStr of normalizedItems) {
+        // Clean up [[Link]] syntax if present in frontmatter
+        const cleanItem = cleanItemStr.replace(/^\[\[(.*)\]\]$/, "$1");
+        const target = fileMap.get(cleanItem);
+        if (target) {
+          slugs.add(target.slug);
+        } else {
+          console.warn(`Relation not found: ${cleanItem} in ${title}`);
+        }
+      }
+      return Array.from(slugs);
+    };
+
+    if (newFrontmatter.related_moves)
+      newFrontmatter.related_moves = resolveRelations(
+        newFrontmatter.related_moves,
+      );
+    if (newFrontmatter.related_concepts)
+      newFrontmatter.related_concepts = resolveRelations(
+        newFrontmatter.related_concepts,
+      );
+    if (newFrontmatter.setup_moves)
+      newFrontmatter.setup_moves = resolveRelations(newFrontmatter.setup_moves);
+    if (newFrontmatter.exit_moves)
+      newFrontmatter.exit_moves = resolveRelations(newFrontmatter.exit_moves);
+
+    // Transform Content
+    const referencedMoves = new Set<string>();
+    const referencedConcepts = new Set<string>();
+
+    body = body.replace(/\[\[([^\]]+)\]\]/g, (match, linkText) => {
+      // Handle [[Link|Alias]]
+      const [linkTarget, linkAlias] = linkText.split("|");
+      const targetTitle = linkTarget.trim();
+      const alias = linkAlias ? linkAlias.trim() : targetTitle;
+
+      const targetInfo = fileMap.get(targetTitle);
+      if (targetInfo) {
+        if (targetInfo.type === "move") {
+          referencedMoves.add(targetInfo.slug);
+          return `[${alias}](/moves/${targetInfo.slug})`;
+        } else {
+          referencedConcepts.add(targetInfo.slug);
+          return `[${alias}](/concepts/${targetInfo.slug})`;
+        }
+      } else {
+        console.warn(`Broken link: [[${linkText}]] in ${title}`);
+        return match;
+      }
+    });
+
+    // Add referenced items to frontmatter
+    if (referencedMoves.size > 0) {
+      const existing = new Set(newFrontmatter.related_moves || []);
+      for (const move of referencedMoves) {
+        if (move !== info.slug) existing.add(move);
+      }
+      newFrontmatter.related_moves = Array.from(existing);
+    }
+
+    if (referencedConcepts.size > 0) {
+      const existing = new Set(newFrontmatter.related_concepts || []);
+      for (const concept of referencedConcepts) {
+        if (concept !== info.slug) existing.add(concept);
+      }
+      newFrontmatter.related_concepts = Array.from(existing);
+    }
+
+    // Convert tabs to spaces
+    body = body.replace(/\t/g, "  ");
+
+    // Ensure numeric fields are numbers
+    if (newFrontmatter.difficulty)
+      newFrontmatter.difficulty = Number(newFrontmatter.difficulty);
+    if (newFrontmatter.leader_difficulty)
+      newFrontmatter.leader_difficulty = Number(
+        newFrontmatter.leader_difficulty,
+      );
+    if (newFrontmatter.follower_difficulty)
+      newFrontmatter.follower_difficulty = Number(
+        newFrontmatter.follower_difficulty,
+      );
+
+    const finalFrontmatter = cleanFrontmatter(newFrontmatter);
+
+    // Write file
+    const outDir = info.type === "move" ? MOVES_OUT_PATH : CONCEPTS_OUT_PATH;
+    const outPath = path.join(outDir, `${info.slug}.md`);
+
+    const newContent = matter.stringify(body, finalFrontmatter);
+    fs.writeFileSync(outPath, newContent);
+    console.log(`Wrote: ${outPath}`);
+  }
+
+  console.log("Import complete.");
+
+  if (currentCommit) {
+    fs.writeFileSync(CACHE_FILE, currentCommit);
+  }
 }
 
 // Run main only if executed directly
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath } from "node:url";
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   main();
 }
