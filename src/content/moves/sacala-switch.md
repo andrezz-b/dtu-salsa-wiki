@@ -3,8 +3,8 @@ title: Sacala Switch
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-12-01T19:40:00.000Z
-updated_date: 2025-12-01T19:40:00.000Z
+created_date: 2025-12-01T20:40:00.000Z
+updated_date: 2025-12-01T20:40:00.000Z
 tags:
   - salsa/move
   - role-switch

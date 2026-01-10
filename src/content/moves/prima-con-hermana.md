@@ -3,8 +3,8 @@ title: Prima con Hermana
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-11-02T19:25:00.000Z
-updated_date: 2025-11-26T09:26:00.000Z
+created_date: 2025-11-02T20:25:00.000Z
+updated_date: 2025-11-26T10:26:00.000Z
 tags:
   - salsa/move
 related_moves:

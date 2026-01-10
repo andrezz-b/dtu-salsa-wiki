@@ -3,8 +3,8 @@ title: Ochenta y Quatro
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-11-04T12:14:00.000Z
-updated_date: 2025-11-26T09:22:00.000Z
+created_date: 2025-11-04T13:14:00.000Z
+updated_date: 2025-11-26T10:22:00.000Z
 tags:
   - salsa/move
 aliases:

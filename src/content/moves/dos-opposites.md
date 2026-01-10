@@ -3,8 +3,8 @@ title: Dos opposites
 type: partner
 difficulty: 1.5
 level: intermediate
-created_date: 2025-11-04T15:55:00.000Z
-updated_date: 2025-11-26T09:19:00.000Z
+created_date: 2025-11-04T16:55:00.000Z
+updated_date: 2025-11-26T10:19:00.000Z
 tags:
   - salsa/move
 related_concepts:

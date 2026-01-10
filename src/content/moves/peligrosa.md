@@ -3,8 +3,8 @@ title: Peligrosa
 type: partner
 difficulty: 3.5
 level: advanced
-created_date: 2025-11-08T17:24:00.000Z
-updated_date: 2025-11-26T09:16:00.000Z
+created_date: 2025-11-08T18:24:00.000Z
+updated_date: 2025-11-26T10:16:00.000Z
 tags:
   - salsa/move
 related_concepts:

@@ -3,8 +3,8 @@ title: Sombrero Doble
 type: partner
 difficulty: 3
 level: intermediate
-created_date: 2025-11-04T21:47:00.000Z
-updated_date: 2025-11-08T21:25:00.000Z
+created_date: 2025-11-04T22:47:00.000Z
+updated_date: 2025-11-08T22:25:00.000Z
 tags:
   - salsa/move
 aliases:

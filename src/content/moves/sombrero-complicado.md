@@ -3,8 +3,8 @@ title: Sombrero Complicado
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-11-04T21:51:00.000Z
-updated_date: 2025-11-08T21:24:00.000Z
+created_date: 2025-11-04T22:51:00.000Z
+updated_date: 2025-11-08T22:24:00.000Z
 tags:
   - salsa/move
 related_concepts:
