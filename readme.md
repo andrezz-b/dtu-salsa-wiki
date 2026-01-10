@@ -26,14 +26,12 @@ A community-driven knowledge base for salsa moves and concepts, built for the DT
 ### 📦 Prerequisites
 
 - Node.js v20.10+
-- npm or yarn
+- npm
 
 ### 👉 Install Dependencies
 
 ```bash
 npm install
-# or
-yarn install
 ```
 
 ### 👉 Development
@@ -42,8 +40,6 @@ Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn run dev
 ```
 
 Visit `http://localhost:4321` to see the site.
@@ -59,6 +55,33 @@ yarn run build
 ```
 
 The output will be in the `dist/` directory.
+
+## 🔄 Sync & Import Workflow
+
+This project pulls content from an external **Obsidian Vault** (`dtu-salsa-data`). The data flows as follows:
+
+### 1. 📥 Data Import
+
+Code in `scripts/` handles importing content from the `obsidian-data` submodule into `src/content`.
+
+- **`scripts/import-obsidian.ts`**: The main driver. It reads content from `obsidian-data/Moves` and `obsidian-data/Concepts`, transforms frontmatter, resolves internal links (`[[Link]]`), and populates `src/content/moves` and `src/content/concepts`.
+- **`scripts/check-changes.ts`**: Optimizes the build process by checking if the submodule commit has changed since the last import. It prevents redundant processing if the data is already up-to-date.
+
+### 2. 🤖 Auto-Deploy Trigger
+
+We use **GitHub Actions** to keep the wiki synchronized with the Obsidian data:
+
+1.  **Push to Data Repo**: When changes are committed to `dtu-salsa-data`.
+2.  **Dispatch Event**: A workflow in the data repo triggers a `repository_dispatch` event in this repository.
+3.  **Update Submodule**: The `.github/workflows/update-data.yml` workflow runs here. It updates the `obsidian-data` submodule to the latest commit and pushes the update to `main`.
+4.  **Netlify Build**: Netlify detects the commit (which includes the updated submodule reference) and rebuilds the site with the new data.
+
+### 3. 👨‍💻 For Developers
+
+When running locally:
+
+- **`npm run dev`**: Automatically runs the import script before starting the server. If `obsidian-data` hasn't changed, the import is skipped for speed.
+- **`npm run import-obsidian -- --force`**: Forces a re-import of all data, ignoring the cache.
 
 ## 📂 Project Structure
 

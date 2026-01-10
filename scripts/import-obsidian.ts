@@ -1,3 +1,4 @@
+import { checkChanges } from "./check-changes.js";
 import fs from "node:fs";
 import { execSync } from "node:child_process";
 import path from "node:path";
@@ -142,35 +143,28 @@ async function main() {
   if (!fs.existsSync(CONCEPTS_OUT_PATH))
     fs.mkdirSync(CONCEPTS_OUT_PATH, { recursive: true });
 
-  // 0. Check for changes in submodule
-  const force = args.includes("--force");
   const CACHE_FILE = path.resolve(process.cwd(), ".obsidian-import-cache");
 
-  let currentCommit = "";
-  try {
-    currentCommit = execSync("git rev-parse HEAD", {
-      cwd: OBSIDIAN_PATH,
-      encoding: "utf-8",
-    }).trim();
-  } catch (e) {
-    console.warn(
-      "Failed to get git commit hash of obsidian-data. Import will proceed to be safe.",
-    );
-  }
+  // 0. Check for changes
+  const force = args.includes("--force");
 
-  if (!force && currentCommit) {
-    if (fs.existsSync(CACHE_FILE)) {
-      const lastCommit = fs.readFileSync(CACHE_FILE, "utf-8").trim();
-      if (lastCommit === currentCommit) {
-        // Check if output directories are empty (safety check)
+  if (!force) {
+    try {
+      // Check specifically in Moves and Concepts folders
+      const hasChanges = checkChanges(["Moves", "Concepts"]);
+
+      if (!hasChanges) {
+        // Ensure we actually have output content before trusting NO_CHANGE
         const movesEmpty = fs.readdirSync(MOVES_OUT_PATH).length === 0;
         const conceptsEmpty = fs.readdirSync(CONCEPTS_OUT_PATH).length === 0;
 
         if (!movesEmpty && !conceptsEmpty) {
-          console.log("No changes detected in obsidian-data. Skipping import.");
+          console.log("No relevant changes detected. Skipping import.");
           return;
         }
       }
+    } catch (e) {
+      console.warn("Change check failed, proceeding with import.", e);
     }
   }
 
@@ -345,8 +339,16 @@ async function main() {
 
   console.log("Import complete.");
 
-  if (currentCommit) {
-    fs.writeFileSync(CACHE_FILE, currentCommit);
+  try {
+    const currentCommit = execSync("git rev-parse HEAD", {
+      cwd: OBSIDIAN_PATH,
+      encoding: "utf-8",
+    }).trim();
+    if (currentCommit) {
+      fs.writeFileSync(CACHE_FILE, currentCommit);
+    }
+  } catch (e) {
+    console.warn("Failed to update import cache file.", e);
   }
 }
 
