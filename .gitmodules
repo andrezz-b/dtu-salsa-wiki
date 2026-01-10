@@ -1,0 +1,3 @@
+[submodule "obsidian-data"]
+	path = obsidian-data
+	url = git@github.com:andrezz-b/dtu-salsa-data.git
