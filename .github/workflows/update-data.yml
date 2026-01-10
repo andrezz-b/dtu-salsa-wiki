@@ -1,5 +1,8 @@
 name: Update Obsidian Data
 
+permissions:
+  contents: write
+
 on:
   repository_dispatch:
     types: [update-data]
@@ -18,6 +21,20 @@ jobs:
       - name: Update Submodule
         run: |
           git submodule update --remote obsidian-data
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Import Script
+        # We force import because in CI environment the cache file is missing/irrelevant
+        # and we want to ensure src/content is synced with the just-updated submodule.
+        run: npm run import-obsidian -- --force
 
       - name: Check for Changes
         id: check_changes

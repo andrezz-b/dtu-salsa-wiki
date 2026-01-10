@@ -8,6 +8,7 @@ tags:
   - salsa/concept
 ---
 ## ✍️ Description
-- TODO
+- Leader's elbow above the follower's hand
+- Keep elbow close to yourself when lifting to not hit the follower
 ## 🎥 Media
 - **Video Link:**
