@@ -60,7 +60,7 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/admin/],
       },
       devOptions: {
-        enabled: true,
+        enabled: false,
       },
     }),
   ],
