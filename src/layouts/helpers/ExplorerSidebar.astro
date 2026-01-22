@@ -43,6 +43,16 @@ const getLevelColor = (level: string) => {
 const EXPAND_THRESHOLD = 10;
 ---
 
+<style>
+  .explorer-folder[data-expanded="false"] .folder-content {
+    display: none;
+  }
+
+  .explorer-folder[data-expanded="true"] .icon-chevron {
+    transform: rotate(90deg);
+  }
+</style>
+
 <aside
   class="explorer-sidebar w-full bg-theme-light dark:bg-darkmode-theme-light rounded-lg border border-border dark:border-darkmode-border p-6"
 >
@@ -62,9 +72,7 @@ const EXPAND_THRESHOLD = 10;
             data-expanded={(setupMoves.length <= EXPAND_THRESHOLD).toString()}
           >
             <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-              <span
-                class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${setupMoves.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
-              >
+              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
                 <FaChevronRight />
               </span>
               <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -72,9 +80,7 @@ const EXPAND_THRESHOLD = 10;
               </span>
               <span class="text-sm text-gray-400">{setupMoves.length}</span>
             </button>
-            <div
-              class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${setupMoves.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
-            >
+            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
               {setupMoves.map((move) => (
                 <a
                   href={`/moves/${move.id}`}
@@ -105,9 +111,7 @@ const EXPAND_THRESHOLD = 10;
             data-expanded={(exitMoves.length <= EXPAND_THRESHOLD).toString()}
           >
             <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-              <span
-                class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${exitMoves.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
-              >
+              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
                 <FaChevronRight />
               </span>
               <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -115,9 +119,7 @@ const EXPAND_THRESHOLD = 10;
               </span>
               <span class="text-sm text-gray-400">{exitMoves.length}</span>
             </button>
-            <div
-              class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${exitMoves.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
-            >
+            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
               {exitMoves.map((move) => (
                 <a
                   href={`/moves/${move.id}`}
@@ -148,9 +150,7 @@ const EXPAND_THRESHOLD = 10;
             data-expanded={(relatedMoves.length <= EXPAND_THRESHOLD).toString()}
           >
             <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-              <span
-                class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${relatedMoves.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
-              >
+              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
                 <FaChevronRight />
               </span>
               <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -158,9 +158,7 @@ const EXPAND_THRESHOLD = 10;
               </span>
               <span class="text-sm text-gray-400">{relatedMoves.length}</span>
             </button>
-            <div
-              class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${relatedMoves.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
-            >
+            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
               {relatedMoves.map((move) => (
                 <a
                   href={`/moves/${move.id}`}
@@ -193,9 +191,7 @@ const EXPAND_THRESHOLD = 10;
             ).toString()}
           >
             <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-              <span
-                class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${relatedConcepts.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
-              >
+              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
                 <FaChevronRight />
               </span>
               <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -205,9 +201,7 @@ const EXPAND_THRESHOLD = 10;
                 {relatedConcepts.length}
               </span>
             </button>
-            <div
-              class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${relatedConcepts.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
-            >
+            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
               {relatedConcepts.map((concept) => (
                 <a
                   href={`/concepts/${concept.id}`}
@@ -257,9 +251,7 @@ const EXPAND_THRESHOLD = 10;
               ).toString()}
             >
               <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-                <span
-                  class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${usedInMoves.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
-                >
+                <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
                   <FaChevronRight />
                 </span>
                 <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -267,9 +259,7 @@ const EXPAND_THRESHOLD = 10;
                 </span>
                 <span class="text-sm text-gray-400">{usedInMoves.length}</span>
               </button>
-              <div
-                class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${usedInMoves.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
-              >
+              <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
                 {usedInMoves.map((move) => (
                   <a
                     href={`/moves/${move.id}`}
@@ -301,9 +291,7 @@ const EXPAND_THRESHOLD = 10;
               ).toString()}
             >
               <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-                <span
-                  class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${usedInConcepts.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
-                >
+                <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
                   <FaChevronRight />
                 </span>
                 <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -313,9 +301,7 @@ const EXPAND_THRESHOLD = 10;
                   {usedInConcepts.length}
                 </span>
               </button>
-              <div
-                class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${usedInConcepts.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
-              >
+              <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
                 {usedInConcepts.map((concept) => (
                   <a
                     href={`/concepts/${concept.id}`}
@@ -359,12 +345,6 @@ const EXPAND_THRESHOLD = 10;
         trigger.addEventListener("click", () => {
           const isExpanded = folder.getAttribute("data-expanded") === "true";
           folder.setAttribute("data-expanded", (!isExpanded).toString());
-
-          content.classList.toggle("hidden");
-
-          if (iconChevron) {
-            iconChevron.classList.toggle("rotate-90");
-          }
         });
       }
     });

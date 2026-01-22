@@ -94,8 +94,8 @@ const SearchResult = ({
               {searchResult.map((item) => (
                 <div
                   key={item.slug}
-                  id="searchItem"
-                  className="bg-white dark:bg-darkmode-light rounded-lg shadow p-6 border border-border dark:border-darkmode-border transition-colors group relative"
+                  data-search-item
+                  className="search-result-item group"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
@@ -105,16 +105,16 @@ const SearchResult = ({
                       <StarRatingDisplay rating={item.frontmatter.difficulty} />
                     )}
                   </div>
-                  <h3 className="h5 mb-2">
+                  <h3 className="mb-2">
                     <a
                       href={`/${item.slug}`}
-                      className="group-hover:text-accent stretched-link dark:text-white transition-colors"
+                      className="search-result-item-title search-result-item-link"
                     >
                       {matchUnderline(item.frontmatter.title, searchString)}
                     </a>
                   </h3>
                   {item.frontmatter.description && (
-                    <p className="text-sm opacity-80 line-clamp-2 mb-4">
+                    <p className="search-result-item-description">
                       {matchUnderline(
                         item.frontmatter.description,
                         searchString,
@@ -123,7 +123,7 @@ const SearchResult = ({
                   )}
                   {item.frontmatter.aliases &&
                     item.frontmatter.aliases.length > 0 && (
-                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                      <div className="search-result-item-taxonomies mb-2">
                         <span className="font-semibold">Aliases: </span>
                         {item.frontmatter.aliases.map((alias, index) => (
                           <span key={index}>
