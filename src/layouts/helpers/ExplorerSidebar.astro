@@ -39,6 +39,8 @@ const getLevelColor = (level: string) => {
       return "bg-gray-400";
   }
 };
+
+const EXPAND_THRESHOLD = 10;
 ---
 
 <aside
@@ -55,9 +57,14 @@ const getLevelColor = (level: string) => {
       <div class="flex flex-col gap-2">
         {/* Setup Moves Folder */}
         {setupMoves.length > 0 && (
-          <div class="explorer-folder" data-expanded="true">
+          <div
+            class="explorer-folder"
+            data-expanded={(setupMoves.length <= EXPAND_THRESHOLD).toString()}
+          >
             <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+              <span
+                class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${setupMoves.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
+              >
                 <FaChevronRight />
               </span>
               <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -65,7 +72,9 @@ const getLevelColor = (level: string) => {
               </span>
               <span class="text-sm text-gray-400">{setupMoves.length}</span>
             </button>
-            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+            <div
+              class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${setupMoves.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
+            >
               {setupMoves.map((move) => (
                 <a
                   href={`/moves/${move.id}`}
@@ -91,9 +100,14 @@ const getLevelColor = (level: string) => {
 
         {/* Exit Moves Folder */}
         {exitMoves.length > 0 && (
-          <div class="explorer-folder" data-expanded="true">
+          <div
+            class="explorer-folder"
+            data-expanded={(exitMoves.length <= EXPAND_THRESHOLD).toString()}
+          >
             <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+              <span
+                class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${exitMoves.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
+              >
                 <FaChevronRight />
               </span>
               <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -101,7 +115,9 @@ const getLevelColor = (level: string) => {
               </span>
               <span class="text-sm text-gray-400">{exitMoves.length}</span>
             </button>
-            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+            <div
+              class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${exitMoves.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
+            >
               {exitMoves.map((move) => (
                 <a
                   href={`/moves/${move.id}`}
@@ -127,9 +143,14 @@ const getLevelColor = (level: string) => {
 
         {/* Related Moves Folder */}
         {relatedMoves.length > 0 && (
-          <div class="explorer-folder" data-expanded="true">
+          <div
+            class="explorer-folder"
+            data-expanded={(relatedMoves.length <= EXPAND_THRESHOLD).toString()}
+          >
             <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+              <span
+                class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${relatedMoves.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
+              >
                 <FaChevronRight />
               </span>
               <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -137,7 +158,9 @@ const getLevelColor = (level: string) => {
               </span>
               <span class="text-sm text-gray-400">{relatedMoves.length}</span>
             </button>
-            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+            <div
+              class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${relatedMoves.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
+            >
               {relatedMoves.map((move) => (
                 <a
                   href={`/moves/${move.id}`}
@@ -163,9 +186,16 @@ const getLevelColor = (level: string) => {
 
         {/* Related Concepts Folder */}
         {relatedConcepts.length > 0 && (
-          <div class="explorer-folder" data-expanded="true">
+          <div
+            class="explorer-folder"
+            data-expanded={(
+              relatedConcepts.length <= EXPAND_THRESHOLD
+            ).toString()}
+          >
             <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+              <span
+                class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${relatedConcepts.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
+              >
                 <FaChevronRight />
               </span>
               <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -175,7 +205,9 @@ const getLevelColor = (level: string) => {
                 {relatedConcepts.length}
               </span>
             </button>
-            <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+            <div
+              class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${relatedConcepts.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
+            >
               {relatedConcepts.map((concept) => (
                 <a
                   href={`/concepts/${concept.id}`}
@@ -199,10 +231,12 @@ const getLevelColor = (level: string) => {
           </div>
         )}
       </div>
-      </div>
     ) : (
-      (usedInMoves.length === 0 && usedInConcepts.length === 0) && (
-        <div class="text-sm text-gray-400 italic px-2">No connections found.</div>
+      usedInMoves.length === 0 &&
+      usedInConcepts.length === 0 && (
+        <div class="text-sm text-gray-400 italic px-2">
+          No connections found.
+        </div>
       )
     )
   }
@@ -216,9 +250,16 @@ const getLevelColor = (level: string) => {
         </div>
         <div class="flex flex-col gap-2">
           {usedInMoves.length > 0 && (
-            <div class="explorer-folder" data-expanded="true">
+            <div
+              class="explorer-folder"
+              data-expanded={(
+                usedInMoves.length <= EXPAND_THRESHOLD
+              ).toString()}
+            >
               <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-                <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+                <span
+                  class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${usedInMoves.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
+                >
                   <FaChevronRight />
                 </span>
                 <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -226,7 +267,9 @@ const getLevelColor = (level: string) => {
                 </span>
                 <span class="text-sm text-gray-400">{usedInMoves.length}</span>
               </button>
-              <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+              <div
+                class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${usedInMoves.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
+              >
                 {usedInMoves.map((move) => (
                   <a
                     href={`/moves/${move.id}`}
@@ -251,9 +294,16 @@ const getLevelColor = (level: string) => {
           )}
 
           {usedInConcepts.length > 0 && (
-            <div class="explorer-folder" data-expanded="true">
+            <div
+              class="explorer-folder"
+              data-expanded={(
+                usedInConcepts.length <= EXPAND_THRESHOLD
+              ).toString()}
+            >
               <button class="folder-trigger w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-100 dark:hover:bg-white/5 text-left transition-colors group">
-                <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200 rotate-90">
+                <span
+                  class={`icon-chevron text-gray-400 text-xs transition-transform duration-200 ${usedInConcepts.length <= EXPAND_THRESHOLD ? "rotate-90" : ""}`}
+                >
                   <FaChevronRight />
                 </span>
                 <span class="text-base font-medium text-text-dark dark:text-darkmode-text-dark flex-1">
@@ -263,7 +313,9 @@ const getLevelColor = (level: string) => {
                   {usedInConcepts.length}
                 </span>
               </button>
-              <div class="folder-content pl-7 flex flex-col gap-1 mt-1">
+              <div
+                class={`folder-content pl-7 flex flex-col gap-1 mt-1 ${usedInConcepts.length <= EXPAND_THRESHOLD ? "" : "hidden"}`}
+              >
                 {usedInConcepts.map((concept) => (
                   <a
                     href={`/concepts/${concept.id}`}
