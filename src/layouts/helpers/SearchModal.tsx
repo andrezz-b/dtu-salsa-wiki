@@ -70,7 +70,7 @@ const SearchModal = () => {
     const searchModal = document.getElementById("searchModal");
     const searchInput = document.getElementById("searchInput");
     const searchModalOverlay = document.getElementById("searchModalOverlay");
-    const searchResultItems = document.querySelectorAll("#searchItem");
+    const searchResultItems = document.querySelectorAll("[data-search-item]");
     const searchModalTriggers = document.querySelectorAll(
       "[data-search-trigger]",
     );

@@ -11,13 +11,37 @@ import { getYoutubeId } from "@/lib/utils/video";
 
 export async function getStaticPaths() {
   const moves = await getSinglePage("moves");
-  return moves.map((move) => ({
-    params: { slug: move.id },
-    props: { move },
-  }));
+  const concepts = await getSinglePage("concepts");
+
+  return moves.map((move) => {
+    const usedInMoves = moves.filter((m) => {
+      const checkRef = (refs: any[] | undefined) =>
+        refs?.some((r) =>
+          typeof r === "string" ? r === move.id : r.id === move.id,
+        );
+      return (
+        checkRef(m.data.setup_moves) ||
+        checkRef(m.data.exit_moves) ||
+        checkRef(m.data.related_moves)
+      );
+    });
+
+    const usedInConcepts = concepts.filter((c) => {
+      const checkRef = (refs: any[] | undefined) =>
+        refs?.some((r) =>
+          typeof r === "string" ? r === move.id : r.id === move.id,
+        );
+      return checkRef(c.data.related_moves);
+    });
+
+    return {
+      params: { slug: move.id },
+      props: { move, usedInMoves, usedInConcepts },
+    };
+  });
 }
 
-const { move } = Astro.props;
+const { move, usedInMoves, usedInConcepts } = Astro.props;
 const { Content } = await render(move);
 const {
   title,
@@ -39,10 +63,14 @@ const videoIds = video_urls
   : [];
 
 // Resolve references
-const resolvedRelatedConcepts = related_concepts ? await getEntries(related_concepts) : [];
+const resolvedRelatedConcepts = related_concepts
+  ? await getEntries(related_concepts)
+  : [];
 const resolvedSetupMoves = setup_moves ? await getEntries(setup_moves) : [];
 const resolvedExitMoves = exit_moves ? await getEntries(exit_moves) : [];
-const resolvedRelatedMoves = related_moves ? await getEntries(related_moves) : [];
+const resolvedRelatedMoves = related_moves
+  ? await getEntries(related_moves)
+  : [];
 ---
 
 <Base title={title}>
@@ -57,6 +85,8 @@ const resolvedRelatedMoves = related_moves ? await getEntries(related_moves) : [
               relatedMoves={resolvedRelatedMoves}
               exitMoves={resolvedExitMoves}
               relatedConcepts={resolvedRelatedConcepts}
+              usedInMoves={usedInMoves}
+              usedInConcepts={usedInConcepts}
             />
           </div>
         </div>
@@ -105,7 +135,7 @@ const resolvedRelatedMoves = related_moves ? await getEntries(related_moves) : [
 
           {/* Content */}
           <div
-            class="content mb-10 prose-a:text-accent prose-a:no-underline hover:prose-a:underline"
+            class="content mb-10 prose-a:text-accent prose-a:no-underline prose-a:hover:underline"
           >
             <Content />
           </div>
@@ -115,7 +145,12 @@ const resolvedRelatedMoves = related_moves ? await getEntries(related_moves) : [
               <div class="grid grid-cols-1 gap-6 mb-10">
                 {videoIds.map((id) => (
                   <div class="rounded-lg overflow-hidden shadow-lg">
-                    <LiteYouTubeEmbed client:idle id={id} title={title} poster="maxresdefault" />
+                    <LiteYouTubeEmbed
+                      client:idle
+                      id={id}
+                      title={title}
+                      poster="maxresdefault"
+                    />
                   </div>
                 ))}
               </div>

@@ -41,13 +41,13 @@
   @apply text-lg text-text-dark dark:text-darkmode-text-dark mb-[5px] px-3;
 }
 .search-result-item {
-  @apply rounded border bg-white dark:bg-darkmode-body dark:border-darkmode-border flex items-start mb-1 p-4 scroll-my-[30px] border-solid border-border relative;
+  @apply bg-white dark:bg-darkmode-light rounded-lg shadow p-6 border border-border dark:border-darkmode-border transition-colors relative block scroll-my-[30px];
 }
 .search-result-item mark {
   @apply bg-yellow-200 rounded-[2px];
 }
 .search-result-item-title {
-  @apply text-lg font-bold text-text-dark dark:text-darkmode-text-dark leading-none;
+  @apply text-xl font-bold text-text-dark dark:text-darkmode-text-dark leading-none;
 }
 .search-result-item-link::after {
   @apply absolute top-0 right-0 bottom-0 left-0 z-10 content-[""];
