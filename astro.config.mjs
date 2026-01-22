@@ -3,10 +3,9 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import AstroPWA from "@vite-pwa/astro";
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import remarkCollapse from "remark-collapse";
 import remarkToc from "remark-toc";
-import sharp from "sharp";
 import config from "./src/config/config.json";
 
 // https://astro.build/config
@@ -56,11 +55,11 @@ export default defineConfig({
       },
       workbox: {
         navigateFallback: "/404",
-        globPatterns: ["**/*.{css,js,html,svg,png,ico,txt}"],
+        globPatterns: ["**/*.{css,js,html,svg,png,ico,txt,woff2}"],
         navigateFallbackDenylist: [/^\/admin/],
       },
       devOptions: {
-        enabled: false,
+        enabled: true,
       },
     }),
   ],
@@ -68,5 +67,16 @@ export default defineConfig({
     remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
     shikiConfig: { theme: "one-dark-pro", wrap: true },
     extendDefaultPlugins: true,
+  },
+  experimental: {
+    fonts: [
+      {
+        name: "Inter",
+        cssVariable: "--font-primary",
+        provider: fontProviders.fontsource(),
+        subsets: ["latin", "latin-ext"],
+        weights: [400, 500, 600, 700],
+      },
+    ],
   },
 });
