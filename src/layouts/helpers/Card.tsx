@@ -14,8 +14,9 @@ interface Props {
 
 const Card: React.FC<Props> = ({ title, href, level, type, difficulty, description, tags }) => {
   return (
-    <div
-      className="bg-white dark:bg-darkmode-light rounded-lg shadow p-6 h-full border border-border dark:border-darkmode-border transition-colors group relative"
+    <a
+      href={href}
+      className="block bg-white dark:bg-darkmode-light rounded-2xl p-6 h-full border border-border dark:border-darkmode-border transition-all duration-300 group relative hover:border-accent/50 dark:hover:border-darkmode-accent/50 hover:shadow-lg hover:-translate-y-1"
     >
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
@@ -23,12 +24,10 @@ const Card: React.FC<Props> = ({ title, href, level, type, difficulty, descripti
         </span>
         {difficulty !== undefined && <StarRatingDisplay rating={difficulty} />}
       </div>
-      <h3 className="h5 mb-2">
-        <a href={href} className="group-hover:text-accent stretched-link dark:text-white transition-colors">
-          {title}
-        </a>
+      <h3 className="text-lg font-bold mb-2 text-text-dark dark:text-white group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
+        {title}
       </h3>
-      {description && <p className="text-sm opacity-80 line-clamp-2 mb-4">{description}</p>}
+      {description && <p className="text-sm text-text-light dark:text-darkmode-text-light line-clamp-2 mb-4">{description}</p>}
       <div className="flex flex-wrap gap-2 mt-auto">
         {
           level && (
@@ -40,7 +39,7 @@ const Card: React.FC<Props> = ({ title, href, level, type, difficulty, descripti
         }
         {tags?.map((tag, index) => <span key={index} className="badge badge-sm">{tag}</span>)}
       </div>
-    </div>
+    </a>
   );
 };
 

@@ -1,36 +1,57 @@
 ---
-import Logo from "@/components/Logo.astro";
-import Social from "@/components/Social.astro";
-import config from "@/config/config.json";
 import menu from "@/config/menu.json";
-import social from "@/config/social.json";
-import { markdownify } from "@/lib/utils/textConverter";
 
 const { footer }: { footer: { name: string; url: string }[] } = menu;
+const currentYear = new Date().getFullYear();
 ---
 
-<footer class="bg-light dark:bg-darkmode-light">
+<footer class="bg-light dark:bg-darkmode-light border-t border-border dark:border-darkmode-border">
   <div class="container">
-    <div class="row items-center py-10">
-      <div class="mb-8 text-center lg:col-3 lg:mb-0 lg:text-left">
-        <div class="order-0">
-          <a href="/" class="navbar-brand"> DTU Salsa Wiki </a>
+    <!-- Main Footer Content -->
+    <div class="py-8 lg:py-10">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <!-- Logo & Description -->
+        <div class="text-center lg:text-left">
+          <a href="/" class="navbar-brand inline-block mb-2">DTU Salsa Wiki</a>
+          <p class="text-sm text-text-light dark:text-darkmode-text-light max-w-xs mx-auto lg:mx-0">
+            A community-driven resource for salsa dancers at DTU.
+          </p>
         </div>
+
+        <!-- Navigation Links -->
+        <nav class="text-center">
+          <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            {
+              footer.map((item) => (
+                <li>
+                  <a
+                    href={item.url}
+                    class="text-text-dark dark:text-darkmode-text-dark hover:text-primary dark:hover:text-darkmode-primary transition-colors text-sm font-medium"
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
       </div>
-      <div class="mb-8 text-center lg:col-6 lg:mb-0">
-        <ul>
-          {
-            footer.map((menu) => (
-              <li class="m-3 inline-block">
-                <a href={menu.url}>{menu.name}</a>
-              </li>
-            ))
-          }
-        </ul>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-border dark:border-darkmode-border"></div>
+
+    <!-- Bottom Bar: Disclaimer & Copyright -->
+    <div class="py-5">
+      <div class="flex flex-col gap-3 text-center">
+        <p class="text-xs text-text-light dark:text-darkmode-text-light leading-relaxed max-w-2xl mx-auto">
+          This website is not affiliated with, endorsed by, or connected to DTU (Technical University of Denmark) or DTU Dancing.
+          It is an independent community project maintained by salsa enthusiasts.
+        </p>
+        <p class="text-xs text-text-light dark:text-darkmode-text-light">
+          &copy; {currentYear} DTU Salsa Wiki. All rights reserved.
+        </p>
       </div>
-      <!-- <div class="mb-8 text-center lg:col-3 lg:mb-0 lg:mt-0 lg:text-right">
-        <Social source={social.main} className="social-icons" />
-      </div> -->
     </div>
   </div>
 </footer>
