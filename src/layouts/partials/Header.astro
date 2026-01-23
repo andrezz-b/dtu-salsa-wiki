@@ -129,14 +129,14 @@ const { pathname } = Astro.url;
         {
           settings.search && (
             <div
-              class="flex items-center bg-theme-light dark:bg-darkmode-theme-light rounded-md border border-border dark:border-darkmode-border px-3 py-1.5 cursor-pointer hover:border-primary dark:hover:border-darkmode-primary transition-colors min-w-[200px]"
+              class="group flex items-center bg-white dark:bg-darkmode-body rounded-xl border border-border dark:border-darkmode-border px-4 py-2.5 cursor-pointer hover:border-accent/50 dark:hover:border-darkmode-accent/50 hover:shadow-md transition-all duration-300 min-w-[220px]"
               data-search-trigger
             >
-              <IoSearch className="text-gray-500 dark:text-gray-400 mr-2" />
-              <span class="text-sm text-gray-500 dark:text-gray-400 mr-auto">
+              <IoSearch className="text-gray-400 group-hover:text-accent dark:group-hover:text-darkmode-accent mr-3 transition-colors" />
+              <span class="text-sm text-gray-400 mr-auto">
                 Search...
               </span>
-              <span class="text-xs text-gray-400 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 search-shortcut-key">
+              <span class="text-xs text-gray-400 bg-light dark:bg-darkmode-light border border-border dark:border-darkmode-border rounded-lg px-2 py-1 font-mono search-shortcut-key">
                 ⌘K
               </span>
             </div>
