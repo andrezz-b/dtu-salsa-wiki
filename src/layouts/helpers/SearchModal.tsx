@@ -12,28 +12,59 @@ const SearchModal = () => {
     setSearchString(e.currentTarget.value.replace("\\", "").toLowerCase());
   };
 
-  // Initialize MiniSearch once
+  // Initialize MiniSearch once with optimized configuration
   const miniSearch = useMemo(() => {
     const ms = new MiniSearch({
       fields: [
         "frontmatter.title",
         "frontmatter.type",
         "frontmatter.level",
+        "frontmatter.description",
         "content",
         "frontmatter.tags",
         "frontmatter.aliases",
-      ], // fields to index for full-text search
-      storeFields: ["slug", "group", "frontmatter", "content"], // fields to return with search results
+      ],
+      storeFields: ["slug", "group", "frontmatter", "content"],
+      // Extract nested fields and handle arrays
       extractField: (document, fieldName) => {
-        return fieldName
+        const value = fieldName
           .split(".")
-          .reduce((doc, key) => doc && doc[key], document);
+          .reduce((doc: any, key: string) => doc && doc[key], document);
+        // Handle arrays (aliases, tags)
+        if (Array.isArray(value)) {
+          return value.join(" ");
+        }
+        return value;
+      },
+      // Custom tokenizer for better matching
+      tokenize: (text: string) => {
+        return text
+          .toLowerCase()
+          .split(/[\s\-_/]+/)
+          .filter((token) => token.length > 0);
       },
       searchOptions: {
+        // Enable prefix matching for partial words
         prefix: true,
-        fuzzy: 0.2,
+        // Dynamic fuzzy matching based on term length
+        fuzzy: (term: string) => {
+          if (term.length <= 2) return 0;
+          if (term.length <= 4) return 0.1;
+          return 0.2;
+        },
+        // Use OR combiner for broader results
+        combineWith: "OR",
+        // Field boosting - title and aliases are most important
         boost: {
-          "frontmatter.title": 2,
+          "frontmatter.title": 4,
+          "frontmatter.aliases": 3,
+          "frontmatter.description": 1.5,
+          "content": 1,
+        },
+        // Weight prefix and fuzzy matches
+        weights: {
+          fuzzy: 0.3,
+          prefix: 0.6,
         },
       },
     });

@@ -4,6 +4,7 @@ import MultiSelect from "./MultiSelect";
 import Card from "./Card";
 import Pagination from "./Pagination";
 import { IoSearch, IoFilter, IoClose } from "react-icons/io5";
+import { useSearch } from "@/lib/hooks/useSearch";
 
 interface IConceptItem {
   slug: string;
@@ -23,7 +24,27 @@ const ConceptsBrowse = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 12;
 
-  const allData = conceptsData as IConceptItem[];
+  const allData = useMemo(
+    () => (conceptsData as IConceptItem[]).map((item) => ({ ...item, id: item.slug })),
+    []
+  );
+
+  // Initialize MiniSearch for better search results
+  const { search } = useSearch({
+    items: allData,
+    fields: [
+      "frontmatter.title",
+      "frontmatter.type",
+      "frontmatter.level",
+      "frontmatter.description",
+    ],
+    storeFields: ["slug", "frontmatter"],
+    idField: "id",
+    boostFields: {
+      "frontmatter.title": 3,
+      "frontmatter.description": 1,
+    },
+  });
 
   // Extract unique options
   const levels = useMemo(() => {
@@ -41,7 +62,11 @@ const ConceptsBrowse = () => {
   }, [allData]);
 
   const filteredData = useMemo(() => {
-    return allData.filter((item) => {
+    // First apply search
+    const searchResults = search(searchQuery);
+
+    // Then apply filters
+    return searchResults.filter((item) => {
       if (
         selectedLevels.length > 0 &&
         !selectedLevels.includes(item.frontmatter.level)
@@ -54,15 +79,9 @@ const ConceptsBrowse = () => {
       )
         return false;
 
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const title = item.frontmatter.title.toLowerCase();
-        return title.includes(q);
-      }
-
       return true;
     });
-  }, [selectedLevels, selectedTypes, searchQuery, allData]);
+  }, [selectedLevels, selectedTypes, searchQuery, search]);
 
   React.useEffect(() => {
     setCurrentPage(1);

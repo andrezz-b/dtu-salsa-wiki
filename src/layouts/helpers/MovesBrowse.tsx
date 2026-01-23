@@ -5,6 +5,7 @@ import StarRatingFilter from "./StarRatingFilter";
 import Card from "./Card";
 import Pagination from "./Pagination";
 import { IoSearch, IoFilter, IoClose } from "react-icons/io5";
+import { useSearch } from "@/lib/hooks/useSearch";
 
 interface IMoveItem {
   slug: string;
@@ -28,7 +29,29 @@ const MovesBrowse = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 12;
 
-  const allData = movesData as IMoveItem[];
+  const allData = useMemo(
+    () => (movesData as IMoveItem[]).map((item) => ({ ...item, id: item.slug })),
+    []
+  );
+
+  // Initialize MiniSearch for better search results
+  const { search } = useSearch({
+    items: allData,
+    fields: [
+      "frontmatter.title",
+      "frontmatter.aliases",
+      "frontmatter.type",
+      "frontmatter.level",
+      "frontmatter.description",
+    ],
+    storeFields: ["slug", "frontmatter"],
+    idField: "id",
+    boostFields: {
+      "frontmatter.title": 3,
+      "frontmatter.aliases": 2,
+      "frontmatter.description": 1,
+    },
+  });
 
   // Extract unique options
   const levels = useMemo(() => {
@@ -46,7 +69,11 @@ const MovesBrowse = () => {
   }, [allData]);
 
   const filteredData = useMemo(() => {
-    return allData.filter((item) => {
+    // First apply search
+    const searchResults = search(searchQuery);
+
+    // Then apply filters
+    return searchResults.filter((item) => {
       if (
         selectedLevels.length > 0 &&
         !selectedLevels.includes(item.frontmatter.level)
@@ -62,16 +89,9 @@ const MovesBrowse = () => {
       if (minDifficulty > 0 && item.frontmatter.difficulty < minDifficulty)
         return false;
 
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const title = item.frontmatter.title.toLowerCase();
-        const aliases = item.frontmatter.aliases?.join(" ").toLowerCase() || "";
-        return title.includes(q) || aliases.includes(q);
-      }
-
       return true;
     });
-  }, [selectedLevels, selectedTypes, minDifficulty, searchQuery, allData]);
+  }, [selectedLevels, selectedTypes, minDifficulty, searchQuery, search]);
 
   React.useEffect(() => {
     setCurrentPage(1);
