@@ -1,6 +1,7 @@
 import searchData from ".json/search.json";
 import MiniSearch from "minisearch";
 import React, { useEffect, useMemo, useState } from "react";
+import { IoSearch, IoClose } from "react-icons/io5";
 import SearchResult, { type ISearchItem } from "./SearchResult";
 
 const SearchModal = () => {
@@ -147,58 +148,38 @@ const SearchModal = () => {
       <div id="searchModalOverlay" className="search-modal-overlay" />
       <div className="search-wrapper">
         <div className="search-wrapper-header">
-          <label
-            htmlFor="searchInput"
-            className="absolute left-7 top-[calc(50%-7px)]"
-          >
-            <span className="sr-only">search icon</span>
-            {searchString ? (
-              <svg
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+              <IoSearch className="w-5 h-5" />
+            </span>
+            <input
+              id="searchInput"
+              placeholder="Search moves, concepts, and more..."
+              className="search-wrapper-header-input"
+              type="text"
+              name="search"
+              value={searchString}
+              onChange={handleSearch}
+              autoComplete="off"
+            />
+            {searchString && (
+              <button
                 onClick={() => setSearchString("")}
-                viewBox="0 0 512 512"
-                height="18"
-                width="18"
-                className="hover:text-red-500 cursor-pointer -mt-0.5"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-accent dark:hover:text-darkmode-accent transition-colors p-1 rounded-lg hover:bg-light dark:hover:bg-darkmode-light"
+                aria-label="Clear search"
               >
-                <title>close icon</title>
-                <path
-                  fill="currentcolor"
-                  d="M256 512A256 256 0 10256 0a256 256 0 100 512zM175 175c9.4-9.4 24.6-9.4 33.9.0l47 47 47-47c9.4-9.4 24.6-9.4 33.9.0s9.4 24.6.0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6.0 33.9s-24.6 9.4-33.9.0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9.0s-9.4-24.6.0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6.0-33.9z"
-                ></path>
-              </svg>
-            ) : (
-              <svg
-                viewBox="0 0 512 512"
-                height="18"
-                width="18"
-                className="-mt-0.5"
-              >
-                <title>search icon</title>
-                <path
-                  fill="currentcolor"
-                  d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8.0 45.3s-32.8 12.5-45.3.0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9.0 208S93.1.0 208 0 416 93.1 416 208zM208 352a144 144 0 100-288 144 144 0 100 288z"
-                ></path>
-              </svg>
+                <IoClose className="w-5 h-5" />
+              </button>
             )}
-          </label>
-          <input
-            id="searchInput"
-            placeholder="Search..."
-            className="search-wrapper-header-input"
-            type="input"
-            name="search"
-            value={searchString}
-            onChange={handleSearch}
-            autoComplete="off"
-          />
+          </div>
         </div>
         <SearchResult searchResult={searchResult} searchString={searchString} />
         <div className="search-wrapper-footer">
-          <span className="flex items-center">
+          <span className="flex items-center gap-1">
             <kbd>
               <svg
-                width="14"
-                height="14"
+                width="12"
+                height="12"
                 fill="currentcolor"
                 viewBox="0 0 16 16"
               >
@@ -207,21 +188,21 @@ const SearchModal = () => {
             </kbd>
             <kbd>
               <svg
-                width="14"
-                height="14"
+                width="12"
+                height="12"
                 fill="currentcolor"
                 viewBox="0 0 16 16"
               >
                 <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 001.506.0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 00-.753 1.659z"></path>
               </svg>
             </kbd>
-            to navigate
+            <span className="ml-1">Navigate</span>
           </span>
-          <span className="flex items-center">
+          <span className="flex items-center gap-1">
             <kbd>
               <svg
-                width="12"
-                height="12"
+                width="10"
+                height="10"
                 fill="currentcolor"
                 viewBox="0 0 16 16"
               >
@@ -231,16 +212,16 @@ const SearchModal = () => {
                 ></path>
               </svg>
             </kbd>
-            to select
+            <span className="ml-1">Select</span>
           </span>
           {searchString && (
-            <span>
-              <strong>{searchResult.length} </strong> results - in{" "}
-              <strong>{totalTime} </strong> seconds
+            <span className="text-text-light dark:text-darkmode-text-light">
+              <strong className="text-text-dark dark:text-darkmode-text-dark">{searchResult.length}</strong> results
             </span>
           )}
-          <span>
-            <kbd>ESC</kbd> to close
+          <span className="flex items-center gap-1">
+            <kbd>ESC</kbd>
+            <span className="ml-1">Close</span>
           </span>
         </div>
       </div>
