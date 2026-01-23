@@ -36,6 +36,7 @@
   --color-body: #fff;
   --color-border: #eaeaea;
   --color-light: #f6f6f6;
+  --color-theme-light: #f8f8f8;
   --color-dark: #040404;
   --color-accent: #a388f5;
   --color-level-beginner: #22c55e;
@@ -51,6 +52,7 @@
   --color-darkmode-body: #1c1c1c;
   --color-darkmode-border: #3e3e3e;
   --color-darkmode-light: #222222;
+  --color-darkmode-theme-light: #2a2a2a;
   --color-darkmode-dark: #fff;
   --color-darkmode-accent: #a388f5;
   --color-darkmode-level-beginner: #4ade80;

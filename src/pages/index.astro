@@ -30,38 +30,95 @@ const latestConcepts = concepts
 <Base>
   <!-- Hero Section -->
   <section
-    class="section pt-20 pb-16 bg-linear-to-b from-primary/10 to-transparent dark:from-darkmode-primary/10"
+    class="relative min-h-[70vh] flex items-center justify-center overflow-hidden"
   >
-    <div class="container">
-      <div class="row justify-center">
-        <div class="lg:col-8 md:col-10 text-center">
-          <h1 class="mb-4 text-h3 lg:text-h1">Welcome to DTU Salsa Wiki</h1>
-          <p class="mb-8 text-lg">Your community-driven guide to salsa moves and concepts.</p>
+    <!-- Background with gradient -->
+    <div
+      class="absolute inset-0 bg-linear-to-br from-accent/20 via-accent/5 to-transparent dark:from-darkmode-accent/20 dark:via-darkmode-accent/5 dark:to-transparent"
+    >
+    </div>
 
-          <!-- Search Bar -->
-          <div
-            data-search-trigger
-            class="cursor-pointer bg-white dark:bg-darkmode-theme-light rounded-lg px-4 py-3 shadow-lg flex items-center gap-2 max-w-lg mx-auto border border-border dark:border-darkmode-border hover:border-primary transition-colors"
+    <!-- Decorative blurred circles -->
+    <div
+      class="absolute top-20 left-10 w-72 h-72 bg-accent/30 dark:bg-darkmode-accent/20 rounded-full blur-3xl"
+    >
+    </div>
+    <div
+      class="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 dark:bg-darkmode-accent/15 rounded-full blur-3xl"
+    >
+    </div>
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent/10 dark:bg-darkmode-accent/10 rounded-full blur-3xl"
+    >
+    </div>
+
+    <!-- Content -->
+    <div class="container relative z-10">
+      <div class="max-w-2xl mx-auto text-center">
+        <h1
+          class="mb-6 text-h2 md:text-h1 lg:text-[3.5rem] font-bold leading-tight"
+        >
+          Master Your <span class="text-accent dark:text-darkmode-accent"
+            >Salsa</span
+          > Moves
+        </h1>
+
+        <p
+          class="mb-10 text-lg md:text-xl text-text-light dark:text-darkmode-text-light max-w-lg mx-auto"
+        >
+          Discover, learn, and perfect salsa moves and concepts.
+        </p>
+
+        <!-- Search Bar -->
+        <div
+          data-search-trigger
+          class="cursor-pointer bg-white dark:bg-darkmode-body rounded-2xl px-5 py-4 shadow-xl flex items-center gap-3 max-w-xl mx-auto border-2 border-border dark:border-darkmode-border hover:border-accent dark:hover:border-darkmode-accent transition-all duration-300 hover:shadow-2xl hover:shadow-accent/10 group"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-gray-400 group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors"
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="text-gray-500 dark:text-gray-400"
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span class="text-gray-400 text-lg">Search moves, concepts...</span>
+          <span
+            class="ml-auto text-xs text-gray-400 bg-gray-100 dark:bg-darkmode-light border border-gray-200 dark:border-darkmode-border rounded-lg px-2 py-1 hidden lg:inline search-shortcut-key font-mono"
+            >⌘K</span
+          >
+        </div>
+
+        <!-- Quick stats -->
+        <div
+          class="mt-12 flex items-center justify-center gap-8 md:gap-12 text-sm"
+        >
+          <div class="text-center">
+            <div
+              class="text-2xl md:text-3xl font-bold text-text-dark dark:text-darkmode-text-dark"
             >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <span class="text-gray-500 dark:text-gray-400">Search moves, concepts...</span>
-            <span
-              class="ml-auto text-xs text-gray-400 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 hidden lg:inline search-shortcut-key"
-              >⌘K</span
+              {moves.length}
+            </div>
+            <div class="text-text-light dark:text-darkmode-text-light">
+              Moves
+            </div>
+          </div>
+          <div class="w-px h-10 bg-border dark:bg-darkmode-border"></div>
+          <div class="text-center">
+            <div
+              class="text-2xl md:text-3xl font-bold text-text-dark dark:text-darkmode-text-dark"
             >
+              {concepts.length}
+            </div>
+            <div class="text-text-light dark:text-darkmode-text-light">
+              Concepts
+            </div>
           </div>
         </div>
       </div>
@@ -69,26 +126,50 @@ const latestConcepts = concepts
   </section>
 
   <!-- Latest Moves Section -->
-  <section class="section-sm">
-    <div class="container">
-      <div class="flex justify-between items-end mb-8">
-        <h2 class="h3 mb-0">Latest Moves</h2>
-        <a href="/moves" class="btn btn-outline-primary btn-sm flex items-center gap-2">
+  <section class="py-16 md:py-24 relative overflow-hidden">
+    <!-- Subtle background decoration -->
+    <div
+      class="absolute top-0 right-0 w-96 h-96 bg-accent/5 dark:bg-darkmode-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"
+    >
+    </div>
+
+    <div class="container relative z-10">
+      <!-- Section Header -->
+      <div
+        class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10"
+      >
+        <div>
+          <span
+            class="inline-flex items-center gap-2 text-sm font-medium text-accent dark:text-gray-400 mb-2"
+          >
+            <span class="w-8 h-px bg-accent dark:bg-gray-400"></span>
+            Explore
+          </span>
+          <h2 class="text-h3 md:text-h2 font-bold">
+            Latest <span class="text-accent dark:text-darkmode-accent"
+              >Moves</span
+            >
+          </h2>
+        </div>
+        <a
+          href="/moves"
+          class="btn btn-outline-primary btn-sm inline-flex items-center gap-2 self-start sm:self-auto"
+        >
           View All <FaArrowRight />
         </a>
       </div>
-      <div class="row g-4">
+
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {
           latestMoves.map((move) => (
-            <div class="md:col-6 lg:col-4">
-              <Card
-                title={move.data.title}
-                href={`/moves/${move.id}`}
-                level={move.data.level}
-                type={move.data.type}
-                difficulty={move.data.difficulty}
-              />
-            </div>
+            <Card
+              title={move.data.title}
+              href={`/moves/${move.id}`}
+              level={move.data.level}
+              type={move.data.type}
+              difficulty={move.data.difficulty}
+            />
           ))
         }
       </div>
@@ -96,25 +177,51 @@ const latestConcepts = concepts
   </section>
 
   <!-- Latest Concepts Section -->
-  <section class="section-sm pt-0">
-    <div class="container">
-      <div class="flex justify-between items-end mb-8">
-        <h2 class="h3 mb-0">Latest Concepts</h2>
-        <a href="/concepts" class="btn btn-outline-primary btn-sm flex items-center gap-2">
+  <section
+    class="py-16 md:py-24 bg-light/50 dark:bg-darkmode-light/50 relative overflow-hidden"
+  >
+    <!-- Subtle background decoration -->
+    <div
+      class="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 dark:bg-darkmode-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"
+    >
+    </div>
+
+    <div class="container relative z-10">
+      <!-- Section Header -->
+      <div
+        class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10"
+      >
+        <div>
+          <span
+            class="inline-flex items-center gap-2 text-sm font-medium text-accent dark:text-gray-400 mb-2"
+          >
+            <span class="w-8 h-px bg-gray-400 dark:bg-gray-400"></span>
+            Learn
+          </span>
+          <h2 class="text-h3 md:text-h2 font-bold">
+            Latest <span class="text-accent dark:text-darkmode-accent"
+              >Concepts</span
+            >
+          </h2>
+        </div>
+        <a
+          href="/concepts"
+          class="btn btn-outline-primary btn-sm inline-flex items-center gap-2 self-start sm:self-auto"
+        >
           View All <FaArrowRight />
         </a>
       </div>
-      <div class="row g-4">
+
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {
           latestConcepts.map((concept) => (
-            <div class="md:col-6 lg:col-4">
-              <Card
-                title={concept.data.title}
-                href={`/concepts/${concept.id}`}
-                level={concept.data.level}
-                type={concept.data.type}
-              />
-            </div>
+            <Card
+              title={concept.data.title}
+              href={`/concepts/${concept.id}`}
+              level={concept.data.level}
+              type={concept.data.type}
+            />
           ))
         }
       </div>
