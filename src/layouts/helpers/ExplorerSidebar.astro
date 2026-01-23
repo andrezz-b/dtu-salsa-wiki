@@ -1,7 +1,6 @@
 ---
-import { IoChevronForward } from "react-icons/io5";
-import { FaRunning, FaLightbulb } from "react-icons/fa";
 import type { CollectionEntry } from "astro:content";
+import ExplorerFolder from "./ExplorerFolder.astro";
 
 interface Props {
   setupMoves?: CollectionEntry<"moves">[];
@@ -27,330 +26,104 @@ const hasConnections =
   relatedMoves.length > 0 ||
   relatedConcepts.length > 0;
 
-const getLevelColor = (level: string) => {
-  switch (level) {
-    case "beginner":
-      return "bg-level-beginner dark:bg-darkmode-level-beginner";
-    case "intermediate":
-      return "bg-level-intermediate dark:bg-darkmode-level-intermediate";
-    case "advanced":
-      return "bg-level-advanced dark:bg-darkmode-level-advanced";
-    default:
-      return "bg-gray-400";
-  }
-};
-
 const EXPAND_THRESHOLD = 10;
 ---
-
-<style>
-  .explorer-folder[data-expanded="false"] .folder-content {
-    display: none;
-  }
-
-  .explorer-folder[data-expanded="true"] .icon-chevron {
-    transform: rotate(90deg);
-  }
-</style>
 
 <aside
   class="explorer-sidebar w-full bg-white dark:bg-darkmode-body rounded-2xl border border-border dark:border-darkmode-border overflow-hidden"
 >
   <!-- Connections Section -->
-  {hasConnections && (
-    <div class="p-5">
-      <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-        Connections
+  {
+    hasConnections && (
+      <div class="p-5">
+        <div class="text-sm lg:text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
+          Connections
+        </div>
+
+        <div class="flex flex-col gap-1">
+          {setupMoves.length > 0 && (
+            <ExplorerFolder
+              title="Setup Moves"
+              items={setupMoves}
+              type="moves"
+              expanded={setupMoves.length <= EXPAND_THRESHOLD}
+            />
+          )}
+
+          {exitMoves.length > 0 && (
+            <ExplorerFolder
+              title="Exit Moves"
+              items={exitMoves}
+              type="moves"
+              expanded={exitMoves.length <= EXPAND_THRESHOLD}
+            />
+          )}
+
+          {relatedMoves.length > 0 && (
+            <ExplorerFolder
+              title="Related Moves"
+              items={relatedMoves}
+              type="moves"
+              expanded={relatedMoves.length <= EXPAND_THRESHOLD}
+            />
+          )}
+
+          {relatedConcepts.length > 0 && (
+            <ExplorerFolder
+              title="Concepts"
+              items={relatedConcepts}
+              type="concepts"
+              expanded={relatedConcepts.length <= EXPAND_THRESHOLD}
+            />
+          )}
+        </div>
       </div>
-
-      <div class="flex flex-col gap-1">
-        {/* Setup Moves Folder */}
-        {setupMoves.length > 0 && (
-          <div
-            class="explorer-folder"
-            data-expanded={(setupMoves.length <= EXPAND_THRESHOLD).toString()}
-          >
-            <button class="folder-trigger w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-light dark:hover:bg-darkmode-light text-left transition-colors">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
-                <IoChevronForward />
-              </span>
-              <span class="text-sm font-semibold text-text-dark dark:text-darkmode-text-dark flex-1">
-                Setup Moves
-              </span>
-              <span class="text-xs font-medium text-gray-400 bg-light dark:bg-darkmode-light px-2 py-0.5 rounded-full">
-                {setupMoves.length}
-              </span>
-            </button>
-            <div class="folder-content pl-5 flex flex-col gap-0.5 mt-1">
-              {setupMoves.map((move) => (
-                <a
-                  href={`/moves/${move.id}`}
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-light dark:hover:bg-darkmode-light text-text-light dark:text-darkmode-text-light hover:text-text-dark dark:hover:text-darkmode-text-dark transition-colors group"
-                >
-                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
-                    <FaRunning />
-                  </span>
-                  <span class="text-sm truncate flex-1">
-                    {move.data.title}
-                  </span>
-                  {move.data.level && (
-                    <span
-                      class={`w-2 h-2 rounded-full ${getLevelColor(move.data.level)}`}
-                      title={move.data.level}
-                    />
-                  )}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Exit Moves Folder */}
-        {exitMoves.length > 0 && (
-          <div
-            class="explorer-folder"
-            data-expanded={(exitMoves.length <= EXPAND_THRESHOLD).toString()}
-          >
-            <button class="folder-trigger w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-light dark:hover:bg-darkmode-light text-left transition-colors">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
-                <IoChevronForward />
-              </span>
-              <span class="text-sm font-semibold text-text-dark dark:text-darkmode-text-dark flex-1">
-                Exit Moves
-              </span>
-              <span class="text-xs font-medium text-gray-400 bg-light dark:bg-darkmode-light px-2 py-0.5 rounded-full">
-                {exitMoves.length}
-              </span>
-            </button>
-            <div class="folder-content pl-5 flex flex-col gap-0.5 mt-1">
-              {exitMoves.map((move) => (
-                <a
-                  href={`/moves/${move.id}`}
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-light dark:hover:bg-darkmode-light text-text-light dark:text-darkmode-text-light hover:text-text-dark dark:hover:text-darkmode-text-dark transition-colors group"
-                >
-                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
-                    <FaRunning />
-                  </span>
-                  <span class="text-sm truncate flex-1">
-                    {move.data.title}
-                  </span>
-                  {move.data.level && (
-                    <span
-                      class={`w-2 h-2 rounded-full ${getLevelColor(move.data.level)}`}
-                      title={move.data.level}
-                    />
-                  )}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Related Moves Folder */}
-        {relatedMoves.length > 0 && (
-          <div
-            class="explorer-folder"
-            data-expanded={(relatedMoves.length <= EXPAND_THRESHOLD).toString()}
-          >
-            <button class="folder-trigger w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-light dark:hover:bg-darkmode-light text-left transition-colors">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
-                <IoChevronForward />
-              </span>
-              <span class="text-sm font-semibold text-text-dark dark:text-darkmode-text-dark flex-1">
-                Related Moves
-              </span>
-              <span class="text-xs font-medium text-gray-400 bg-light dark:bg-darkmode-light px-2 py-0.5 rounded-full">
-                {relatedMoves.length}
-              </span>
-            </button>
-            <div class="folder-content pl-5 flex flex-col gap-0.5 mt-1">
-              {relatedMoves.map((move) => (
-                <a
-                  href={`/moves/${move.id}`}
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-light dark:hover:bg-darkmode-light text-text-light dark:text-darkmode-text-light hover:text-text-dark dark:hover:text-darkmode-text-dark transition-colors group"
-                >
-                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
-                    <FaRunning />
-                  </span>
-                  <span class="text-sm truncate flex-1">
-                    {move.data.title}
-                  </span>
-                  {move.data.level && (
-                    <span
-                      class={`w-2 h-2 rounded-full ${getLevelColor(move.data.level)}`}
-                      title={move.data.level}
-                    />
-                  )}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Related Concepts Folder */}
-        {relatedConcepts.length > 0 && (
-          <div
-            class="explorer-folder"
-            data-expanded={(relatedConcepts.length <= EXPAND_THRESHOLD).toString()}
-          >
-            <button class="folder-trigger w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-light dark:hover:bg-darkmode-light text-left transition-colors">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
-                <IoChevronForward />
-              </span>
-              <span class="text-sm font-semibold text-text-dark dark:text-darkmode-text-dark flex-1">
-                Concepts
-              </span>
-              <span class="text-xs font-medium text-gray-400 bg-light dark:bg-darkmode-light px-2 py-0.5 rounded-full">
-                {relatedConcepts.length}
-              </span>
-            </button>
-            <div class="folder-content pl-5 flex flex-col gap-0.5 mt-1">
-              {relatedConcepts.map((concept) => (
-                <a
-                  href={`/concepts/${concept.id}`}
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-light dark:hover:bg-darkmode-light text-text-light dark:text-darkmode-text-light hover:text-text-dark dark:hover:text-darkmode-text-dark transition-colors group"
-                >
-                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
-                    <FaLightbulb />
-                  </span>
-                  <span class="text-sm truncate flex-1">
-                    {concept.data.title}
-                  </span>
-                  {concept.data.level && (
-                    <span
-                      class={`w-2 h-2 rounded-full ${getLevelColor(concept.data.level)}`}
-                      title={concept.data.level}
-                    />
-                  )}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  )}
-
-  {/* Empty State */}
-  {!hasConnections && usedInMoves.length === 0 && usedInConcepts.length === 0 && (
-    <div class="p-5">
-      <div class="text-sm text-gray-400 text-center py-4">
-        No connections found
-      </div>
-    </div>
-  )}
-
-  {/* Used In Section */}
-  {(usedInMoves.length > 0 || usedInConcepts.length > 0) && (
-    <div class={`p-5 ${hasConnections ? "border-t border-border dark:border-darkmode-border" : ""}`}>
-      <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-        Used In
-      </div>
-
-      <div class="flex flex-col gap-1">
-        {usedInMoves.length > 0 && (
-          <div
-            class="explorer-folder"
-            data-expanded={(usedInMoves.length <= EXPAND_THRESHOLD).toString()}
-          >
-            <button class="folder-trigger w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-light dark:hover:bg-darkmode-light text-left transition-colors">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
-                <IoChevronForward />
-              </span>
-              <span class="text-sm font-semibold text-text-dark dark:text-darkmode-text-dark flex-1">
-                Moves
-              </span>
-              <span class="text-xs font-medium text-gray-400 bg-light dark:bg-darkmode-light px-2 py-0.5 rounded-full">
-                {usedInMoves.length}
-              </span>
-            </button>
-            <div class="folder-content pl-5 flex flex-col gap-0.5 mt-1">
-              {usedInMoves.map((move) => (
-                <a
-                  href={`/moves/${move.id}`}
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-light dark:hover:bg-darkmode-light text-text-light dark:text-darkmode-text-light hover:text-text-dark dark:hover:text-darkmode-text-dark transition-colors group"
-                >
-                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
-                    <FaRunning />
-                  </span>
-                  <span class="text-sm truncate flex-1">
-                    {move.data.title}
-                  </span>
-                  {move.data.level && (
-                    <span
-                      class={`w-2 h-2 rounded-full ${getLevelColor(move.data.level)}`}
-                      title={move.data.level}
-                    />
-                  )}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {usedInConcepts.length > 0 && (
-          <div
-            class="explorer-folder"
-            data-expanded={(usedInConcepts.length <= EXPAND_THRESHOLD).toString()}
-          >
-            <button class="folder-trigger w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-light dark:hover:bg-darkmode-light text-left transition-colors">
-              <span class="icon-chevron text-gray-400 text-xs transition-transform duration-200">
-                <IoChevronForward />
-              </span>
-              <span class="text-sm font-semibold text-text-dark dark:text-darkmode-text-dark flex-1">
-                Concepts
-              </span>
-              <span class="text-xs font-medium text-gray-400 bg-light dark:bg-darkmode-light px-2 py-0.5 rounded-full">
-                {usedInConcepts.length}
-              </span>
-            </button>
-            <div class="folder-content pl-5 flex flex-col gap-0.5 mt-1">
-              {usedInConcepts.map((concept) => (
-                <a
-                  href={`/concepts/${concept.id}`}
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-light dark:hover:bg-darkmode-light text-text-light dark:text-darkmode-text-light hover:text-text-dark dark:hover:text-darkmode-text-dark transition-colors group"
-                >
-                  <span class="text-gray-400 text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
-                    <FaLightbulb />
-                  </span>
-                  <span class="text-sm truncate flex-1">
-                    {concept.data.title}
-                  </span>
-                  {concept.data.level && (
-                    <span
-                      class={`w-2 h-2 rounded-full ${getLevelColor(concept.data.level)}`}
-                      title={concept.data.level}
-                    />
-                  )}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  )}
-</aside>
-
-<script>
-  function setupExplorer() {
-    const folders = document.querySelectorAll(".explorer-folder");
-
-    folders.forEach((folder) => {
-      const trigger = folder.querySelector(".folder-trigger");
-      const content = folder.querySelector(".folder-content");
-
-      if (trigger && content && !trigger.hasAttribute("data-initialized")) {
-        trigger.setAttribute("data-initialized", "true");
-
-        trigger.addEventListener("click", () => {
-          const isExpanded = folder.getAttribute("data-expanded") === "true";
-          folder.setAttribute("data-expanded", (!isExpanded).toString());
-        });
-      }
-    });
+    )
   }
 
-  setupExplorer();
-  document.addEventListener("astro:page-load", setupExplorer);
-</script>
+  {/* Empty State */}
+  {
+    !hasConnections &&
+      usedInMoves.length === 0 &&
+      usedInConcepts.length === 0 && (
+        <div class="p-5">
+          <div class="text-base lg:text-sm text-gray-400 text-center py-4">
+            No connections found
+          </div>
+        </div>
+      )
+  }
+
+  {/* Used In Section */}
+  {
+    (usedInMoves.length > 0 || usedInConcepts.length > 0) && (
+      <div
+        class={`p-5 ${hasConnections ? "border-t border-border dark:border-darkmode-border" : ""}`}
+      >
+        <div class="text-sm lg:text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
+          Used In
+        </div>
+
+        <div class="flex flex-col gap-1">
+          {usedInMoves.length > 0 && (
+            <ExplorerFolder
+              title="Moves"
+              items={usedInMoves}
+              type="moves"
+              expanded={usedInMoves.length <= EXPAND_THRESHOLD}
+            />
+          )}
+
+          {usedInConcepts.length > 0 && (
+            <ExplorerFolder
+              title="Concepts"
+              items={usedInConcepts}
+              type="concepts"
+              expanded={usedInConcepts.length <= EXPAND_THRESHOLD}
+            />
+          )}
+        </div>
+      </div>
+    )
+  }
+</aside>

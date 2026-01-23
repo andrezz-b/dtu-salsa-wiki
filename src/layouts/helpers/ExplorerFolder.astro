@@ -1,0 +1,114 @@
+---
+import { IoChevronForward } from "react-icons/io5";
+import { FaRunning, FaLightbulb } from "react-icons/fa";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  title: string;
+  items: (CollectionEntry<"moves"> | CollectionEntry<"concepts">)[];
+  type: "moves" | "concepts";
+  expanded?: boolean;
+}
+
+const { title, items, type, expanded = false } = Astro.props;
+
+const getLevelColor = (level: string) => {
+  switch (level) {
+    case "beginner":
+      return "bg-level-beginner dark:bg-darkmode-level-beginner";
+    case "intermediate":
+      return "bg-level-intermediate dark:bg-darkmode-level-intermediate";
+    case "advanced":
+      return "bg-level-advanced dark:bg-darkmode-level-advanced";
+    default:
+      return "bg-gray-400";
+  }
+};
+
+const getPath = (
+  item: CollectionEntry<"moves"> | CollectionEntry<"concepts">,
+) => {
+  if (item.collection === "moves") {
+    return `/moves/${item.id}`;
+  }
+  return `/concepts/${item.id}`;
+};
+---
+
+<style>
+  .explorer-folder[data-expanded="false"] .folder-content {
+    display: none;
+  }
+
+  .explorer-folder[data-expanded="true"] .icon-chevron {
+    transform: rotate(90deg);
+  }
+</style>
+
+<div class="explorer-folder" data-expanded={expanded.toString()}>
+  <button
+    class="folder-trigger w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-light dark:hover:bg-darkmode-light text-left transition-colors"
+  >
+    <span
+      class="icon-chevron text-gray-400 text-sm lg:text-xs transition-transform duration-200"
+    >
+      <IoChevronForward />
+    </span>
+    <span
+      class="text-base lg:text-sm font-semibold text-text-dark dark:text-darkmode-text-dark flex-1"
+    >
+      {title}
+    </span>
+    <span
+      class="text-sm lg:text-xs font-medium text-gray-400 bg-light dark:bg-darkmode-light px-2 py-0.5 rounded-full"
+    >
+      {items.length}
+    </span>
+  </button>
+  <div class="folder-content pl-5 flex flex-col gap-0.5 mt-1">
+    {
+      items.map((item) => (
+        <a
+          href={getPath(item)}
+          class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-light dark:hover:bg-darkmode-light text-text-light dark:text-darkmode-text-light hover:text-text-dark dark:hover:text-darkmode-text-dark transition-colors group"
+        >
+          <span class="text-gray-400 text-base lg:text-sm group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
+            {type === "moves" ? <FaRunning /> : <FaLightbulb />}
+          </span>
+          <span class="text-base lg:text-sm truncate flex-1">
+            {item.data.title}
+          </span>
+          {item.data.level && (
+            <span
+              class={`w-2 h-2 rounded-full ${getLevelColor(item.data.level)}`}
+              title={item.data.level}
+            />
+          )}
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  function setupExplorerFolder(folder: Element) {
+    const trigger = folder.querySelector(".folder-trigger");
+    const content = folder.querySelector(".folder-content");
+
+    if (trigger && content && !trigger.hasAttribute("data-initialized")) {
+      trigger.setAttribute("data-initialized", "true");
+
+      trigger.addEventListener("click", () => {
+        const isExpanded = folder.getAttribute("data-expanded") === "true";
+        folder.setAttribute("data-expanded", (!isExpanded).toString());
+      });
+    }
+  }
+
+  function initExplorerFolders() {
+    document.querySelectorAll(".explorer-folder").forEach(setupExplorerFolder);
+  }
+
+  initExplorerFolders();
+  document.addEventListener("astro:page-load", initExplorerFolders);
+</script>
