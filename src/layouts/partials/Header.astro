@@ -22,121 +22,334 @@ const { pathname } = Astro.url;
 
 <header class={`header z-30 ${settings.sticky_header && "sticky top-0"}`}>
   <nav class="navbar container">
-    <!-- logo -->
-    <div class="order-0">
-      <a href="/" class="navbar-brand"> DTU Salsa Wiki </a>
-    </div>
-    <!-- navbar toggler -->
-    <input id="nav-toggle" type="checkbox" class="hidden" />
-    <label
-      for="nav-toggle"
-      class="order-3 cursor-pointer flex items-center lg:hidden text-text-dark dark:text-white lg:order-1"
-    >
-      <svg id="show-button" class="h-6 fill-current block" viewBox="0 0 20 20">
-        <title>Menu Open</title>
-        <path d="M0 3h20v2H0V3z m0 6h20v2H0V9z m0 6h20v2H0V0z"></path>
-      </svg>
-      <svg id="hide-button" class="h-6 fill-current hidden" viewBox="0 0 20 20">
-        <title>Menu Close</title>
-        <polygon
-          points="11 9 22 9 22 11 11 11 11 22 9 22 9 11 -2 11 -2 9 9 9 9 -2 11 -2"
-          transform="rotate(45 10 10)"></polygon>
-      </svg>
-    </label>
-    <!-- /navbar toggler -->
-    <ul
-      id="nav-menu"
-      class="navbar-nav order-3 hidden w-full lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8"
-    >
-      {
-        main.map((menu) => (
-          <>
-            {menu.hasChildren ? (
-              <li class="nav-item nav-dropdown group relative">
-                <input type="checkbox" id={`submenu-${menu.name}`} class="peer hidden lg:hidden" />
-                <label
-                  for={`submenu-${menu.name}`}
-                  class={`nav-link inline-flex items-center ${
-                    menu.children?.map(({ url }) => url).includes(pathname) ||
-                    menu.children?.map(({ url }) => `${url}/`).includes(pathname)
-                      ? "active"
-                      : ""
-                  }`}
-                >
-                  {menu.name}
-                  <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </label>
-                <ul class="nav-dropdown-list hidden peer-checked:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
-                  {menu.children?.map((child) => (
-                    <li class="nav-dropdown-item">
-                      <a
-                        href={child.url}
-                        aria-label={child.name}
-                        class={`nav-dropdown-link block ${
-                          (pathname === `${child.url}/` || pathname === child.url) && "active"
-                        }`}
-                      >
-                        {child.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ) : (
-              <li class="nav-item">
-                <a
-                  href={menu.url}
-                  class={`nav-link block ${
-                    (pathname === `${menu.url}/` || pathname === menu.url) && "active"
-                  }`}
-                >
-                  {menu.name}
-                </a>
-              </li>
-            )}
-          </>
-        ))
-      }
-    </ul>
-    <div class="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
+    <!-- Mobile: Hamburger (left) + Title (center) + Search (right) -->
+    <div class="flex items-center justify-between w-full lg:hidden">
+      <!-- Hamburger Menu Button (Mobile) -->
+      <button
+        id="mobile-menu-button"
+        class="text-text-dark dark:text-white p-2 -ml-2"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-drawer"
+      >
+        <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
+          <title>Menu Open</title>
+          <path d="M0 3h20v2H0V3z m0 6h20v2H0V9z m0 6h20v2H0V0z"></path>
+        </svg>
+      </button>
+
+      <!-- Title (Mobile - Centered) -->
+      <a href="/" class="navbar-brand absolute left-1/2 -translate-x-1/2">
+        DTU Salsa Wiki
+      </a>
+
+      <!-- Search Icon (Mobile) -->
       {
         settings.search && (
-          <>
-            {/* Mobile Search Icon */}
-            <button
-              class="border-border text-text-dark hover:text-primary dark:border-darkmode-border mr-5 inline-block text-xl dark:text-white dark:hover:text-darkmode-primary lg:hidden"
-              aria-label="search"
-              data-search-trigger
-            >
-              <IoSearch />
-            </button>
+          <button
+            class="text-text-dark hover:text-primary dark:text-white dark:hover:text-darkmode-primary text-xl p-2 -mr-2"
+            aria-label="search"
+            data-search-trigger
+          >
+            <IoSearch className="w-6 h-6" />
+          </button>
+        )
+      }
+    </div>
 
-            {/* Desktop Search Bar */}
+    <!-- Desktop: Logo + Nav Links (centered) + Search -->
+    <div class="hidden lg:flex lg:items-center lg:w-full relative">
+      <!-- Logo (Desktop - Left) -->
+      <div>
+        <a href="/" class="navbar-brand"> DTU Salsa Wiki </a>
+      </div>
+
+      <!-- Nav Links (Desktop - Absolutely centered) -->
+      <ul
+        class="navbar-nav absolute left-1/2 -translate-x-1/2 flex space-x-2 xl:space-x-8"
+      >
+        {
+          main.map((menu) => (
+            <>
+              {menu.hasChildren ? (
+                <li class="nav-item nav-dropdown group relative">
+                  <span
+                    class={`nav-link inline-flex items-center ${
+                      menu.children?.map(({ url }) => url).includes(pathname) ||
+                      menu.children
+                        ?.map(({ url }) => `${url}/`)
+                        .includes(pathname)
+                        ? "active"
+                        : ""
+                    }`}
+                  >
+                    {menu.name}
+                    <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </span>
+                  <ul class="nav-dropdown-list invisible absolute block opacity-0 group-hover:visible group-hover:opacity-100">
+                    {menu.children?.map((child) => (
+                      <li class="nav-dropdown-item">
+                        <a
+                          href={child.url}
+                          aria-label={child.name}
+                          class={`nav-dropdown-link block ${
+                            (pathname === `${child.url}/` ||
+                              pathname === child.url) &&
+                            "active"
+                          }`}
+                        >
+                          {child.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ) : (
+                <li class="nav-item">
+                  <a
+                    href={menu.url}
+                    class={`nav-link block ${
+                      (pathname === `${menu.url}/` || pathname === menu.url) &&
+                      "active"
+                    }`}
+                  >
+                    {menu.name}
+                  </a>
+                </li>
+              )}
+            </>
+          ))
+        }
+      </ul>
+
+      <!-- Search Bar (Desktop - Right) -->
+      <div class="ml-auto flex items-center">
+        {
+          settings.search && (
             <div
-              class="hidden lg:flex items-center bg-theme-light dark:bg-darkmode-theme-light rounded-md border border-border dark:border-darkmode-border px-3 py-1.5 cursor-pointer hover:border-primary dark:hover:border-darkmode-primary transition-colors min-w-[200px]"
+              class="flex items-center bg-theme-light dark:bg-darkmode-theme-light rounded-md border border-border dark:border-darkmode-border px-3 py-1.5 cursor-pointer hover:border-primary dark:hover:border-darkmode-primary transition-colors min-w-[200px]"
               data-search-trigger
             >
               <IoSearch className="text-gray-500 dark:text-gray-400 mr-2" />
-              <span class="text-sm text-gray-500 dark:text-gray-400 mr-auto">Search...</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 mr-auto">
+                Search...
+              </span>
               <span class="text-xs text-gray-400 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 search-shortcut-key">
                 ⌘K
               </span>
             </div>
-          </>
-        )
-      }
+          )
+        }
+      </div>
     </div>
   </nav>
 </header>
 
+<!-- Mobile Drawer Overlay (outside header for full viewport coverage) -->
+<div
+  id="mobile-drawer-overlay"
+  class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
+  aria-hidden="true"
+>
+</div>
+
+<!-- Mobile Drawer (outside header for full viewport height) -->
+<aside
+  id="mobile-drawer"
+  class="fixed top-0 left-0 h-screen w-64 bg-body dark:bg-darkmode-body border-r border-border dark:border-darkmode-border z-50 transform -translate-x-full transition-transform duration-300 lg:hidden overflow-y-auto"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation menu"
+>
+  <div class="p-4">
+    <!-- Drawer Header -->
+    <div class="flex items-center justify-between mb-6">
+      <a href="/" class="navbar-brand">DTU Salsa Wiki</a>
+      <button
+        id="mobile-drawer-close"
+        class="text-text-dark dark:text-white p-2 -mr-2 hover:bg-theme-light dark:hover:bg-darkmode-theme-light rounded"
+        aria-label="Close navigation menu"
+      >
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Drawer Navigation -->
+    <nav>
+      <ul class="space-y-1">
+        {
+          main.map((menu) => (
+            <>
+              {menu.hasChildren ? (
+                <li>
+                  <input
+                    type="checkbox"
+                    id={`drawer-submenu-${menu.name}`}
+                    class="peer hidden"
+                  />
+                  <label
+                    for={`drawer-submenu-${menu.name}`}
+                    class={`nav-link flex items-center justify-between rounded-md cursor-pointer ${
+                      menu.children?.map(({ url }) => url).includes(pathname) ||
+                      menu.children
+                        ?.map(({ url }) => `${url}/`)
+                        .includes(pathname)
+                        ? "active"
+                        : ""
+                    }`}
+                  >
+                    {menu.name}
+                    <svg
+                      class="h-4 w-4 fill-current transition-transform peer-checked:rotate-180"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </label>
+                  <ul class="ml-4 mt-1 space-y-1 hidden peer-checked:block">
+                    {menu.children?.map((child) => (
+                      <li>
+                        <a
+                          href={child.url}
+                          class={`nav-dropdown-link block rounded-md drawer-nav-link ${
+                            (pathname === `${child.url}/` ||
+                              pathname === child.url) &&
+                            "active"
+                          }`}
+                        >
+                          {child.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ) : (
+                <li>
+                  <a
+                    href={menu.url}
+                    class={`nav-link block rounded-md drawer-nav-link ${
+                      (pathname === `${menu.url}/` || pathname === menu.url) &&
+                      "active"
+                    }`}
+                  >
+                    {menu.name}
+                  </a>
+                </li>
+              )}
+            </>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</aside>
+
 <script>
-  // OS Detection for Search Shortcut
-  const isMac = typeof navigator !== "undefined" && /mac/i.test(navigator.userAgent);
-  const shortcutKey = isMac ? "⌘K" : "Ctrl+K";
-  const shortcutElements = document.querySelectorAll(".search-shortcut-key");
-  shortcutElements.forEach((el) => {
-    el.textContent = shortcutKey;
-  });
+  function initHeader() {
+    // OS Detection for Search Shortcut
+    const isMac =
+      typeof navigator !== "undefined" && /mac/i.test(navigator.userAgent);
+    const shortcutKey = isMac ? "⌘K" : "Ctrl+K";
+    const shortcutElements = document.querySelectorAll(".search-shortcut-key");
+    shortcutElements.forEach((el) => {
+      el.textContent = shortcutKey;
+    });
+
+    // Mobile Drawer Functionality
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileDrawer = document.getElementById("mobile-drawer");
+    const mobileDrawerOverlay = document.getElementById(
+      "mobile-drawer-overlay",
+    );
+    const mobileDrawerClose = document.getElementById("mobile-drawer-close");
+    const drawerNavLinks = document.querySelectorAll(".drawer-nav-link");
+
+    let isDrawerOpen = false;
+
+    // Function to open drawer
+    function openDrawer() {
+      isDrawerOpen = true;
+      mobileDrawer?.classList.remove("-translate-x-full");
+      mobileDrawerOverlay?.classList.remove("opacity-0", "pointer-events-none");
+      mobileMenuButton?.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+
+      const firstLink = mobileDrawer?.querySelector("a");
+      setTimeout(() => (firstLink as HTMLElement)?.focus(), 300);
+    }
+
+    // Function to close drawer
+    function closeDrawer() {
+      isDrawerOpen = false;
+      mobileDrawer?.classList.add("-translate-x-full");
+      mobileDrawerOverlay?.classList.add("opacity-0", "pointer-events-none");
+      mobileMenuButton?.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      mobileMenuButton?.focus();
+    }
+
+    // Open drawer on button click
+    mobileMenuButton?.addEventListener("click", openDrawer);
+
+    // Close drawer on close button click
+    mobileDrawerClose?.addEventListener("click", closeDrawer);
+
+    // Close drawer on overlay click
+    mobileDrawerOverlay?.addEventListener("click", closeDrawer);
+
+    // Close drawer when clicking a navigation link
+    drawerNavLinks.forEach((link) => {
+      link.addEventListener("click", closeDrawer);
+    });
+
+    // Close drawer on Escape key
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape" && isDrawerOpen) {
+        closeDrawer();
+      }
+    }
+
+    // Focus trap for accessibility
+    function handleFocusTrap(e: KeyboardEvent) {
+      if (!isDrawerOpen || e.key !== "Tab") return;
+
+      const focusableElements = mobileDrawer?.querySelectorAll(
+        'a, button, input[type="checkbox"]',
+      );
+      if (!focusableElements || focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[
+        focusableElements.length - 1
+      ] as HTMLElement;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleEscape);
+    document.addEventListener("keydown", handleFocusTrap);
+  }
+
+  // Run on initial load
+  initHeader();
+
+  // Re-run after Astro page transitions (View Transitions)
+  document.addEventListener("astro:page-load", initHeader);
 </script>

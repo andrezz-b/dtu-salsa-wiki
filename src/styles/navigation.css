@@ -1,5 +1,5 @@
 .header {
-  @apply bg-body dark:bg-darkmode-body py-6;
+  @apply bg-body/95 dark:bg-darkmode-body/90 border-b border-border dark:border-darkmode-border backdrop-blur-md py-4;
 }
 
 /* navbar items */
@@ -40,6 +40,30 @@
 
 .nav-dropdown-link {
   @apply text-text-dark hover:text-primary dark:text-darkmode-text dark:hover:text-darkmode-primary block py-1 font-semibold transition;
+}
+
+/* mobile drawer */
+#mobile-drawer {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* smooth scrolling for drawer */
+#mobile-drawer {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+#mobile-drawer::-webkit-scrollbar {
+  width: 4px;
+}
+
+#mobile-drawer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#mobile-drawer::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
 }
 
 /* theme-switcher */
