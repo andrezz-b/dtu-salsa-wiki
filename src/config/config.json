@@ -18,7 +18,8 @@
     "default_theme": "dark",
     "pagination": 2,
     "summary_length": 200,
-    "blog_folder": "blog"
+    "blog_folder": "blog",
+    "enable_pwa": false
   },
   "params": {
     "contact_form_action": "#",

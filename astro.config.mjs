@@ -20,48 +20,49 @@ export default defineConfig({
     //   filter: (page) => !page.includes("/admin/"),
     // }),
     mdx(),
-    AstroPWA({
-      registerType: "autoUpdate",
-      manifest: {
-        name: "DTU Salsa Wiki",
-        short_name: "Salsa Wiki",
-        description: "A wiki for DTU Salsa",
-        theme_color: "#000000",
-        background_color: "#FFFFFF",
-        icons: [
-          {
-            src: "/favicon/pwa-64x64.png",
-            sizes: "64x64",
-            type: "image/png",
-          },
-          {
-            src: "/favicon/pwa-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "/favicon/pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any",
-          },
-          {
-            src: "/favicon/maskable-icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
-          },
-        ],
-      },
-      workbox: {
-        navigateFallback: "/404",
-        globPatterns: ["**/*.{css,js,html,svg,png,ico,txt,woff2}"],
-        navigateFallbackDenylist: [/^\/admin/],
-      },
-      devOptions: {
-        enabled: true,
-      },
-    }),
+    config.settings.enable_pwa &&
+      AstroPWA({
+        registerType: "autoUpdate",
+        manifest: {
+          name: "DTU Salsa Wiki",
+          short_name: "Salsa Wiki",
+          description: "A wiki for DTU Salsa",
+          theme_color: "#000000",
+          background_color: "#FFFFFF",
+          icons: [
+            {
+              src: "/favicon/pwa-64x64.png",
+              sizes: "64x64",
+              type: "image/png",
+            },
+            {
+              src: "/favicon/pwa-192x192.png",
+              sizes: "192x192",
+              type: "image/png",
+            },
+            {
+              src: "/favicon/pwa-512x512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any",
+            },
+            {
+              src: "/favicon/maskable-icon-512x512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable",
+            },
+          ],
+        },
+        workbox: {
+          navigateFallback: "/404",
+          globPatterns: ["**/*.{css,js,html,svg,png,ico,txt,woff2}"],
+          navigateFallbackDenylist: [/^\/admin/],
+        },
+        devOptions: {
+          enabled: true,
+        },
+      }),
   ],
   markdown: {
     remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
