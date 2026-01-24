@@ -1,7 +1,7 @@
 {
   "site": {
     "title": "DTU Salsa Wiki",
-    "base_url": "https://dtu-salsa-wiki.netlify.app",
+    "base_url": "https://dtusalsa.com",
     "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
@@ -11,7 +11,6 @@
     "logo_height": "30",
     "logo_text": "DTU Salsa Wiki"
   },
-
   "settings": {
     "search": true,
     "sticky_header": true,
@@ -21,17 +20,14 @@
     "summary_length": 200,
     "blog_folder": "blog"
   },
-
   "params": {
     "contact_form_action": "#",
-    "copyright": "Designed And Developed by [DTU Salsa ](https://dtu-salsa-wiki.netlify.app)"
+    "copyright": "Designed And Developed by [DTU Salsa ](https://dtusalsa.com)"
   },
-
   "google_tag_manager": {
     "enable": false,
     "gtm_id": "GTM-XXXXXX"
   },
-
   "metadata": {
     "meta_author": "DTU Salsa",
     "meta_image": "/images/og-image.png",

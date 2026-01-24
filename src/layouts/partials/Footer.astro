@@ -5,16 +5,22 @@ const { footer }: { footer: { name: string; url: string }[] } = menu;
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="bg-light dark:bg-darkmode-light border-t border-border dark:border-darkmode-border">
+<footer
+  class="bg-light dark:bg-darkmode-light border-t border-border dark:border-darkmode-border"
+>
   <div class="container">
     <!-- Main Footer Content -->
     <div class="py-8 lg:py-10">
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div
+        class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
+      >
         <!-- Logo & Description -->
         <div class="text-center lg:text-left">
           <a href="/" class="navbar-brand inline-block mb-2">DTU Salsa Wiki</a>
-          <p class="text-sm text-text-light dark:text-darkmode-text-light max-w-xs mx-auto lg:mx-0">
-            A community-driven resource for salsa dancers at DTU.
+          <p
+            class="text-sm text-text-light dark:text-darkmode-text-light max-w-xs mx-auto lg:mx-0"
+          >
+            A community-driven reference for salsa dancers.
           </p>
         </div>
 
@@ -44,12 +50,16 @@ const currentYear = new Date().getFullYear();
     <!-- Bottom Bar: Disclaimer & Copyright -->
     <div class="py-5">
       <div class="flex flex-col gap-3 text-center">
-        <p class="text-xs text-text-light dark:text-darkmode-text-light leading-relaxed max-w-2xl mx-auto">
-          This website is not affiliated with, endorsed by, or connected to DTU (Technical University of Denmark) or DTU Dancing.
-          It is an independent community project maintained by salsa enthusiasts.
+        <p
+          class="text-xs text-text-light dark:text-darkmode-text-light leading-relaxed max-w-2xl mx-auto"
+        >
+          This website is not affiliated with, endorsed by, or connected to DTU
+          (Technical University of Denmark) or DTU Dancing. It is an independent
+          community project which aims to improve the salsa learning experience
+          for students.
         </p>
         <p class="text-xs text-text-light dark:text-darkmode-text-light">
-          &copy; {currentYear} DTU Salsa Wiki. All rights reserved.
+          &copy; {currentYear} All rights reserved.
         </p>
       </div>
     </div>

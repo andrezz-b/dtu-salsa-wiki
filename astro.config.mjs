@@ -16,9 +16,9 @@ export default defineConfig({
   vite: { plugins: [tailwindcss()] },
   integrations: [
     react(),
-    sitemap({
-      filter: (page) => !page.includes("/admin/"),
-    }),
+    // sitemap({
+    //   filter: (page) => !page.includes("/admin/"),
+    // }),
     mdx(),
     AstroPWA({
       registerType: "autoUpdate",
