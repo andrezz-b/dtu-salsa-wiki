@@ -11,7 +11,7 @@ interface StarRatingDisplayProps {
 const StarRatingDisplay: React.FC<StarRatingDisplayProps> = ({
   rating,
   max = 5,
-  size = 16,
+  size = 20,
   color = "text-yellow-400",
 }) => {
   return (

@@ -12,7 +12,7 @@ const { leaderDifficulty, followerDifficulty, overallDifficulty } = Astro.props;
 const hasBreakdown = leaderDifficulty !== undefined || followerDifficulty !== undefined;
 ---
 
-<div class="difficulty-accordion flex flex-wrap items-center gap-4 mb-6">
+<div class="difficulty-accordion flex flex-wrap items-center gap-4">
   <button
     class={`accordion-trigger flex flex-col items-start gap-1 p-2 rounded-lg transition-colors ${
       hasBreakdown ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5" : "cursor-default"

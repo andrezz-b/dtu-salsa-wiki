@@ -56,7 +56,10 @@ const {
   exit_moves,
   related_moves,
   tags,
+  aliases,
 } = move.data;
+
+const pageUrl = Astro.url.href;
 
 const videoIds = video_urls
   ? video_urls.map((url) => getYoutubeId(url)).filter((id) => id !== null)
@@ -94,7 +97,7 @@ const resolvedRelatedMoves = related_moves
         {/* Main Content (Right on Desktop, Top on Mobile) */}
         <article class="lg:col-span-9 order-1 lg:order-2">
           {/* Header */}
-          <div class="mb-4">
+          <div class="mb-6">
             <Breadcrumbs
               className="mb-4"
               parts={[
@@ -103,7 +106,7 @@ const resolvedRelatedMoves = related_moves
                 { label: title },
               ]}
             />
-            <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-3 mb-3">
               <span
                 class={`px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider ${
                   level === "beginner"
@@ -121,17 +124,50 @@ const resolvedRelatedMoves = related_moves
                 {type}
               </span>
             </div>
-            <h1 class="h1">
-              {title}
-            </h1>
+            <div class="flex items-start justify-between gap-4 flex-wrap">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 flex-wrap">
+                  <h1 class="h1">
+                    {title}
+                  </h1>
+                  <button
+                    id="copy-link-btn"
+                    class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+                    title="Copy link to clipboard"
+                    data-url={pageUrl}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-5 h-5 text-gray-600 dark:text-gray-300"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                {
+                  aliases && aliases.length > 0 && (
+                    <p class="text-gray-500 dark:text-gray-400 mt-1 text-sm">
+                      Also known as: {aliases.join(", ")}
+                    </p>
+                  )
+                }
+              </div>
+              {/* Difficulty Rating */}
+              <DifficultyAccordion
+                leaderDifficulty={leader_difficulty}
+                followerDifficulty={follower_difficulty}
+                overallDifficulty={difficulty}
+              />
+            </div>
           </div>
-
-          {/* Difficulty Accordion */}
-          <DifficultyAccordion
-            leaderDifficulty={leader_difficulty}
-            followerDifficulty={follower_difficulty}
-            overallDifficulty={difficulty}
-          />
 
           {/* Content */}
           <div
@@ -161,3 +197,21 @@ const resolvedRelatedMoves = related_moves
     </div>
   </section>
 </Base>
+
+<script>
+  const copyBtn = document.getElementById("copy-link-btn");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async () => {
+      const url = copyBtn.getAttribute("data-url") || window.location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+        copyBtn.classList.add("!bg-green-100", "dark:!bg-green-700");
+        setTimeout(() => {
+          copyBtn.classList.remove("!bg-green-100", "dark:!bg-green-700");
+        }, 1000);
+      } catch (err) {
+        console.error("Failed to copy link:", err);
+      }
+    });
+  }
+</script>
