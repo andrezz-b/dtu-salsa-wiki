@@ -20,6 +20,8 @@ setup_moves:
   - setenta
 exit_moves:
   - enchufla
+video_urls:
+  - 'https://youtube.com/watch?v=DbB6mC1ToEw'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -59,5 +61,3 @@ exit_moves:
 - 123 567 - Do the move
 - 123 - [Enchufla](/moves/enchufla)
 - 567 - Hand on shoulder [Ronde](/moves/ronde) into [Dile Que No](/moves/dile-que-no)
-## 🎥 Video
-- **Video Link:**

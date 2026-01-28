@@ -11,6 +11,8 @@ related_moves:
   - enchufla
   - sacala
   - prima-con-familia
+video_urls:
+  - 'https://youtu.be/QjCJ8azmxmA'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -27,5 +29,3 @@ related_moves:
 - 67 - Walk around and get close for finish
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

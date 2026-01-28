@@ -18,6 +18,8 @@ related_moves:
   - setenta
   - enchufla
   - alternative-sombrero-finish
+video_urls:
+  - 'https://youtube.com/watch?v=16GLdJNNzUc'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -35,5 +37,3 @@ related_moves:
 - 567 - [Sombrero Finish](/concepts/sombrero-finish) or [Alternative Sombrero Finish](/moves/alternative-sombrero-finish)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

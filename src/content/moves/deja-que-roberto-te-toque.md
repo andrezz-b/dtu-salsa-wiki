@@ -13,6 +13,8 @@ related_moves:
   - vuelta
   - enchufla
   - espejo
+video_urls:
+  - 'https://youtube.com/watch?v=zvYMI9P0Mh8'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -27,5 +29,3 @@ related_moves:
 - 123 - [Enchufla](/moves/enchufla) and finish
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

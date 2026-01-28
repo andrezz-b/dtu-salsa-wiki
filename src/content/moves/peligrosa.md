@@ -17,6 +17,8 @@ related_moves:
   - enchufla-double-spin
   - setenta
   - montadito
+video_urls:
+  - 'https://youtube.com/watch?v=KAny7ZNzXeo'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -38,5 +40,3 @@ related_moves:
 - [Peligrosa](/moves/peligrosa), [Candado](/moves/candado), [Peligrosa](/moves/peligrosa), [Setenta al Revés](/moves/setenta-al-revés)
 - [Peligrosa](/moves/peligrosa), [Candado](/moves/candado), [Enchufla Moderno](/moves/enchufla-moderno), [Enchufla Double Spin](/moves/enchufla-double-spin)
 - [Peligrosa](/moves/peligrosa), Explosive [Setenta](/moves/setenta), [Montadito](/moves/montadito)
-## 🎥 Video
-- **Video Link:** 

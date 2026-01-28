@@ -20,5 +20,3 @@ related_moves:
 - Towards the end you can finish by taking her arm out of the hook and doing [Dile Que No](/moves/dile-que-no)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

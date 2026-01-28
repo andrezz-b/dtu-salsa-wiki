@@ -15,6 +15,8 @@ related_concepts:
 related_moves:
   - enchufla
   - dile-que-no
+video_urls:
+  - 'https://youtube.com/watch?v=L4vp3sDWRJg'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -35,5 +37,3 @@ related_moves:
 - 
 ## 🔗 Connections & Transitions
 - Ends in [Cuban Hold](/concepts/cuban-hold), good for [Crossed Hands](/concepts/crossed-hands)
-## 🎥 Video
-- **Video Link:** 

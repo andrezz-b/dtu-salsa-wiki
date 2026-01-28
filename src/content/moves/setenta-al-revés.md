@@ -13,6 +13,8 @@ related_moves:
   - ronde
   - vuelta
   - espejo
+video_urls:
+  - 'https://youtube.com/watch?v=9wePN2mEyQo'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -30,5 +32,3 @@ related_moves:
 - This is the core of the move, when called it might consider doing a [Setenta](/moves/setenta) and then during after the [Enchufla](/moves/enchufla) you go into this
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

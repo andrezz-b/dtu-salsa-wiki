@@ -17,6 +17,8 @@ related_moves:
   - sacala
   - coca-cola
   - enchufla
+video_urls:
+  - 'https://youtu.be/4WxGBBdXXZ0'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -61,6 +63,4 @@ related_moves:
 - 123 - Micro basic
 - 567 - [Sacala](/moves/sacala) / [Vuelta](/moves/vuelta)
 - TODO: Exit somewhere with [Enchufla](/moves/enchufla)
-## 🎥 Video
-- **Video Link:** 
 

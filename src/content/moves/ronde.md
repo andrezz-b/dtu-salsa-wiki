@@ -16,10 +16,8 @@ tags:
 - 6 - Legs should be in weird A shape pointing back
 - 7 - Finish by completing the turn and facing forward
 ---
-- For style check [Check this Runde](https://www.youtube.com/watch?v=7uswi2sC35s)
+- For style check [Check this Ronde](https://www.youtube.com/watch?v=7uswi2sC35s)
   - Throw right leg back on 5 to get momentum, heel spin on the left leg
   - 67 Turn using the momentum
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 
