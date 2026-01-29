@@ -2,8 +2,8 @@
 title: Guapea Hold
 type: hold
 level: beginner
-created_date: 2025-11-02T19:37:00.000Z
-updated_date: 2025-11-04T22:05:00.000Z
+created_date: 2025-11-02T20:37:00.000Z
+updated_date: 2025-11-04T23:05:00.000Z
 tags:
   - salsa/concept
 ---

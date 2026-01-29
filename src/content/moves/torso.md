@@ -3,8 +3,8 @@ title: Torso
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-11-04T21:55:00.000Z
-updated_date: 2025-11-07T18:25:00.000Z
+created_date: 2025-11-04T22:55:00.000Z
+updated_date: 2025-11-07T19:25:00.000Z
 tags:
   - salsa/move
 related_moves:

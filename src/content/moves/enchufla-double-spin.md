@@ -3,8 +3,8 @@ title: Enchufla Double Spin
 type: partner
 difficulty: 4
 level: advanced
-created_date: 2025-11-04T12:29:00.000Z
-updated_date: 2025-11-25T23:17:00.000Z
+created_date: 2025-11-04T13:29:00.000Z
+updated_date: 2025-11-26T00:17:00.000Z
 tags:
   - salsa/move
 related_moves:

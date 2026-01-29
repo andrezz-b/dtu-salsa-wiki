@@ -3,8 +3,8 @@ title: Super Mario
 type: partner
 difficulty: 5
 level: advanced
-created_date: 2025-11-06T20:30:00.000Z
-updated_date: 2025-11-07T18:25:00.000Z
+created_date: 2025-11-06T21:30:00.000Z
+updated_date: 2025-11-07T19:25:00.000Z
 tags:
   - salsa/move
 related_concepts:

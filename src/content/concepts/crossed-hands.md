@@ -2,8 +2,8 @@
 title: Crossed Hands
 type: hold
 level: beginner
-created_date: 2025-11-02T19:39:00.000Z
-updated_date: 2025-11-04T12:13:00.000Z
+created_date: 2025-11-02T20:39:00.000Z
+updated_date: 2025-11-04T13:13:00.000Z
 tags:
   - salsa/concept
 related_concepts:

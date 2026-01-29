@@ -3,8 +3,8 @@ title: Setenta y Uno
 type: partner
 difficulty: 1.5
 level: beginner
-created_date: 2025-11-02T09:31:00.000Z
-updated_date: 2025-11-26T09:36:00.000Z
+created_date: 2025-11-02T10:31:00.000Z
+updated_date: 2025-11-26T10:36:00.000Z
 tags:
   - salsa/move
 aliases:
@@ -15,6 +15,8 @@ related_concepts:
 related_moves:
   - setenta
   - enchufla
+video_urls:
+  - 'https://youtu.be/WRx0lydVn_c'
 ---
 ## ✍️ Description & Execution
 ### Leader

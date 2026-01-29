@@ -2,8 +2,8 @@
 title: Corona Finish
 type: finish
 level: beginner
-created_date: 2025-11-04T15:56:00.000Z
-updated_date: 2025-11-04T16:01:00.000Z
+created_date: 2025-11-04T16:56:00.000Z
+updated_date: 2025-11-04T17:01:00.000Z
 tags:
   - salsa/concept
 related_moves:

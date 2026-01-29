@@ -3,8 +3,8 @@ title: Setenta
 type: partner
 difficulty: 2
 level: beginner
-created_date: 2025-11-01T20:28:00.000Z
-updated_date: 2025-11-26T09:32:00.000Z
+created_date: 2025-11-01T21:28:00.000Z
+updated_date: 2025-11-26T10:32:00.000Z
 tags:
   - salsa/move
 aliases:
@@ -16,6 +16,8 @@ related_moves:
   - vuelta
   - enchufla
   - espejo
+video_urls:
+  - 'https://youtu.be/AfoHXW_9khU'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -35,5 +37,3 @@ related_moves:
 - 23 - I step forward, our arms are spread
   - Walk around
 - 567 - She turns I walk around
-## 🎥 Video
-- **Video Link:** 

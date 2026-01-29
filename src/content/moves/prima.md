@@ -3,8 +3,8 @@ title: Prima
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-11-08T18:13:00.000Z
-updated_date: 2025-11-08T21:35:00.000Z
+created_date: 2025-11-08T19:13:00.000Z
+updated_date: 2025-11-08T22:35:00.000Z
 tags:
   - salsa/move
 aliases:

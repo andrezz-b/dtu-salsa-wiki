@@ -3,8 +3,8 @@ title: Vacilala
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-11-06T20:09:00.000Z
-updated_date: 2025-11-06T20:11:00.000Z
+created_date: 2025-11-06T21:09:00.000Z
+updated_date: 2025-11-06T21:11:00.000Z
 tags:
   - salsa/move
 related_moves:

@@ -3,8 +3,8 @@ title: Enchufla Moderno
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-11-04T12:22:00.000Z
-updated_date: 2025-11-08T21:26:00.000Z
+created_date: 2025-11-04T13:22:00.000Z
+updated_date: 2025-11-08T22:26:00.000Z
 tags:
   - salsa/move
 related_concepts:

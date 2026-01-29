@@ -3,8 +3,8 @@ title: Enchufla y Sacala con Familia
 type: partner
 difficulty: 3.5
 level: advanced
-created_date: 2025-11-06T20:44:00.000Z
-updated_date: 2025-11-08T21:25:00.000Z
+created_date: 2025-11-06T21:44:00.000Z
+updated_date: 2025-11-08T22:25:00.000Z
 tags:
   - salsa/move
 related_moves:

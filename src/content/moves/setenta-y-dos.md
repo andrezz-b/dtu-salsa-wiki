@@ -3,8 +3,8 @@ title: Setenta y Dos
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2026-01-26T17:44:00.000Z
-updated_date: 2026-01-26T17:44:00.000Z
+created_date: 2026-01-26T18:44:00.000Z
+updated_date: 2026-01-26T18:44:00.000Z
 tags:
   - salsa/move
 aliases:
@@ -15,6 +15,8 @@ related_moves:
   - setenta
   - enchufla
   - dile-que-no
+video_urls:
+  - 'https://youtu.be/uYde5H97zC4'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -25,6 +27,4 @@ related_moves:
 - 123 567 - [Dile Que No](/moves/dile-que-no)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 
 
