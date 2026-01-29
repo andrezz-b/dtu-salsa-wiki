@@ -3,8 +3,8 @@ title: Coca-Cola al Revés
 type: partner
 difficulty: 4
 level: advanced
-created_date: 2025-11-08T18:28:00.000Z
-updated_date: 2025-11-08T22:25:00.000Z
+created_date: 2025-11-08T17:28:00.000Z
+updated_date: 2025-11-08T21:25:00.000Z
 tags:
   - salsa/move
 related_moves:

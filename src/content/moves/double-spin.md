@@ -3,8 +3,8 @@ title: Double Spin
 type: partner
 difficulty: 3.5
 level: intermediate
-created_date: 2025-11-24T21:11:00.000Z
-updated_date: 2025-11-24T21:12:00.000Z
+created_date: 2025-11-24T20:11:00.000Z
+updated_date: 2025-11-24T20:12:00.000Z
 tags:
   - salsa/move
 related_concepts:

@@ -124,57 +124,58 @@ const resolvedRelatedMoves = related_moves
                 {type}
               </span>
             </div>
-            <div class="flex items-start justify-between gap-4 flex-wrap">
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-3 flex-wrap">
-                  <h1 class="h1">
-                    {title}
-                  </h1>
-                  <button
-                    id="copy-link-btn"
-                    class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
-                    title="Copy link to clipboard"
-                    data-url={pageUrl}
+            <div class="block">
+              <h1 class="h1">
+                {title}
+                <button
+                  id="copy-link-btn"
+                  class="inline-block p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+                  title="Copy link to clipboard"
+                  data-url={pageUrl}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5 text-gray-600 dark:text-gray-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-5 h-5 text-gray-600 dark:text-gray-300"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                      />
-                    </svg>
-                  </button>
-                </div>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                    ></path>
+                  </svg>
+                </button>
+              </h1>
+
+              <div class="flex flex-row items-start gap-4 mt-2">
+                <DifficultyAccordion
+                  leaderDifficulty={leader_difficulty}
+                  followerDifficulty={follower_difficulty}
+                  overallDifficulty={difficulty}
+                />
                 {
                   aliases && aliases.length > 0 && (
-                    <p class="text-gray-500 dark:text-gray-400 mt-1 text-sm">
-                      Also known as: {aliases.join(", ")}
-                    </p>
+                    <div class="flex flex-col gap-1 p-2">
+                      <span class="text-gray-500 text-xs uppercase tracking-wider font-medium">
+                        Also known as
+                      </span>
+                      <div class="flex flex-wrap gap-1.5">
+                        {aliases.map((alias) => (
+                          <span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm">
+                            {alias}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   )
                 }
               </div>
-              {/* Difficulty Rating */}
-              <DifficultyAccordion
-                leaderDifficulty={leader_difficulty}
-                followerDifficulty={follower_difficulty}
-                overallDifficulty={difficulty}
-              />
             </div>
           </div>
 
-          {/* Content */}
-          <div
-            class="content mb-10 prose-a:text-accent prose-a:no-underline prose-a:hover:underline"
-          >
-            <Content />
-          </div>
           {/* Videos */}
           {
             videoIds.length > 0 && (
@@ -185,13 +186,22 @@ const resolvedRelatedMoves = related_moves
                       client:idle
                       id={id}
                       title={title}
-                      poster="maxresdefault"
+                      webp={true}
+                      params="rel=0"
+                      rel="preload"
                     />
                   </div>
                 ))}
               </div>
             )
           }
+
+          {/* Content */}
+          <div
+            class="content mb-10 prose-a:text-accent prose-a:no-underline prose-a:hover:underline"
+          >
+            <Content />
+          </div>
         </article>
       </div>
     </div>

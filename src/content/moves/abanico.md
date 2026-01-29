@@ -3,8 +3,8 @@ title: Abanico
 type: partner
 difficulty: 3
 level: intermediate
-created_date: 2025-11-06T21:11:00.000Z
-updated_date: 2025-11-26T00:10:00.000Z
+created_date: 2025-11-06T20:11:00.000Z
+updated_date: 2025-11-25T23:10:00.000Z
 tags:
   - salsa/move
 related_concepts:

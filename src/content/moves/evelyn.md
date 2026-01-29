@@ -3,8 +3,8 @@ title: Evelyn
 type: partner
 difficulty: 2
 level: intermediate
-created_date: 2025-11-04T14:32:00.000Z
-updated_date: 2025-11-26T10:05:00.000Z
+created_date: 2025-11-04T13:32:00.000Z
+updated_date: 2025-11-26T09:05:00.000Z
 tags:
   - salsa/move
 related_concepts:

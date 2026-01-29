@@ -3,8 +3,8 @@ title: Alternative Sombrero Finish
 type: partner
 difficulty: 3.5
 level: advanced
-created_date: 2025-11-19T22:51:00.000Z
-updated_date: 2025-11-19T22:52:00.000Z
+created_date: 2025-11-19T21:51:00.000Z
+updated_date: 2025-11-19T21:52:00.000Z
 tags:
   - salsa/move
 related_concepts:

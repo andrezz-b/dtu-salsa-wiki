@@ -3,8 +3,8 @@ title: Setenta
 type: partner
 difficulty: 2
 level: beginner
-created_date: 2025-11-01T21:28:00.000Z
-updated_date: 2025-11-26T10:32:00.000Z
+created_date: 2025-11-01T20:28:00.000Z
+updated_date: 2025-11-26T09:32:00.000Z
 tags:
   - salsa/move
 aliases:

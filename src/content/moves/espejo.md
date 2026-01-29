@@ -3,8 +3,8 @@ title: Espejo
 type: solo
 difficulty: 1
 level: beginner
-created_date: 2025-11-01T21:54:00.000Z
-updated_date: 2025-11-01T21:57:00.000Z
+created_date: 2025-11-01T20:54:00.000Z
+updated_date: 2025-11-01T20:57:00.000Z
 tags:
   - salsa/move
 ---

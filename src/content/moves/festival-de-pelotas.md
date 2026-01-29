@@ -3,8 +3,8 @@ title: Festival de Pelotas
 type: rueda
 difficulty: 3
 level: intermediate
-created_date: 2025-11-06T21:49:00.000Z
-updated_date: 2025-11-08T22:26:00.000Z
+created_date: 2025-11-06T20:49:00.000Z
+updated_date: 2025-11-08T21:26:00.000Z
 tags:
   - salsa/move
 related_moves:

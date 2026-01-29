@@ -3,8 +3,8 @@ title: Enchufla
 type: partner
 difficulty: 1
 level: beginner
-created_date: 2025-11-24T22:13:00.000Z
-updated_date: 2025-11-24T22:13:00.000Z
+created_date: 2025-11-24T21:13:00.000Z
+updated_date: 2025-11-24T21:13:00.000Z
 tags:
   - salsa/move
 ---

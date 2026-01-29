@@ -3,8 +3,8 @@ title: Enchufla Continuation
 type: partner
 difficulty: 3
 level: advanced
-created_date: 2025-11-04T13:27:00.000Z
-updated_date: 2025-11-08T22:25:00.000Z
+created_date: 2025-11-04T12:27:00.000Z
+updated_date: 2025-11-08T21:25:00.000Z
 tags:
   - salsa/move
 related_moves:

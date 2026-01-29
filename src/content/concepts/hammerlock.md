@@ -2,8 +2,8 @@
 title: Hammerlock
 type: hold
 level: beginner
-created_date: 2025-11-01T21:35:00.000Z
-updated_date: 2025-11-01T21:39:00.000Z
+created_date: 2025-11-01T20:35:00.000Z
+updated_date: 2025-11-01T20:39:00.000Z
 tags:
   - salsa/concept
 aliases:

@@ -2,8 +2,8 @@
 title: Sombrero Finish
 type: position
 level: beginner
-created_date: 2025-11-02T20:13:00.000Z
-updated_date: 2025-11-02T20:15:00.000Z
+created_date: 2025-11-02T19:13:00.000Z
+updated_date: 2025-11-02T19:15:00.000Z
 tags:
   - salsa/concept
 related_moves:

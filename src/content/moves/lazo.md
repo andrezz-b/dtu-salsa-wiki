@@ -3,8 +3,8 @@ title: Lazo
 type: partner
 difficulty: 1.5
 level: beginner
-created_date: 2025-11-05T22:02:00.000Z
-updated_date: 2025-11-07T19:25:00.000Z
+created_date: 2025-11-05T21:02:00.000Z
+updated_date: 2025-11-07T18:25:00.000Z
 tags:
   - salsa/move
 related_moves:

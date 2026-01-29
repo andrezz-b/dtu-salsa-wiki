@@ -3,8 +3,8 @@ title: Coca-Cola
 type: partner
 difficulty: 3
 level: intermediate
-created_date: 2025-11-24T21:09:00.000Z
-updated_date: 2025-11-24T21:09:00.000Z
+created_date: 2025-11-24T20:09:00.000Z
+updated_date: 2025-11-24T20:09:00.000Z
 tags:
   - salsa/move
 related_moves:

@@ -3,8 +3,8 @@ title: Mambo
 type: shine
 difficulty: 1.5
 level: beginner
-created_date: 2025-11-04T22:16:00.000Z
-updated_date: 2025-11-07T19:25:00.000Z
+created_date: 2025-11-04T21:16:00.000Z
+updated_date: 2025-11-07T18:25:00.000Z
 tags:
   - salsa/move
 ---
