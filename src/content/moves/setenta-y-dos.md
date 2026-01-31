@@ -3,8 +3,8 @@ title: Setenta y Dos
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2026-01-26T18:44:00.000Z
-updated_date: 2026-01-26T18:44:00.000Z
+created_date: 2026-01-26T17:44:00.000Z
+updated_date: 2026-01-26T17:44:00.000Z
 tags:
   - salsa/move
 aliases:

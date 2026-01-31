@@ -3,8 +3,8 @@ title: Ochenta
 type: partner
 difficulty: 2.5
 level: intermediate
-created_date: 2025-11-02T20:36:00.000Z
-updated_date: 2025-11-26T10:21:00.000Z
+created_date: 2025-11-02T19:36:00.000Z
+updated_date: 2025-11-26T09:21:00.000Z
 tags:
   - salsa/move
 aliases:

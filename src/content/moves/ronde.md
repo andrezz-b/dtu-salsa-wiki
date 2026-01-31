@@ -3,8 +3,8 @@ title: Ronde
 type: solo
 difficulty: 1.5
 level: beginner
-created_date: 2025-11-02T20:45:00.000Z
-updated_date: 2025-11-02T21:26:00.000Z
+created_date: 2025-11-02T19:45:00.000Z
+updated_date: 2025-11-02T20:26:00.000Z
 tags:
   - salsa/move
 ---

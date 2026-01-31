@@ -3,8 +3,8 @@ title: Setenta Cruzado
 type: partner
 difficulty: 2
 level: intermediate
-created_date: 2025-11-02T20:32:00.000Z
-updated_date: 2025-11-08T22:27:00.000Z
+created_date: 2025-11-02T19:32:00.000Z
+updated_date: 2025-11-08T21:27:00.000Z
 tags:
   - salsa/move
 related_concepts:

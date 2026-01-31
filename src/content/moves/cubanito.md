@@ -3,8 +3,8 @@ title: Cubanito
 type: partner
 difficulty: 1.5
 level: intermediate
-created_date: 2025-11-04T22:25:00.000Z
-updated_date: 2025-11-07T19:25:00.000Z
+created_date: 2025-11-04T21:25:00.000Z
+updated_date: 2025-11-07T18:25:00.000Z
 tags:
   - salsa/move
 related_concepts:

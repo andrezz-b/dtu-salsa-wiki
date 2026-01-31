@@ -3,8 +3,8 @@ title: Candado
 type: partner
 difficulty: 3
 level: intermediate
-created_date: 2025-11-19T22:28:00.000Z
-updated_date: 2025-11-19T22:28:00.000Z
+created_date: 2025-11-19T21:28:00.000Z
+updated_date: 2025-11-19T21:28:00.000Z
 tags:
   - salsa/move
 related_concepts:

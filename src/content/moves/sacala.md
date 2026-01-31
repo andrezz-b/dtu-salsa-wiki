@@ -3,8 +3,8 @@ title: Sacala
 type: partner
 difficulty: 2
 level: beginner
-created_date: 2025-11-02T10:42:00.000Z
-updated_date: 2025-11-26T10:31:00.000Z
+created_date: 2025-11-02T09:42:00.000Z
+updated_date: 2025-11-26T09:31:00.000Z
 tags:
   - salsa/move
 aliases:

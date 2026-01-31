@@ -3,8 +3,8 @@ title: Dile Que Si
 type: partner
 difficulty: 2
 level: intermediate
-created_date: 2025-11-06T21:25:00.000Z
-updated_date: 2025-11-07T19:25:00.000Z
+created_date: 2025-11-06T20:25:00.000Z
+updated_date: 2025-11-07T18:25:00.000Z
 tags:
   - salsa/move
 related_concepts:

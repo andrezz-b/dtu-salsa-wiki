@@ -3,8 +3,8 @@ title: Close Position Turning
 type: partner
 difficulty: 2.5
 level: advanced
-created_date: 2025-11-12T23:08:00.000Z
-updated_date: 2025-11-12T23:18:00.000Z
+created_date: 2025-11-12T22:08:00.000Z
+updated_date: 2025-11-12T22:18:00.000Z
 tags:
   - salsa/move
 related_concepts:

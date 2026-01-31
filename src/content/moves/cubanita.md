@@ -3,8 +3,8 @@ title: Cubanita
 type: partner
 difficulty: 1.5
 level: beginner
-created_date: 2025-11-17T17:01:00.000Z
-updated_date: 2025-11-17T17:03:00.000Z
+created_date: 2025-11-17T16:01:00.000Z
+updated_date: 2025-11-17T16:03:00.000Z
 tags:
   - salsa/move
 related_concepts:
