@@ -7,18 +7,6 @@ import Pagination from "./Pagination";
 import { IoSearch, IoFilter, IoClose } from "react-icons/io5";
 import { useSearch } from "@/lib/hooks/useSearch";
 
-interface IMoveItem {
-  slug: string;
-  frontmatter: {
-    title: string;
-    aliases?: string[];
-    type: string;
-    level: string;
-    difficulty: number;
-    description?: string;
-  };
-}
-
 const MovesBrowse = () => {
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -29,44 +17,39 @@ const MovesBrowse = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 12;
 
-  const allData = useMemo(
-    () => (movesData as IMoveItem[]).map((item) => ({ ...item, id: item.slug })),
-    []
-  );
-
   // Initialize MiniSearch for better search results
   const { search } = useSearch({
-    items: allData,
+    items: movesData,
     fields: [
       "frontmatter.title",
       "frontmatter.aliases",
       "frontmatter.type",
       "frontmatter.level",
-      "frontmatter.description",
+      "content",
     ],
     storeFields: ["slug", "frontmatter"],
-    idField: "id",
+    idField: "slug",
     boostFields: {
       "frontmatter.title": 3,
       "frontmatter.aliases": 2,
-      "frontmatter.description": 1,
+      content: 1,
     },
   });
 
   // Extract unique options
   const levels = useMemo(() => {
     const uniqueLevels = new Set(
-      allData.map((item) => item.frontmatter.level).filter(Boolean),
+      movesData.map((item) => item.frontmatter.level).filter(Boolean),
     );
     return Array.from(uniqueLevels);
-  }, [allData]);
+  }, [movesData]);
 
   const types = useMemo(() => {
     const uniqueTypes = new Set(
-      allData.map((item) => item.frontmatter.type).filter(Boolean),
+      movesData.map((item) => item.frontmatter.type).filter(Boolean),
     );
     return Array.from(uniqueTypes);
-  }, [allData]);
+  }, [movesData]);
 
   const filteredData = useMemo(() => {
     // First apply search
@@ -121,7 +104,7 @@ const MovesBrowse = () => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const currentItems = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const activeFilterCount = [
@@ -170,10 +153,11 @@ const MovesBrowse = () => {
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-h2 md:text-h1 font-bold mb-2">
-          Browse <span className="text-accent dark:text-darkmode-accent">Moves</span>
+          Browse{" "}
+          <span className="text-accent dark:text-darkmode-accent">Moves</span>
         </h1>
         <p className="text-text-light dark:text-darkmode-text-light">
-          Explore our collection of {allData.length} salsa moves
+          Explore our collection of {movesData.length} salsa moves
         </p>
       </div>
 
@@ -283,8 +267,15 @@ const MovesBrowse = () => {
           {/* Results Count */}
           <div className="flex items-center justify-between mb-6">
             <p className="text-sm text-text-light dark:text-darkmode-text-light">
-              Showing <span className="font-medium text-text-dark dark:text-darkmode-text-dark">{currentItems.length}</span> of{" "}
-              <span className="font-medium text-text-dark dark:text-darkmode-text-dark">{filteredData.length}</span> moves
+              Showing{" "}
+              <span className="font-medium text-text-dark dark:text-darkmode-text-dark">
+                {currentItems.length}
+              </span>{" "}
+              of{" "}
+              <span className="font-medium text-text-dark dark:text-darkmode-text-dark">
+                {filteredData.length}
+              </span>{" "}
+              moves
             </p>
 
             {/* Active Filters Pills (Desktop) */}
@@ -293,7 +284,11 @@ const MovesBrowse = () => {
                 {selectedLevels.map((level) => (
                   <button
                     key={level}
-                    onClick={() => setSelectedLevels(selectedLevels.filter((l) => l !== level))}
+                    onClick={() =>
+                      setSelectedLevels(
+                        selectedLevels.filter((l) => l !== level),
+                      )
+                    }
                     className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-accent/10 text-accent dark:bg-darkmode-accent/10 dark:text-darkmode-accent rounded-full hover:bg-accent/20 dark:hover:bg-darkmode-accent/20 transition-colors"
                   >
                     {level}
@@ -303,7 +298,9 @@ const MovesBrowse = () => {
                 {selectedTypes.map((type) => (
                   <button
                     key={type}
-                    onClick={() => setSelectedTypes(selectedTypes.filter((t) => t !== type))}
+                    onClick={() =>
+                      setSelectedTypes(selectedTypes.filter((t) => t !== type))
+                    }
                     className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-accent/10 text-accent dark:bg-darkmode-accent/10 dark:text-darkmode-accent rounded-full hover:bg-accent/20 dark:hover:bg-darkmode-accent/20 transition-colors"
                   >
                     {type}
@@ -325,7 +322,6 @@ const MovesBrowse = () => {
                   level={item.frontmatter.level}
                   type={item.frontmatter.type}
                   difficulty={item.frontmatter.difficulty}
-                  description={item.frontmatter.description}
                 />
               ))}
             </div>
