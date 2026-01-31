@@ -2,8 +2,7 @@
 import Base from "@/layouts/Base.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
 import { render, getEntries } from "astro:content";
-import LiteYouTubeEmbed from "react-lite-youtube-embed";
-import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+import { YouTube } from "@astro-community/astro-embed-youtube";
 import { getYoutubeId } from "@/lib/utils/video";
 import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
 import Breadcrumbs from "@/helpers/Breadcrumbs";
@@ -103,29 +102,24 @@ const resolvedRelatedConcepts = related_concepts
               {title}
             </h1>
           </div>
-          {/* Content */}
-          <div
-            class="content mb-10 prose-a:text-accent prose-a:no-underline prose-a:hover:underline"
-          >
-            <Content />
-          </div>
           {/* Videos */}
           {
             videoIds.length > 0 && (
               <div class="grid grid-cols-1 gap-6 mb-10">
                 {videoIds.map((id) => (
                   <div class="rounded-lg overflow-hidden shadow-lg">
-                    <LiteYouTubeEmbed
-                      client:idle
-                      id={id}
-                      title={title}
-                      poster="maxresdefault"
-                    />
+                    <YouTube id={id} params="rel=0" />
                   </div>
                 ))}
               </div>
             )
           }
+          {/* Content */}
+          <div
+            class="content mb-10 prose-a:text-accent prose-a:no-underline prose-a:hover:underline"
+          >
+            <Content />
+          </div>
         </article>
       </div>
     </div>

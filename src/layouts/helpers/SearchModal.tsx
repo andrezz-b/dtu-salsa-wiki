@@ -1,182 +1,127 @@
 import searchData from ".json/search.json";
-import MiniSearch from "minisearch";
-import React, { useEffect, useMemo, useState } from "react";
+import { useSearch } from "@/lib/hooks/useSearch";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IoSearch, IoClose } from "react-icons/io5";
 import SearchResult, { type ISearchItem } from "./SearchResult";
 
+const fields = [
+  "frontmatter.title",
+  "frontmatter.type",
+  "frontmatter.level",
+  "content",
+  "frontmatter.tags",
+  "frontmatter.aliases",
+];
+
+const storeFields = ["slug", "group", "frontmatter", "content"];
+
+const boostFields = {
+  "frontmatter.title": 4,
+  "frontmatter.aliases": 3,
+  content: 1,
+};
+
 const SearchModal = () => {
   const [searchString, setSearchString] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // handle input change
   const handleSearch = (e: React.FormEvent<HTMLInputElement>) => {
     setSearchString(e.currentTarget.value.replace("\\", "").toLowerCase());
+    setSelectedIndex(-1); // Reset selection on search change
   };
 
-  // Initialize MiniSearch once with optimized configuration
-  const miniSearch = useMemo(() => {
-    const ms = new MiniSearch({
-      fields: [
-        "frontmatter.title",
-        "frontmatter.type",
-        "frontmatter.level",
-        "frontmatter.description",
-        "content",
-        "frontmatter.tags",
-        "frontmatter.aliases",
-      ],
-      storeFields: ["slug", "group", "frontmatter", "content"],
-      // Extract nested fields and handle arrays
-      extractField: (document, fieldName) => {
-        const value = fieldName
-          .split(".")
-          .reduce((doc: any, key: string) => doc && doc[key], document);
-        // Handle arrays (aliases, tags)
-        if (Array.isArray(value)) {
-          return value.join(" ");
-        }
-        return value;
-      },
-      // Custom tokenizer for better matching
-      tokenize: (text: string) => {
-        return text
-          .toLowerCase()
-          .split(/[\s\-_/]+/)
-          .filter((token) => token.length > 0);
-      },
-      searchOptions: {
-        // Enable prefix matching for partial words
-        prefix: true,
-        // Dynamic fuzzy matching based on term length
-        fuzzy: (term: string) => {
-          if (term.length <= 2) return 0;
-          if (term.length <= 4) return 0.1;
-          return 0.2;
-        },
-        // Use OR combiner for broader results
-        combineWith: "OR",
-        // Field boosting - title and aliases are most important
-        boost: {
-          "frontmatter.title": 4,
-          "frontmatter.aliases": 3,
-          "frontmatter.description": 1.5,
-          "content": 1,
-        },
-        // Weight prefix and fuzzy matches
-        weights: {
-          fuzzy: 0.3,
-          prefix: 0.6,
-        },
-      },
-    });
-
-    // Index all documents
-    ms.addAll(searchData.map((item) => ({ id: item.slug, ...item })));
-    return ms;
-  }, []);
+  const { search } = useSearch<ISearchItem>({
+    items: searchData,
+    fields,
+    storeFields,
+    idField: "slug",
+    boostFields,
+  });
 
   // Generate search result
-  const { searchResult, totalTime } = useMemo(() => {
-    const startTime = performance.now();
-    if (searchString === "") {
-      return { searchResult: [], totalTime: "0.000" };
-    }
+  const searchResult = useMemo(
+    () => search(searchString),
+    [searchString, search],
+  );
 
-    const results = miniSearch.search(searchString);
-    const endTime = performance.now();
-
-    const mappedResults = results.map((result: any) => ({
-      slug: result.slug,
-      group: result.group,
-      frontmatter: result.frontmatter,
-      content: result.content,
-    })) as ISearchItem[];
-
-    return {
-      searchResult: mappedResults,
-      totalTime: ((endTime - startTime) / 1000).toFixed(3),
-    };
-  }, [searchString, miniSearch]);
-
-  // search dom manipulation
+  // Handle external triggers
   useEffect(() => {
-    const searchModal = document.getElementById("searchModal");
-    const searchInput = document.getElementById("searchInput");
-    const searchModalOverlay = document.getElementById("searchModalOverlay");
-    const searchResultItems = document.querySelectorAll("[data-search-item]");
-    const searchModalTriggers = document.querySelectorAll(
-      "[data-search-trigger]",
-    );
-
-    // search modal open
-    searchModalTriggers.forEach((button) => {
-      button.addEventListener("click", function () {
-        const searchModal = document.getElementById("searchModal");
-        searchModal!.classList.add("show");
-        searchInput!.focus();
-      });
-    });
-
-    // search modal close
-    searchModalOverlay!.addEventListener("click", function () {
-      searchModal!.classList.remove("show");
-    });
-
-    // keyboard navigation
-    let selectedIndex = -1;
-
-    const updateSelection = () => {
-      searchResultItems.forEach((item, index) => {
-        if (index === selectedIndex) {
-          item.classList.add("search-result-item-active");
-        } else {
-          item.classList.remove("search-result-item-active");
-        }
-      });
-
-      searchResultItems[selectedIndex]?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
+    const handleTriggerClick = () => {
+      setIsOpen(true);
+      setTimeout(() => inputRef.current?.focus(), 100);
     };
 
-    document.addEventListener("keydown", function (event) {
-      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-        searchModal!.classList.add("show");
-        searchInput!.focus();
-        updateSelection();
-      }
+    const triggers = document.querySelectorAll("[data-search-trigger]");
+    triggers.forEach((trigger) => {
+      trigger.addEventListener("click", handleTriggerClick);
+    });
 
-      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+    return () => {
+      triggers.forEach((trigger) => {
+        trigger.removeEventListener("click", handleTriggerClick);
+      });
+    };
+  }, []);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
         event.preventDefault();
+        setIsOpen(true);
+        setTimeout(() => inputRef.current?.focus(), 100);
       }
 
       if (event.key === "Escape") {
-        searchModal!.classList.remove("show");
+        setIsOpen(false);
       }
 
-      if (event.key === "ArrowUp" && selectedIndex > 0) {
-        selectedIndex--;
-      } else if (
-        event.key === "ArrowDown" &&
-        selectedIndex < searchResultItems.length - 1
-      ) {
-        selectedIndex++;
+      if (!isOpen) return;
+
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setSelectedIndex((prev) =>
+          prev < searchResult.length - 1 ? prev + 1 : prev,
+        );
       } else if (event.key === "Enter") {
-        const activeLink = document.querySelector(
-          ".search-result-item-active a",
-        ) as HTMLAnchorElement;
-        if (activeLink) {
-          activeLink?.click();
+        event.preventDefault();
+        if (selectedIndex >= 0 && selectedIndex < searchResult.length) {
+          const selectedItem = searchResult[selectedIndex];
+          window.location.href = `/${selectedItem.slug}`;
+          setIsOpen(false);
         }
       }
+    };
 
-      updateSelection();
-    });
-  }, [searchString]);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, searchResult, selectedIndex]);
+
+  // Reset selected index when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedIndex(-1);
+    }
+  }, [isOpen]);
+
+  // Close modal when clicking outside (overlay)
+  const handleOverlayClick = () => {
+    setIsOpen(false);
+  };
 
   return (
-    <div id="searchModal" className="search-modal">
-      <div id="searchModalOverlay" className="search-modal-overlay" />
+    <div id="searchModal" className={`search-modal ${isOpen ? "show" : ""}`}>
+      <div
+        id="searchModalOverlay"
+        className="search-modal-overlay"
+        onClick={handleOverlayClick}
+      />
       <div className="search-wrapper">
         <div className="search-wrapper-header">
           <div className="relative">
@@ -184,6 +129,7 @@ const SearchModal = () => {
               <IoSearch className="w-5 h-5" />
             </span>
             <input
+              ref={inputRef}
               id="searchInput"
               placeholder="Search moves, concepts, and more..."
               className="search-wrapper-header-input"
@@ -195,7 +141,10 @@ const SearchModal = () => {
             />
             {searchString && (
               <button
-                onClick={() => setSearchString("")}
+                onClick={() => {
+                  setSearchString("");
+                  inputRef.current?.focus();
+                }}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-accent dark:hover:text-darkmode-accent transition-colors p-1 rounded-lg hover:bg-light dark:hover:bg-darkmode-light"
                 aria-label="Clear search"
               >
@@ -204,7 +153,11 @@ const SearchModal = () => {
             )}
           </div>
         </div>
-        <SearchResult searchResult={searchResult} searchString={searchString} />
+        <SearchResult
+          searchResult={searchResult}
+          searchString={searchString}
+          selectedIndex={selectedIndex}
+        />
         <div className="search-wrapper-footer">
           <span className="flex items-center gap-1">
             <kbd>
@@ -247,7 +200,10 @@ const SearchModal = () => {
           </span>
           {searchString && (
             <span className="text-text-light dark:text-darkmode-text-light">
-              <strong className="text-text-dark dark:text-darkmode-text-dark">{searchResult.length}</strong> results
+              <strong className="text-text-dark dark:text-darkmode-text-dark">
+                {searchResult.length}
+              </strong>{" "}
+              results
             </span>
           )}
           <span className="flex items-center gap-1">

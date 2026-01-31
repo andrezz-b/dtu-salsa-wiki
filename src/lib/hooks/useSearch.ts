@@ -1,11 +1,6 @@
 import { useMemo } from "react";
 import MiniSearch, { type SearchResult } from "minisearch";
 
-interface SearchableItem {
-  id: string;
-  [key: string]: any;
-}
-
 interface UseSearchOptions<T> {
   items: T[];
   fields: string[];
@@ -29,7 +24,7 @@ interface UseSearchResult<T> {
  * - Nested field extraction (supports "frontmatter.title")
  * - Combiner set to OR for broader matches
  */
-export function useSearch<T extends SearchableItem>({
+export function useSearch<T>({
   items,
   fields,
   storeFields,
@@ -98,7 +93,10 @@ export function useSearch<T extends SearchableItem>({
 
       // Map results back to original items, preserving search order
       const resultMap = new Map(
-        results.map((result: SearchResult, index: number) => [result.id, index])
+        results.map((result: SearchResult, index: number) => [
+          result.id,
+          index,
+        ]),
       );
 
       return items

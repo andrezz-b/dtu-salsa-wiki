@@ -1,5 +1,5 @@
 import { plainify } from "@/lib/utils/textConverter";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { FaRunning, FaLightbulb } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import StarRatingDisplay from "./StarRatingDisplay";
@@ -10,7 +10,6 @@ export interface ISearchItem {
   frontmatter: {
     title: string;
     image?: string;
-    description?: string;
     categories?: string[];
     tags?: string[];
     level?: string;
@@ -34,14 +33,35 @@ const getLevelColor = (level: string) => {
   }
 };
 
+interface SearchResultProps {
+  searchResult: ISearchItem[];
+  searchString: string;
+  selectedIndex: number;
+}
+
 // search result component
 const SearchResult = ({
   searchResult,
   searchString,
-}: {
-  searchResult: ISearchItem[];
-  searchString: string;
-}) => {
+  selectedIndex,
+}: SearchResultProps) => {
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Reset refs array when search result changes to avoid memory leaks or stale refs
+  useEffect(() => {
+    itemsRef.current = itemsRef.current.slice(0, searchResult.length);
+  }, [searchResult]);
+
+  // Scroll active item into view
+  useEffect(() => {
+    if (selectedIndex >= 0 && selectedIndex < searchResult.length) {
+      itemsRef.current[selectedIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [selectedIndex, searchResult.length]);
+
   // match marker
   const matchMarker = (text: string, substring: string) => {
     const parts = text.split(new RegExp(`(${substring})`, "gi"));
@@ -110,15 +130,19 @@ const SearchResult = ({
         <div className="search-result">
           {searchResult.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {searchResult.map((item) => (
+              {searchResult.map((item, index) => (
                 <div
                   key={item.slug}
-                  data-search-item
-                  className="search-result-item group"
+                  ref={(el) => {
+                    itemsRef.current[index] = el;
+                  }}
+                  className={`search-result-item group ${
+                    index === selectedIndex ? "search-result-item-active" : ""
+                  }`}
                 >
                   <div className="flex items-start gap-4">
                     {/* Icon */}
-                    <span className="flex-shrink-0 w-10 h-10 rounded-xl bg-light dark:bg-darkmode-light flex items-center justify-center text-gray-400 group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
+                    <span className="shrink-0 w-10 h-10 rounded-xl bg-light dark:bg-darkmode-light flex items-center justify-center text-gray-400 group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
                       {getItemIcon(item.group)}
                     </span>
 
@@ -135,7 +159,9 @@ const SearchResult = ({
                           />
                         )}
                         {item.frontmatter.difficulty !== undefined && (
-                          <StarRatingDisplay rating={item.frontmatter.difficulty} />
+                          <StarRatingDisplay
+                            rating={item.frontmatter.difficulty}
+                          />
                         )}
                       </div>
 
@@ -151,7 +177,9 @@ const SearchResult = ({
                       {item.frontmatter.aliases &&
                         item.frontmatter.aliases.length > 0 && (
                           <div className="text-xs text-text-light dark:text-darkmode-text-light mb-1">
-                            <span className="text-gray-400">Also known as: </span>
+                            <span className="text-gray-400">
+                              Also known as:{" "}
+                            </span>
                             {item.frontmatter.aliases.map((alias, index) => (
                               <span key={index}>
                                 {matchUnderline(alias, searchString)}
@@ -162,11 +190,12 @@ const SearchResult = ({
                           </div>
                         )}
 
-                      {item.content && matchContent(item.content, searchString) && (
-                        <p className="search-result-item-content">
-                          {matchContent(item.content, searchString)}
-                        </p>
-                      )}
+                      {item.content &&
+                        matchContent(item.content, searchString) && (
+                          <p className="search-result-item-content">
+                            {matchContent(item.content, searchString)}
+                          </p>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -181,9 +210,15 @@ const SearchResult = ({
                 No results found
               </p>
               <p className="text-sm">
-                No results for &quot;<strong className="text-accent dark:text-darkmode-accent">{searchString}</strong>&quot;
+                No results for &quot;
+                <strong className="text-accent dark:text-darkmode-accent">
+                  {searchString}
+                </strong>
+                &quot;
               </p>
-              <p className="text-xs mt-2">Try different keywords or check for typos</p>
+              <p className="text-xs mt-2">
+                Try different keywords or check for typos
+              </p>
             </div>
           )}
         </div>

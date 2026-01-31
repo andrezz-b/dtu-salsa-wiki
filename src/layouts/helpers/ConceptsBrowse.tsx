@@ -6,15 +6,19 @@ import Pagination from "./Pagination";
 import { IoSearch, IoFilter, IoClose } from "react-icons/io5";
 import { useSearch } from "@/lib/hooks/useSearch";
 
-interface IConceptItem {
-  slug: string;
-  frontmatter: {
-    title: string;
-    type: string;
-    level: string;
-    description?: string;
-  };
-}
+const fields = [
+  "frontmatter.title",
+  "frontmatter.type",
+  "frontmatter.level",
+  "content",
+];
+
+const storeFields = ["slug", "frontmatter"];
+
+const boostFields = {
+  "frontmatter.title": 3,
+  content: 1,
+};
 
 const ConceptsBrowse = () => {
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
@@ -24,48 +28,33 @@ const ConceptsBrowse = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 12;
 
-  const allData = useMemo(
-    () => (conceptsData as IConceptItem[]).map((item) => ({ ...item, id: item.slug })),
-    []
-  );
-
   // Initialize MiniSearch for better search results
   const { search } = useSearch({
-    items: allData,
-    fields: [
-      "frontmatter.title",
-      "frontmatter.type",
-      "frontmatter.level",
-      "frontmatter.description",
-    ],
-    storeFields: ["slug", "frontmatter"],
-    idField: "id",
-    boostFields: {
-      "frontmatter.title": 3,
-      "frontmatter.description": 1,
-    },
+    items: conceptsData,
+    fields,
+    storeFields,
+    idField: "slug",
+    boostFields,
   });
 
   // Extract unique options
   const levels = useMemo(() => {
     const uniqueLevels = new Set(
-      allData.map((item) => item.frontmatter.level).filter(Boolean),
+      conceptsData.map((item) => item.frontmatter.level).filter(Boolean),
     );
     return Array.from(uniqueLevels);
-  }, [allData]);
+  }, []);
 
   const types = useMemo(() => {
     const uniqueTypes = new Set(
-      allData.map((item) => item.frontmatter.type).filter(Boolean),
+      conceptsData.map((item) => item.frontmatter.type).filter(Boolean),
     );
     return Array.from(uniqueTypes);
-  }, [allData]);
+  }, []);
 
   const filteredData = useMemo(() => {
-    // First apply search
     const searchResults = search(searchQuery);
 
-    // Then apply filters
     return searchResults.filter((item) => {
       if (
         selectedLevels.length > 0 &&
@@ -111,7 +100,7 @@ const ConceptsBrowse = () => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const currentItems = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const activeFilterCount = [
@@ -151,10 +140,13 @@ const ConceptsBrowse = () => {
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-h2 md:text-h1 font-bold mb-2">
-          Browse <span className="text-accent dark:text-darkmode-accent">Concepts</span>
+          Browse{" "}
+          <span className="text-accent dark:text-darkmode-accent">
+            Concepts
+          </span>
         </h1>
         <p className="text-text-light dark:text-darkmode-text-light">
-          Explore our collection of {allData.length} salsa concepts
+          Explore our collection of {conceptsData.length} salsa concepts
         </p>
       </div>
 
@@ -264,8 +256,15 @@ const ConceptsBrowse = () => {
           {/* Results Count */}
           <div className="flex items-center justify-between mb-6">
             <p className="text-sm text-text-light dark:text-darkmode-text-light">
-              Showing <span className="font-medium text-text-dark dark:text-darkmode-text-dark">{currentItems.length}</span> of{" "}
-              <span className="font-medium text-text-dark dark:text-darkmode-text-dark">{filteredData.length}</span> concepts
+              Showing{" "}
+              <span className="font-medium text-text-dark dark:text-darkmode-text-dark">
+                {currentItems.length}
+              </span>{" "}
+              of{" "}
+              <span className="font-medium text-text-dark dark:text-darkmode-text-dark">
+                {filteredData.length}
+              </span>{" "}
+              concepts
             </p>
 
             {/* Active Filters Pills (Desktop) */}
@@ -274,7 +273,11 @@ const ConceptsBrowse = () => {
                 {selectedLevels.map((level) => (
                   <button
                     key={level}
-                    onClick={() => setSelectedLevels(selectedLevels.filter((l) => l !== level))}
+                    onClick={() =>
+                      setSelectedLevels(
+                        selectedLevels.filter((l) => l !== level),
+                      )
+                    }
                     className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-accent/10 text-accent dark:bg-darkmode-accent/10 dark:text-darkmode-accent rounded-full hover:bg-accent/20 dark:hover:bg-darkmode-accent/20 transition-colors"
                   >
                     {level}
@@ -284,7 +287,9 @@ const ConceptsBrowse = () => {
                 {selectedTypes.map((type) => (
                   <button
                     key={type}
-                    onClick={() => setSelectedTypes(selectedTypes.filter((t) => t !== type))}
+                    onClick={() =>
+                      setSelectedTypes(selectedTypes.filter((t) => t !== type))
+                    }
                     className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium bg-accent/10 text-accent dark:bg-darkmode-accent/10 dark:text-darkmode-accent rounded-full hover:bg-accent/20 dark:hover:bg-darkmode-accent/20 transition-colors"
                   >
                     {type}
@@ -305,7 +310,6 @@ const ConceptsBrowse = () => {
                   href={`/${item.slug}`}
                   level={item.frontmatter.level}
                   type={item.frontmatter.type}
-                  description={item.frontmatter.description}
                 />
               ))}
             </div>
