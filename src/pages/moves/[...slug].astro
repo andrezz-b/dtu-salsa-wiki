@@ -5,8 +5,7 @@ import { render, getEntries } from "astro:content";
 import DifficultyAccordion from "@/layouts/helpers/DifficultyAccordion.astro";
 import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
 import Breadcrumbs from "@/layouts/helpers/Breadcrumbs";
-import LiteYouTubeEmbed from "react-lite-youtube-embed";
-import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+import { YouTube } from "@astro-community/astro-embed-youtube";
 import { getYoutubeId } from "@/lib/utils/video";
 
 export async function getStaticPaths() {
@@ -182,14 +181,7 @@ const resolvedRelatedMoves = related_moves
               <div class="grid grid-cols-1 gap-6 mb-10">
                 {videoIds.map((id) => (
                   <div class="rounded-lg overflow-hidden shadow-lg">
-                    <LiteYouTubeEmbed
-                      client:idle
-                      id={id}
-                      title={title}
-                      webp={true}
-                      params="rel=0"
-                      rel="preload"
-                    />
+                    <YouTube id={id} params="rel=0" />
                   </div>
                 ))}
               </div>
