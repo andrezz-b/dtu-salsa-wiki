@@ -4,6 +4,23 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IoSearch, IoClose } from "react-icons/io5";
 import SearchResult, { type ISearchItem } from "./SearchResult";
 
+const fields = [
+  "frontmatter.title",
+  "frontmatter.type",
+  "frontmatter.level",
+  "content",
+  "frontmatter.tags",
+  "frontmatter.aliases",
+];
+
+const storeFields = ["slug", "group", "frontmatter", "content"];
+
+const boostFields = {
+  "frontmatter.title": 4,
+  "frontmatter.aliases": 3,
+  content: 1,
+};
+
 const SearchModal = () => {
   const [searchString, setSearchString] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -16,28 +33,12 @@ const SearchModal = () => {
     setSelectedIndex(-1); // Reset selection on search change
   };
 
-  const allData = useMemo(
-    () => (searchData as any[]).map((item) => ({ ...item, id: item.slug })),
-    [],
-  );
-
   const { search } = useSearch<ISearchItem>({
-    items: allData,
-    fields: [
-      "frontmatter.title",
-      "frontmatter.type",
-      "frontmatter.level",
-      "content",
-      "frontmatter.tags",
-      "frontmatter.aliases",
-    ],
-    storeFields: ["slug", "group", "frontmatter", "content"],
+    items: searchData,
+    fields,
+    storeFields,
     idField: "slug",
-    boostFields: {
-      "frontmatter.title": 4,
-      "frontmatter.aliases": 3,
-      content: 1,
-    },
+    boostFields,
   });
 
   // Generate search result

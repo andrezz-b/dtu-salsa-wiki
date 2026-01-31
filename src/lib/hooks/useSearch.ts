@@ -1,10 +1,6 @@
 import { useMemo } from "react";
 import MiniSearch, { type SearchResult } from "minisearch";
 
-interface SearchableItem {
-  id: string;
-}
-
 interface UseSearchOptions<T> {
   items: T[];
   fields: string[];

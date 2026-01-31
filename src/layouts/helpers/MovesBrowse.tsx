@@ -7,6 +7,22 @@ import Pagination from "./Pagination";
 import { IoSearch, IoFilter, IoClose } from "react-icons/io5";
 import { useSearch } from "@/lib/hooks/useSearch";
 
+const fields = [
+  "frontmatter.title",
+  "frontmatter.aliases",
+  "frontmatter.type",
+  "frontmatter.level",
+  "content",
+];
+
+const storeFields = ["slug", "frontmatter"];
+
+const boostFields = {
+  "frontmatter.title": 3,
+  "frontmatter.aliases": 2,
+  content: 1,
+};
+
 const MovesBrowse = () => {
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -20,20 +36,10 @@ const MovesBrowse = () => {
   // Initialize MiniSearch for better search results
   const { search } = useSearch({
     items: movesData,
-    fields: [
-      "frontmatter.title",
-      "frontmatter.aliases",
-      "frontmatter.type",
-      "frontmatter.level",
-      "content",
-    ],
-    storeFields: ["slug", "frontmatter"],
+    fields,
+    storeFields,
     idField: "slug",
-    boostFields: {
-      "frontmatter.title": 3,
-      "frontmatter.aliases": 2,
-      content: 1,
-    },
+    boostFields,
   });
 
   // Extract unique options
