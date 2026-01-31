@@ -7,6 +7,8 @@ created_date: 2025-11-24T22:14:00.000Z
 updated_date: 2025-11-24T22:14:00.000Z
 tags:
   - salsa/move
+video_urls:
+  - 'https://www.youtube.com/watch?v=TrDuKwlyXG4'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -16,6 +18,4 @@ tags:
 - 67 - Face towards her
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 
 

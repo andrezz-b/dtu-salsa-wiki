@@ -15,6 +15,8 @@ related_moves:
   - noodle-complicado
   - enchufla
   - ronde
+video_urls:
+  - 'https://youtu.be/_6u0p5Hmyo0'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -34,6 +36,4 @@ related_moves:
 - 
 ## 🔗 Connections & Transitions
 - [Both Hands Hold](/concepts/both-hands-hold) right into [Noodle Complicado](/moves/noodle-complicado)
-## 🎥 Video
-- **Video Link:** 
 

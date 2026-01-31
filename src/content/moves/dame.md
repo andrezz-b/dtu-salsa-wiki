@@ -12,6 +12,8 @@ aliases:
 related_moves:
   - guapea
   - dile-que-no
+video_urls:
+  - 'https://www.youtube.com/watch?v=HuAXZzMrU88'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -21,8 +23,3 @@ related_moves:
 - 567 - Finish [Dile Que No](/moves/dile-que-no)
 ### Follower
 - 
-## ✨ Variations
-### Dame Dos
-- Skip the next partner, have [Dile Que No](/moves/dile-que-no) with the following one
-## 🎥 Video
-- **Video Link:** 

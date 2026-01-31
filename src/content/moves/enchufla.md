@@ -7,6 +7,8 @@ created_date: 2025-11-24T22:13:00.000Z
 updated_date: 2025-11-24T22:13:00.000Z
 tags:
   - salsa/move
+video_urls:
+  - 'https://www.youtube.com/watch?v=Z_s68llhRI8'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -17,6 +19,4 @@ tags:
   - Little flick on 7 to straighten her out
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 
 

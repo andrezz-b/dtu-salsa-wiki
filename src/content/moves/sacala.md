@@ -13,6 +13,8 @@ related_concepts:
   - dile-que-no-position
 related_moves:
   - vuelta
+video_urls:
+  - 'https://www.youtube.com/watch?v=1PYKCF5_U88'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -29,5 +31,3 @@ related_moves:
 - 
 ## ✨ Variations
 - Right before or in [Dile Que No Position](/concepts/dile-que-no-position) switch to right hand, do it with the right hand, more forwards backwards (less turning towards her, I think)
-## 🎥 Video
-- **Video Link:** 

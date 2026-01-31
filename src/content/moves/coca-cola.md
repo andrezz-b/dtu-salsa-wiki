@@ -10,6 +10,8 @@ tags:
 related_moves:
   - dile-que-no
   - double-spin
+video_urls:
+  - 'https://www.youtube.com/watch?v=Z0lmg0GXz9I'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -20,6 +22,4 @@ related_moves:
   - See [Double Spin](/moves/double-spin) for technique (but you just do 1 spin)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 
 

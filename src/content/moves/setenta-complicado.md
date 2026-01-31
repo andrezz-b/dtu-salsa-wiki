@@ -11,6 +11,8 @@ related_moves:
   - setenta
   - ronde
   - enchufla
+video_urls:
+  - 'https://youtu.be/TJTLkJD04a8'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -25,5 +27,3 @@ related_moves:
  - 567 - Hand on Shoulder [Ronde](/moves/ronde) into finish
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

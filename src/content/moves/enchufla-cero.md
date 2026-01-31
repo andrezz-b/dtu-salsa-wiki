@@ -11,6 +11,8 @@ related_moves:
   - enchufla
   - cruzado-step
   - dile-que-no
+video_urls:
+  - 'https://www.youtube.com/watch?v=XsgRLVbCsxU'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -21,6 +23,4 @@ related_moves:
 - 123-567 Lead a [Dile Que No](/moves/dile-que-no)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 
 

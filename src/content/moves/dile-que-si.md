@@ -11,6 +11,8 @@ related_concepts:
   - close-position
 related_moves:
   - sombrero
+video_urls:
+  - 'https://www.youtube.com/watch?v=h8eDAwO1yBA'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -18,5 +20,3 @@ related_moves:
 - 567 - Turn for her, I walk around and end in [Close Position](/concepts/close-position)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

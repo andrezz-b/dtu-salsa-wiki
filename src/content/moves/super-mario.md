@@ -15,6 +15,8 @@ related_moves:
   - ronde
   - enchufla
   - setenta-y-uno
+video_urls:
+  - 'https://youtu.be/02q7cgF3nLo'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -39,5 +41,3 @@ related_moves:
 - The hardest part is the hands going up and left hand transition - good way to practice that part is [Setenta y Uno](/moves/setenta-y-uno) as it ends in [Corona Finish](/concepts/corona-finish)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

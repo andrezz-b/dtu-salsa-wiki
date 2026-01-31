@@ -16,6 +16,8 @@ related_moves:
   - setenta
   - enchufla
   - ronde
+video_urls:
+  - 'https://www.youtube.com/watch?v=hYE-a9yFR0U'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -27,5 +29,3 @@ related_moves:
 - 567 -  Switch hands and finish
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

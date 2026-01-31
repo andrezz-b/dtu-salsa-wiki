@@ -16,6 +16,8 @@ related_moves:
   - vuelta
   - enchufla
   - ronde
+video_urls:
+  - 'https://www.youtube.com/watch?v=fKMpo5bdIjU'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -27,5 +29,3 @@ related_moves:
 - 567 - [Sombrero Finish](/concepts/sombrero-finish)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

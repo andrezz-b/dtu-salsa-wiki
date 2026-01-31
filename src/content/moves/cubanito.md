@@ -14,6 +14,8 @@ related_moves:
   - cubanita
 setup_moves:
   - enchufla
+video_urls:
+  - 'https://www.youtube.com/watch?v=oVNfzxVhdDw'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -29,5 +31,3 @@ setup_moves:
 - Before doing the [Enchufla](/moves/enchufla) for the exit you are in [Crossed Hands](/concepts/crossed-hands)
 ### To [Cubanita](/moves/cubanita)
 - After exit, instead of [Enchufla](/moves/enchufla) go into [Cubanita](/moves/cubanita)
-## 🎥 Video
-- **Video Link:** 

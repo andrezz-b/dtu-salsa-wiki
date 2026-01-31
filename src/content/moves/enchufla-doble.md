@@ -9,6 +9,8 @@ tags:
   - salsa/move
 related_moves:
   - enchufla
+video_urls:
+  - 'https://www.youtube.com/watch?v=gbdKw2641Bc'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -17,6 +19,4 @@ related_moves:
 - 67 - Go back to starting position
 - Another [Enchufla](/moves/enchufla) 
 ### Follower
-- 
-## 🎥 Video
-- **Video Link:** 
+-  

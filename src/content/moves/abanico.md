@@ -26,5 +26,3 @@ related_moves:
 - 567 - [Ronde](/moves/ronde)
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** 

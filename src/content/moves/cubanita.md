@@ -13,6 +13,8 @@ related_concepts:
 related_moves:
   - enchufla
   - cubanito
+video_urls:
+  - 'https://www.youtube.com/watch?v=rvOKVI3WtVY'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -30,7 +32,5 @@ related_moves:
 ### To [Cubanito](/moves/cubanito)
 - On 3 of diagonal go under left hand
 - 567 - reposition and ask for the other hand
-## 🎥 Video
-- **Video Link:**
 
 

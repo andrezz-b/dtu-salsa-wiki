@@ -25,5 +25,3 @@ video_urls:
 123-567: [Dile Que No](/moves/dile-que-no) with next partner
 ### Follower
 - 
-## 🎥 Video
-- **Video Link:** https://youtu.be/qx21fNpdNKE?si=HZqfRdEDCklucIIm

@@ -13,6 +13,8 @@ related_moves:
   - enchufla-doble
   - ronde
   - enchufla
+video_urls:
+  - 'https://www.youtube.com/watch?v=WsSLytbGcCQ'
 ---
 ## ✍️ Description & Execution
 ### Leader
@@ -24,5 +26,3 @@ related_moves:
 - 
 ## 🔗 Connections & Transitions
 - We are in [Crossed Hands](/concepts/crossed-hands) so we can do something with that
-## 🎥 Video
-- **Video Link:** 
