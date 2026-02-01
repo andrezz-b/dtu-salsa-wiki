@@ -40,7 +40,12 @@ export function useSearch<T>({
       extractField: (document: T, fieldName: string) => {
         const value = fieldName
           .split(".")
-          .reduce((doc: any, key: string) => doc && doc[key], document);
+          .reduce((doc: unknown, key: string) => {
+            if (doc && typeof doc === "object") {
+              return (doc as Record<string, unknown>)[key];
+            }
+            return undefined;
+          }, document);
 
         // Handle arrays (e.g., aliases, tags)
         if (Array.isArray(value)) {

@@ -1,6 +1,6 @@
 ---
 import { FaChevronRight } from "react-icons/fa";
-import StarRatingDisplay from "./StarRatingDisplay";
+import StarRatingDisplay from "@/components/ui/StarRatingDisplay";
 
 interface Props {
   leaderDifficulty?: number;
@@ -9,18 +9,23 @@ interface Props {
 }
 
 const { leaderDifficulty, followerDifficulty, overallDifficulty } = Astro.props;
-const hasBreakdown = leaderDifficulty !== undefined || followerDifficulty !== undefined;
+const hasBreakdown =
+  leaderDifficulty !== undefined || followerDifficulty !== undefined;
 ---
 
 <div class="difficulty-accordion flex flex-wrap items-center gap-4">
   <button
     class={`accordion-trigger flex flex-col items-start gap-1 p-2 rounded-lg transition-colors ${
-      hasBreakdown ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5" : "cursor-default"
+      hasBreakdown
+        ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5"
+        : "cursor-default"
     }`}
     aria-expanded="false"
     disabled={!hasBreakdown}
   >
-    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Difficulty</span>
+    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider"
+      >Difficulty</span
+    >
     <div class="flex items-center gap-2">
       <StarRatingDisplay rating={overallDifficulty} />
       {
@@ -38,13 +43,20 @@ const hasBreakdown = leaderDifficulty !== undefined || followerDifficulty !== un
       <div class="difficulty-content hidden flex flex-row items-center gap-6 pl-4 border-l border-border dark:border-darkmode-border">
         {/* Leader Difficulty */}
         <div class="flex flex-col items-start gap-1">
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Leader</span>
-          <StarRatingDisplay rating={leaderDifficulty || overallDifficulty} color="text-blue-500" />
+          <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">
+            Leader
+          </span>
+          <StarRatingDisplay
+            rating={leaderDifficulty || overallDifficulty}
+            color="text-blue-500"
+          />
         </div>
 
         {/* Follower Difficulty */}
         <div class="flex flex-col items-start gap-1">
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Follower</span>
+          <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">
+            Follower
+          </span>
           <StarRatingDisplay
             rating={followerDifficulty || overallDifficulty}
             color="text-pink-500"

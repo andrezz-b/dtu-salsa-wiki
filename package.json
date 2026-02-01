@@ -11,7 +11,7 @@
     "check": "astro check",
     "format": "prettier -w ./src",
     "clean": "rm -rf node_modules package-lock.json .astro .json dist",
-    "generate-json": "node scripts/jsonGenerator.js",
+    "generate-json": "node --experimental-strip-types scripts/jsonGenerator.ts",
     "remove-darkmode": "node scripts/removeDarkmode.js && npm run format",
     "import-obsidian": "npx tsx scripts/import-obsidian.ts --moves-out src/content/moves --concepts-out src/content/concepts --obsidian-data obsidian-data"
   },
@@ -24,6 +24,7 @@
     "@digi4care/astro-google-tagmanager": "^1.6.0",
     "@vite-pwa/astro": "^1.2.0",
     "astro": "^5.16.7",
+    "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",

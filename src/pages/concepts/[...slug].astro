@@ -1,11 +1,8 @@
 ---
-import Base from "@/layouts/Base.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
 import { render, getEntries } from "astro:content";
-import { YouTube } from "@astro-community/astro-embed-youtube";
 import { getYoutubeId } from "@/lib/utils/video";
-import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
-import Breadcrumbs from "@/helpers/Breadcrumbs";
+import ContentLayout from "@/layouts/ContentLayout.astro";
 
 export async function getStaticPaths() {
   const concepts = await getSinglePage("concepts");
@@ -13,7 +10,7 @@ export async function getStaticPaths() {
 
   return concepts.map((concept) => {
     const usedInMoves = moves.filter((m) => {
-      const checkRef = (refs: any[] | undefined) =>
+      const checkRef = (refs: (string | { id: string })[] | undefined) =>
         refs?.some((r) =>
           typeof r === "string" ? r === concept.id : r.id === concept.id,
         );
@@ -21,7 +18,7 @@ export async function getStaticPaths() {
     });
 
     const usedInConcepts = concepts.filter((c) => {
-      const checkRef = (refs: any[] | undefined) =>
+      const checkRef = (refs: (string | { id: string })[] | undefined) =>
         refs?.some((r) =>
           typeof r === "string" ? r === concept.id : r.id === concept.id,
         );
@@ -52,76 +49,22 @@ const resolvedRelatedConcepts = related_concepts
   : [];
 ---
 
-<Base title={title}>
-  <section class="section pt-6">
-    <div class="container">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Sidebar (Left on Desktop, Bottom on Mobile) */}
-        <div class="lg:col-span-3 order-2 lg:order-1">
-          <div class="h-auto">
-            <ExplorerSidebar
-              relatedMoves={resolvedRelatedMoves}
-              relatedConcepts={resolvedRelatedConcepts}
-              usedInMoves={usedInMoves}
-              usedInConcepts={usedInConcepts}
-            />
-          </div>
-        </div>
-
-        {/* Main Content (Right on Desktop, Top on Mobile) */}
-        <article class="lg:col-span-9 order-1 lg:order-2">
-          {/* Header */}
-          <div class="mb-8">
-            <Breadcrumbs
-              className="mb-4"
-              parts={[
-                { label: "Home", href: "/" },
-                { label: "Concepts", href: "/concepts" },
-                { label: title },
-              ]}
-            />
-            <div class="flex items-center gap-3 mb-4">
-              <span
-                class={`px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider ${
-                  level === "beginner"
-                    ? "bg-level-beginner/10 text-level-beginner dark:bg-darkmode-level-beginner/10 dark:text-darkmode-level-beginner"
-                    : level === "intermediate"
-                      ? "bg-level-intermediate/10 text-level-intermediate dark:bg-darkmode-level-intermediate/10 dark:text-darkmode-level-intermediate"
-                      : "bg-level-advanced/10 text-level-advanced dark:bg-darkmode-level-advanced/10 dark:text-darkmode-level-advanced"
-                }`}
-              >
-                {level}
-              </span>
-              <span
-                class="px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-bold uppercase tracking-wider dark:bg-gray-700 dark:text-gray-200"
-              >
-                {type}
-              </span>
-            </div>
-            <h1 class="h1 mb-4">
-              {title}
-            </h1>
-          </div>
-          {/* Videos */}
-          {
-            videoIds.length > 0 && (
-              <div class="grid grid-cols-1 gap-6 mb-10">
-                {videoIds.map((id) => (
-                  <div class="rounded-lg overflow-hidden shadow-lg">
-                    <YouTube id={id} params="rel=0" />
-                  </div>
-                ))}
-              </div>
-            )
-          }
-          {/* Content */}
-          <div
-            class="content mb-10 prose-a:text-accent prose-a:no-underline prose-a:hover:underline"
-          >
-            <Content />
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-</Base>
+<ContentLayout
+  title={title}
+  type={type}
+  level={level}
+  videoIds={videoIds}
+  breadcrumbs={[
+    { label: "Home", href: "/" },
+    { label: "Concepts", href: "/concepts" },
+    { label: title },
+  ]}
+  sidebarProps={{
+    relatedMoves: resolvedRelatedMoves,
+    relatedConcepts: resolvedRelatedConcepts,
+    usedInMoves: usedInMoves,
+    usedInConcepts: usedInConcepts,
+  }}
+>
+  <Content />
+</ContentLayout>

@@ -1,5 +1,5 @@
-import React from 'react';
-import Badge from "./Badge";
+import React from "react";
+import LevelBadge from "./LevelBadge";
 import StarRatingDisplay from "./StarRatingDisplay";
 
 interface Props {
@@ -12,7 +12,15 @@ interface Props {
   tags?: string[];
 }
 
-const Card: React.FC<Props> = ({ title, href, level, type, difficulty, description, tags }) => {
+const Card: React.FC<Props> = ({
+  title,
+  href,
+  level,
+  type,
+  difficulty,
+  description,
+  tags,
+}) => {
   return (
     <a
       href={href}
@@ -27,17 +35,18 @@ const Card: React.FC<Props> = ({ title, href, level, type, difficulty, descripti
       <h3 className="text-lg font-bold mb-2 text-text-dark dark:text-white group-hover:text-accent dark:group-hover:text-darkmode-accent transition-colors">
         {title}
       </h3>
-      {description && <p className="text-sm text-text-light dark:text-darkmode-text-light line-clamp-2 mb-4">{description}</p>}
+      {description && (
+        <p className="text-sm text-text-light dark:text-darkmode-text-light line-clamp-2 mb-4">
+          {description}
+        </p>
+      )}
       <div className="flex flex-wrap gap-2 mt-auto">
-        {
-          level && (
-            <Badge
-              label={level}
-              type={level === "beginner" ? "success" : level === "intermediate" ? "warning" : "danger"}
-            />
-          )
-        }
-        {tags?.map((tag, index) => <span key={index} className="badge badge-sm">{tag}</span>)}
+        {level && <LevelBadge level={level} size="sm" />}
+        {tags?.map((tag, index) => (
+          <span key={index} className="badge badge-sm">
+            {tag}
+          </span>
+        ))}
       </div>
     </a>
   );
