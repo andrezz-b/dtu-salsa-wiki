@@ -2,8 +2,8 @@ import { plainify } from "@/lib/utils/textConverter";
 import React, { useEffect, useRef } from "react";
 import { FaRunning, FaLightbulb } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
-import StarRatingDisplay from "./StarRatingDisplay";
-import LevelBadge from "./LevelBadge";
+import StarRatingDisplay from "@/components/ui/StarRatingDisplay";
+import LevelBadge from "@/components/ui/LevelBadge";
 
 export interface ISearchItem {
   group: string;

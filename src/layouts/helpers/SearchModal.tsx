@@ -1,5 +1,5 @@
 import searchData from ".json/search.json";
-import { useSearch } from "@/lib/hooks/useSearch";
+import { useSearch } from "@/hooks/useSearch";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IoSearch, IoClose } from "react-icons/io5";
 import SearchResult, { type ISearchItem } from "./SearchResult";

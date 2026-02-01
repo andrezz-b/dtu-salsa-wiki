@@ -1,11 +1,11 @@
 import movesData from ".json/moves.json";
 import React, { useState, useMemo } from "react";
-import MultiSelect from "./MultiSelect";
-import StarRatingFilter from "./StarRatingFilter";
-import Card from "./Card";
-import Pagination from "./Pagination";
+import MultiSelect from "@/components/ui/MultiSelect";
+import StarRatingFilter from "@/components/ui/StarRatingFilter";
+import Card from "@/components/ui/Card";
+import Pagination from "@/components/ui/Pagination";
 import { IoSearch, IoFilter, IoClose } from "react-icons/io5";
-import { useSearch } from "@/lib/hooks/useSearch";
+import { useSearch } from "@/hooks/useSearch";
 
 const fields = [
   "frontmatter.title",

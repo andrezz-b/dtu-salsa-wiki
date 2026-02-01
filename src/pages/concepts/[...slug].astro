@@ -5,8 +5,8 @@ import { render, getEntries } from "astro:content";
 import { YouTube } from "@astro-community/astro-embed-youtube";
 import { getYoutubeId } from "@/lib/utils/video";
 import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
-import Breadcrumbs from "@/helpers/Breadcrumbs";
-import LevelBadge from "@/layouts/helpers/LevelBadge";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import LevelBadge from "@/components/ui/LevelBadge";
 
 export async function getStaticPaths() {
   const concepts = await getSinglePage("concepts");
