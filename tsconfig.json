@@ -14,6 +14,7 @@
     "paths": {
       "@/components/*": ["./src/components/*"],
       "@/hooks/*": ["./src/hooks/*"],
+      "@/types/*": ["./src/types/*"],
       "@/shortcodes/*": ["./src/layouts/shortcodes/*"],
       "@/helpers/*": ["./src/layouts/helpers/*"],
       "@/partials/*": ["./src/layouts/partials/*"],

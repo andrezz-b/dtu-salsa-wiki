@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 
   return moves.map((move) => {
     const usedInMoves = moves.filter((m) => {
-      const checkRef = (refs: any[] | undefined) =>
+      const checkRef = (refs: (string | { id: string })[] | undefined) =>
         refs?.some((r) =>
           typeof r === "string" ? r === move.id : r.id === move.id,
         );
@@ -23,7 +23,7 @@ export async function getStaticPaths() {
     });
 
     const usedInConcepts = concepts.filter((c) => {
-      const checkRef = (refs: any[] | undefined) =>
+      const checkRef = (refs: (string | { id: string })[] | undefined) =>
         refs?.some((r) =>
           typeof r === "string" ? r === move.id : r.id === move.id,
         );

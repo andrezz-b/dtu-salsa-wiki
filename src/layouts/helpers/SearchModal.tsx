@@ -2,7 +2,7 @@ import searchData from ".json/search.json";
 import { useSearch } from "@/hooks/useSearch";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { IoSearch, IoClose } from "react-icons/io5";
-import SearchResult, { type ISearchItem } from "./SearchResult";
+import SearchResult from "./SearchResult";
 
 const fields = [
   "frontmatter.title",
@@ -33,7 +33,7 @@ const SearchModal = () => {
     setSelectedIndex(-1); // Reset selection on search change
   };
 
-  const { search } = useSearch<ISearchItem>({
+  const { search } = useSearch({
     items: searchData,
     fields,
     storeFields,

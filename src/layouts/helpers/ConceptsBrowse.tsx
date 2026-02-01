@@ -1,6 +1,13 @@
 import conceptsData from ".json/concepts.json";
-import BrowsePage, { relevanceSort } from "./BrowsePage";
+import BrowsePage, {
+  relevanceSort,
+  type FilterDefinition,
+  type SortOption,
+} from "./BrowsePage";
 import Card from "@/components/ui/Card";
+import type { ConceptItem } from "@/types/content";
+
+const concepts = conceptsData as ConceptItem[];
 
 // ============================================================================
 // Search Configuration
@@ -24,30 +31,30 @@ const boostFields = {
 // Filter Definitions
 // ============================================================================
 
-const filters = [
+const filters: FilterDefinition<ConceptItem>[] = [
   {
     id: "level",
     label: "Level",
     type: "multiselect" as const,
-    getOptions: (items: typeof conceptsData) => {
+    getOptions: (items: ConceptItem[]) => {
       const uniqueLevels = new Set(
         items.map((item) => item.frontmatter.level).filter(Boolean),
       );
       return Array.from(uniqueLevels) as string[];
     },
-    getValue: (item: (typeof conceptsData)[0]) => item.frontmatter.level,
+    getValue: (item: ConceptItem) => item.frontmatter.level,
   },
   {
     id: "type",
     label: "Type",
     type: "multiselect" as const,
-    getOptions: (items: typeof conceptsData) => {
+    getOptions: (items: ConceptItem[]) => {
       const uniqueTypes = new Set(
         items.map((item) => item.frontmatter.type).filter(Boolean),
       );
       return Array.from(uniqueTypes) as string[];
     },
-    getValue: (item: (typeof conceptsData)[0]) => item.frontmatter.type,
+    getValue: (item: ConceptItem) => item.frontmatter.type,
   },
 ];
 
@@ -55,18 +62,18 @@ const filters = [
 // Sort Options
 // ============================================================================
 
-const sortOptions = [
+const sortOptions: SortOption<ConceptItem>[] = [
   relevanceSort,
   {
     id: "title-asc",
     label: "A-Z",
-    sortFn: (a: (typeof conceptsData)[0], b: (typeof conceptsData)[0]) =>
+    sortFn: (a: ConceptItem, b: ConceptItem) =>
       a.frontmatter.title.localeCompare(b.frontmatter.title),
   },
   {
     id: "title-desc",
     label: "Z-A",
-    sortFn: (a: (typeof conceptsData)[0], b: (typeof conceptsData)[0]) =>
+    sortFn: (a: ConceptItem, b: ConceptItem) =>
       b.frontmatter.title.localeCompare(a.frontmatter.title),
   },
 ];
@@ -76,8 +83,8 @@ const sortOptions = [
 // ============================================================================
 
 const ConceptsBrowse = () => (
-  <BrowsePage
-    items={conceptsData}
+  <BrowsePage<ConceptItem>
+    items={concepts}
     idField="slug"
     searchFields={searchFields}
     storeFields={storeFields}
