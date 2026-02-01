@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { FaRunning, FaLightbulb } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import StarRatingDisplay from "./StarRatingDisplay";
+import LevelBadge from "./LevelBadge";
 
 export interface ISearchItem {
   group: string;
@@ -19,19 +20,6 @@ export interface ISearchItem {
   };
   content: string;
 }
-
-const getLevelColor = (level: string) => {
-  switch (level) {
-    case "beginner":
-      return "bg-level-beginner dark:bg-darkmode-level-beginner";
-    case "intermediate":
-      return "bg-level-intermediate dark:bg-darkmode-level-intermediate";
-    case "advanced":
-      return "bg-level-advanced dark:bg-darkmode-level-advanced";
-    default:
-      return "bg-gray-400";
-  }
-};
 
 interface SearchResultProps {
   searchResult: ISearchItem[];
@@ -153,9 +141,9 @@ const SearchResult = ({
                           {item.frontmatter.type || item.group}
                         </span>
                         {item.frontmatter.level && (
-                          <span
-                            className={`w-2 h-2 rounded-full ${getLevelColor(item.frontmatter.level)}`}
-                            title={item.frontmatter.level}
+                          <LevelBadge
+                            level={item.frontmatter.level}
+                            variant="dot"
                           />
                         )}
                         {item.frontmatter.difficulty !== undefined && (

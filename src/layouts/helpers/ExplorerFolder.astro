@@ -2,6 +2,7 @@
 import { IoChevronForward } from "react-icons/io5";
 import { FaRunning, FaLightbulb } from "react-icons/fa";
 import type { CollectionEntry } from "astro:content";
+import LevelBadge from "./LevelBadge";
 
 interface Props {
   title: string;
@@ -11,19 +12,6 @@ interface Props {
 }
 
 const { title, items, type, expanded = false } = Astro.props;
-
-const getLevelColor = (level: string) => {
-  switch (level) {
-    case "beginner":
-      return "bg-level-beginner dark:bg-darkmode-level-beginner";
-    case "intermediate":
-      return "bg-level-intermediate dark:bg-darkmode-level-intermediate";
-    case "advanced":
-      return "bg-level-advanced dark:bg-darkmode-level-advanced";
-    default:
-      return "bg-gray-400";
-  }
-};
 
 const getPath = (
   item: CollectionEntry<"moves"> | CollectionEntry<"concepts">,
@@ -79,10 +67,7 @@ const getPath = (
             {item.data.title}
           </span>
           {item.data.level && (
-            <span
-              class={`w-2 h-2 rounded-full ${getLevelColor(item.data.level)}`}
-              title={item.data.level}
-            />
+            <LevelBadge level={item.data.level} variant="dot" />
           )}
         </a>
       ))

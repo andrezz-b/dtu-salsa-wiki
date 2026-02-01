@@ -5,6 +5,7 @@ import { render, getEntries } from "astro:content";
 import DifficultyAccordion from "@/layouts/helpers/DifficultyAccordion.astro";
 import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
 import Breadcrumbs from "@/layouts/helpers/Breadcrumbs";
+import LevelBadge from "@/layouts/helpers/LevelBadge";
 import { YouTube } from "@astro-community/astro-embed-youtube";
 import { getYoutubeId } from "@/lib/utils/video";
 
@@ -106,17 +107,7 @@ const resolvedRelatedMoves = related_moves
               ]}
             />
             <div class="flex items-center gap-3 mb-3">
-              <span
-                class={`px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider ${
-                  level === "beginner"
-                    ? "bg-level-beginner/10 text-level-beginner dark:bg-darkmode-level-beginner/10 dark:text-darkmode-level-beginner"
-                    : level === "intermediate"
-                      ? "bg-level-intermediate/10 text-level-intermediate dark:bg-darkmode-level-intermediate/10 dark:text-darkmode-level-intermediate"
-                      : "bg-level-advanced/10 text-level-advanced dark:bg-darkmode-level-advanced/10 dark:text-darkmode-level-advanced"
-                }`}
-              >
-                {level}
-              </span>
+              <LevelBadge level={level} size="md" />
               <span
                 class="px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-bold uppercase tracking-wider dark:bg-gray-700 dark:text-gray-200"
               >
