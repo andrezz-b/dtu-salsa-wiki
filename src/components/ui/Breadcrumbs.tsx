@@ -1,7 +1,7 @@
 import React from "react";
 import { FaChevronRight } from "react-icons/fa";
 
-interface BreadcrumbPart {
+export interface BreadcrumbPart {
   label: string;
   href?: string;
 }

@@ -1,0 +1,132 @@
+---
+import Base from "@/layouts/Base.astro";
+import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import LevelBadge from "@/components/ui/LevelBadge";
+import { YouTube } from "@astro-community/astro-embed-youtube";
+import { FaLink } from "react-icons/fa";
+import type { ComponentProps } from "astro/types";
+import type { BreadcrumbPart } from "@/components/ui/Breadcrumbs";
+
+interface Props {
+  title: string;
+  type: string;
+  level?: string;
+  videoIds?: string[];
+  breadcrumbs: BreadcrumbPart[];
+  sidebarProps: ComponentProps<typeof ExplorerSidebar>;
+}
+
+const {
+  title,
+  type,
+  level,
+  videoIds = [],
+  breadcrumbs,
+  sidebarProps,
+} = Astro.props;
+const pageUrl = Astro.url.href;
+---
+
+<Base title={title}>
+  <section class="section pt-6">
+    <div class="container">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Sidebar (Left on Desktop, Bottom on Mobile) */}
+        <div class="lg:col-span-3 order-2 lg:order-1">
+          <div class="h-auto">
+            <ExplorerSidebar {...sidebarProps} />
+          </div>
+        </div>
+
+        {/* Main Content (Right on Desktop, Top on Mobile) */}
+        <article class="lg:col-span-9 order-1 lg:order-2">
+          {/* Header */}
+          <div class="mb-6">
+            <Breadcrumbs className="mb-4" parts={breadcrumbs} />
+            <div class="flex items-center gap-3 mb-3">
+              {level && <LevelBadge level={level} size="md" />}
+              <span
+                class="px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-sm font-bold uppercase tracking-wider dark:bg-gray-700 dark:text-gray-200"
+              >
+                {type}
+              </span>
+            </div>
+            <div class="block">
+              <h1 class="h1">
+                {title}
+                <button
+                  id="copy-link-btn"
+                  class="inline-flex items-center justify-center p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors ml-2 align-middle"
+                  title="Copy link to clipboard"
+                  data-url={pageUrl}
+                >
+                  <FaLink
+                    className="w-4 h-4 text-gray-600 dark:text-gray-300"
+                  />
+                </button>
+              </h1>
+
+              {/* Optional Header Content (e.g. Difficulty, Aliases) */}
+              <slot name="header-bottom" />
+            </div>
+          </div>
+
+          {/* Videos */}
+          {
+            videoIds.length > 0 && (
+              <div class="grid grid-cols-1 gap-6 mb-10">
+                {videoIds.map((id) => (
+                  <div class="rounded-lg overflow-hidden shadow-lg">
+                    <YouTube id={id} params="rel=0" />
+                  </div>
+                ))}
+              </div>
+            )
+          }
+
+          {/* Content */}
+          <div
+            class="content mb-10 prose-a:text-accent prose-a:no-underline prose-a:hover:underline"
+          >
+            <slot />
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Handle view transitions
+  document.addEventListener("astro:page-load", () => {
+    const copyBtn = document.getElementById("copy-link-btn");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", async () => {
+        const url = copyBtn.getAttribute("data-url") || window.location.href;
+        try {
+          await navigator.clipboard.writeText(url);
+
+          // Visual feedback
+          copyBtn.classList.add(
+            "!bg-green-100",
+            "dark:!bg-green-700",
+            "text-green-600",
+            "dark:text-green-200",
+          );
+
+          setTimeout(() => {
+            copyBtn.classList.remove(
+              "!bg-green-100",
+              "dark:!bg-green-700",
+              "text-green-600",
+              "dark:text-green-200",
+            );
+          }, 1000);
+        } catch (err) {
+          console.error("Failed to copy link:", err);
+        }
+      });
+    }
+  });
+</script>
