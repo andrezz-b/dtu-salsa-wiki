@@ -82,6 +82,13 @@ const getInitialFilterState = <T,>(
 // BrowsePage Component
 // ============================================================================
 
+// Noop sort to use the Minisearch relevance
+export const relevanceSort: SortOption<any> = {
+  id: "relevance",
+  label: "Relevance",
+  sortFn: (a, b) => 0,
+};
+
 function BrowsePage<T>({
   items,
   idField,
@@ -141,7 +148,102 @@ function BrowsePage<T>({
     [],
   );
 
-  // Apply search, filters, and sorting
+  // Sync from URL on mount and popstate
+  React.useEffect(() => {
+    const readFromURL = () => {
+      if (typeof window === "undefined") return;
+      const params = new URLSearchParams(window.location.search);
+
+      // Search
+      const q = params.get("q");
+      if (q) setSearchQuery(q);
+
+      // Pagination
+      const page = params.get("page");
+      if (page) setCurrentPage(parseInt(page));
+
+      // Sort
+      const sort = params.get("sort");
+      if (sort) setCurrentSort(sort);
+
+      // Filters
+      const newState = getInitialFilterState(filters);
+      let hasFilterChanges = false;
+
+      filters.forEach((filter) => {
+        if (filter.type === "multiselect") {
+          const values = params.getAll(filter.id);
+          if (values.length > 0) {
+            newState[filter.id] = values;
+            hasFilterChanges = true;
+          }
+        } else if (filter.type === "rating") {
+          const value = params.get(filter.id);
+          if (value) {
+            newState[filter.id] = parseInt(value);
+            hasFilterChanges = true;
+          }
+        }
+      });
+
+      if (hasFilterChanges) {
+        setFilterState(newState);
+      }
+    };
+
+    readFromURL();
+  }, [filters]);
+
+  // Sync to URL on state change
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams();
+
+    // Search
+    if (searchQuery) params.set("q", searchQuery);
+
+    // Pagination
+    if (currentPage > 1) params.set("page", currentPage.toString());
+
+    // Sort
+    if (currentSort && currentSort !== (defaultSort || sortOptions[0]?.id)) {
+      params.set("sort", currentSort);
+    }
+
+    // Filters
+    filters.forEach((filter) => {
+      const value = filterState[filter.id];
+      if (filter.type === "multiselect") {
+        const selected = value as string[];
+        if (selected.length > 0) {
+          selected.forEach((v) => params.append(filter.id, v));
+        }
+      } else if (filter.type === "rating") {
+        const rating = value as number;
+        if (rating > 0) {
+          params.set(filter.id, rating.toString());
+        }
+      }
+    });
+
+    const newSearch = params.toString();
+    const newUrl = newSearch
+      ? `${window.location.pathname}?${newSearch}`
+      : window.location.pathname;
+
+    if (window.location.search !== (newSearch ? `?${newSearch}` : "")) {
+      window.history.replaceState({}, "", newUrl);
+    }
+  }, [
+    filterState,
+    searchQuery,
+    currentPage,
+    currentSort,
+    filters,
+    defaultSort,
+    sortOptions,
+  ]);
   const filteredData = useMemo(() => {
     // First apply search
     let results = search(searchQuery);
@@ -175,7 +277,7 @@ function BrowsePage<T>({
         (opt: SortOption<T>) => opt.id === currentSort,
       );
       if (sortOption) {
-        results = [...results].sort(sortOption.sortFn);
+        results.sort(sortOption.sortFn);
       }
     }
 

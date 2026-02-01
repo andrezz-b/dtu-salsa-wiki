@@ -1,5 +1,5 @@
 import movesData from ".json/moves.json";
-import BrowsePage from "./BrowsePage";
+import BrowsePage, { relevanceSort } from "./BrowsePage";
 import Card from "@/components/ui/Card";
 
 // ============================================================================
@@ -64,6 +64,7 @@ const filters = [
 // ============================================================================
 
 const sortOptions = [
+  relevanceSort,
   {
     id: "title-asc",
     label: "A-Z",
@@ -106,7 +107,7 @@ const MovesBrowse = () => (
     searchPlaceholder="Search moves..."
     filters={filters}
     sortOptions={sortOptions}
-    defaultSort="title-asc"
+    defaultSort={relevanceSort.id}
     renderCard={(item) => (
       <Card
         key={item.slug}
