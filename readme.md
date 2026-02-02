@@ -58,29 +58,32 @@ The output will be in the `dist/` directory.
 
 ## 🔄 Sync & Import Workflow
 
-This project pulls content from an external **Obsidian Vault** (`dtu-salsa-data`). The data flows as follows:
+This project pulls content from an external **Obsidian Vault** (`dtu-salsa-data`). The data is fetched at build time—no git submodule management required.
 
-### 1. 📥 Data Import
+### 1. 📥 Data Sync & Import
 
-Code in `scripts/` handles importing content from the `obsidian-data` submodule into `src/content`.
+Scripts in `scripts/` handle fetching and importing content:
 
-- **`scripts/import-obsidian.ts`**: The main driver. It reads content from `obsidian-data/Moves` and `obsidian-data/Concepts`, transforms frontmatter, resolves internal links (`[[Link]]`), and populates `src/content/moves` and `src/content/concepts`.
-- **`scripts/check-changes.ts`**: Optimizes the build process by checking if the submodule commit has changed since the last import. It prevents redundant processing if the data is already up-to-date.
+- **`scripts/sync-data.ts`**: Clones or pulls the latest `dtu-salsa-data` repository into `obsidian-data/`. Runs automatically before dev/build.
+- **`scripts/import-obsidian.ts`**: Reads content from `obsidian-data/Moves` and `obsidian-data/Concepts`, transforms frontmatter, resolves internal links (`[[Link]]`), and populates `src/content/moves` and `src/content/concepts`. Also cleans up orphan files (handles deletions/renames).
+- **`scripts/check-changes.ts`**: Optimizes the build process by checking if the data has changed since the last import.
 
 ### 2. 🤖 Auto-Deploy Trigger
 
-We use **GitHub Actions** to keep the wiki synchronized with the Obsidian data:
+The deployment flow is simple and decoupled:
 
 1.  **Push to Data Repo**: When changes are committed to `dtu-salsa-data`.
-2.  **Dispatch Event**: A workflow in the data repo triggers a `repository_dispatch` event in this repository.
-3.  **Update Submodule**: The `.github/workflows/update-data.yml` workflow runs here. It updates the `obsidian-data` submodule to the latest commit and pushes the update to `main`.
-4.  **Netlify Build**: Netlify detects the commit (which includes the updated submodule reference) and rebuilds the site with the new data.
+2.  **Netlify Build Hook**: A GitHub Action in the data repo calls a Netlify Build Hook URL.
+3.  **Netlify Build**: Netlify runs `npm run build`, which fetches the latest data and rebuilds the site.
+
+> **Note**: No commits are made to this repository when data changes—the git history stays clean.
 
 ### 3. 👨‍💻 For Developers
 
-When running locally:
+Just run the standard commands—data fetching is automatic:
 
-- **`npm run dev`**: Automatically runs the import script before starting the server. If `obsidian-data` hasn't changed, the import is skipped for speed.
+- **`npm run dev`**: Syncs data, imports content, and starts the dev server.
+- **`npm run build`**: Syncs data, imports content, and builds for production.
 - **`npm run import-obsidian -- --force`**: Forces a re-import of all data, ignoring the cache.
 
 ## 📂 Project Structure

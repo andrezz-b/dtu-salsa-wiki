@@ -194,6 +194,10 @@ async function main() {
   scanDirectory(path.join(OBSIDIAN_PATH, "Concepts"), "concept");
   console.log(`Found ${fileMap.size} files.`);
 
+  // Track written slugs to clean up orphans later
+  const writtenMoves = new Set<string>();
+  const writtenConcepts = new Set<string>();
+
   // 2. Process files
   for (const [title, info] of fileMap.entries()) {
     console.log(`Processing: ${title} (${info.type})`);
@@ -335,7 +339,30 @@ async function main() {
     const newContent = matter.stringify(body, finalFrontmatter);
     fs.writeFileSync(outPath, newContent);
     console.log(`Wrote: ${outPath}`);
+
+    // Track written slug
+    if (info.type === "move") {
+      writtenMoves.add(`${info.slug}.md`);
+    } else {
+      writtenConcepts.add(`${info.slug}.md`);
+    }
   }
+
+  // 3. Clean up orphan files (handles deletions/renames in data repo)
+  function cleanOrphans(dir: string, writtenSet: Set<string>, label: string) {
+    if (!fs.existsSync(dir)) return;
+    const existingFiles = fs.readdirSync(dir).filter((f) => f.endsWith(".md"));
+    for (const file of existingFiles) {
+      if (!writtenSet.has(file)) {
+        const orphanPath = path.join(dir, file);
+        fs.unlinkSync(orphanPath);
+        console.log(`🗑️ Deleted orphan ${label}: ${file}`);
+      }
+    }
+  }
+
+  cleanOrphans(MOVES_OUT_PATH, writtenMoves, "move");
+  cleanOrphans(CONCEPTS_OUT_PATH, writtenConcepts, "concept");
 
   console.log("Import complete.");
 
