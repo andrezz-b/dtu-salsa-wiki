@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # ide
 .idea/
+
+# data repo (cloned at build time)
+obsidian-data/

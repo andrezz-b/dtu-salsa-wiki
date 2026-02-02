@@ -5,15 +5,18 @@
   "author": "andrezz-b",
   "type": "module",
   "scripts": {
-    "dev": "npm run import-obsidian && npm run generate-json && astro dev",
-    "build": "npm run import-obsidian && npm run generate-json && astro build",
+    "dev": "npx tsx scripts/build/prepare.ts && astro dev",
+    "build": "npx tsx scripts/build/prepare.ts && astro build",
     "preview": "astro preview",
     "check": "astro check",
     "format": "prettier -w ./src",
     "clean": "rm -rf node_modules package-lock.json .astro .json dist",
-    "generate-json": "node --experimental-strip-types scripts/jsonGenerator.ts",
-    "remove-darkmode": "node scripts/removeDarkmode.js && npm run format",
-    "import-obsidian": "npx tsx scripts/import-obsidian.ts --moves-out src/content/moves --concepts-out src/content/concepts --obsidian-data obsidian-data"
+    "generate-json": "npx tsx scripts/build/jsonGenerator.ts",
+    "remove-darkmode": "node scripts/tools/removeDarkmode.js && npm run format",
+    "import-obsidian": "npx tsx scripts/build/import-obsidian.ts --moves-out src/content/moves --concepts-out src/content/concepts --obsidian-data obsidian-data",
+    "sync-data": "npx tsx scripts/build/sync-data.ts",
+    "prepare-data": "npx tsx scripts/build/prepare.ts",
+    "test": "npx tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@astro-community/astro-embed-youtube": "^0.5.10",
