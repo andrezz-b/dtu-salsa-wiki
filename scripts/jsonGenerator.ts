@@ -68,54 +68,63 @@ const getLatestMtime = (folder: string): number => {
   return maxTime;
 };
 
-try {
+export function generateJson(force = false) {
+  try {
+    // Create folder if it doesn't exist
+    if (!fs.existsSync(JSON_FOLDER)) {
+      fs.mkdirSync(JSON_FOLDER);
+    }
+
+    // Check if update is needed
+    const outputFiles = ["moves.json", "concepts.json", "search.json"].map(
+      (f) => path.join(JSON_FOLDER, f),
+    );
+
+    const outputsExist = outputFiles.every((f) => fs.existsSync(f));
+
+    let shouldRun = !outputsExist || force;
+
+    if (outputsExist && !force) {
+      const oldestOutputMtime = Math.min(
+        ...outputFiles.map((f) => fs.statSync(f).mtimeMs),
+      );
+      const latestContentMtime = Math.max(
+        getLatestMtime("src/content/moves"),
+        getLatestMtime("src/content/concepts"),
+      );
+
+      if (latestContentMtime > oldestOutputMtime) {
+        shouldRun = true;
+      } else {
+        console.log("JSONs are up to date. Skipping generation.");
+      }
+    }
+
+    if (shouldRun) {
+      console.log("Generating JSON files...");
+      // Create json files
+      const moves = getData("src/content/moves", 2);
+      const concepts = getData("src/content/concepts", 2);
+
+      fs.writeFileSync(`${JSON_FOLDER}/moves.json`, JSON.stringify(moves));
+      fs.writeFileSync(
+        `${JSON_FOLDER}/concepts.json`,
+        JSON.stringify(concepts),
+      );
+
+      // Merge json files for search
+      const search = [...moves, ...concepts];
+      fs.writeFileSync(`${JSON_FOLDER}/search.json`, JSON.stringify(search));
+      console.log("JSON generation complete.");
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+import { fileURLToPath } from "node:url";
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   const force = args.includes("--force");
-
-  // Create folder if it doesn't exist
-  if (!fs.existsSync(JSON_FOLDER)) {
-    fs.mkdirSync(JSON_FOLDER);
-  }
-
-  // Check if update is needed
-  const outputFiles = ["moves.json", "concepts.json", "search.json"].map((f) =>
-    path.join(JSON_FOLDER, f),
-  );
-
-  const outputsExist = outputFiles.every((f) => fs.existsSync(f));
-
-  let shouldRun = !outputsExist || force;
-
-  if (outputsExist && !force) {
-    const oldestOutputMtime = Math.min(
-      ...outputFiles.map((f) => fs.statSync(f).mtimeMs),
-    );
-    const latestContentMtime = Math.max(
-      getLatestMtime("src/content/moves"),
-      getLatestMtime("src/content/concepts"),
-    );
-
-    if (latestContentMtime > oldestOutputMtime) {
-      shouldRun = true;
-    } else {
-      console.log("JSONs are up to date. Skipping generation.");
-    }
-  }
-
-  if (shouldRun) {
-    console.log("Generating JSON files...");
-    // Create json files
-    const moves = getData("src/content/moves", 2);
-    const concepts = getData("src/content/concepts", 2);
-
-    fs.writeFileSync(`${JSON_FOLDER}/moves.json`, JSON.stringify(moves));
-    fs.writeFileSync(`${JSON_FOLDER}/concepts.json`, JSON.stringify(concepts));
-
-    // Merge json files for search
-    const search = [...moves, ...concepts];
-    fs.writeFileSync(`${JSON_FOLDER}/search.json`, JSON.stringify(search));
-    console.log("JSON generation complete.");
-  }
-} catch (err) {
-  console.error(err);
+  generateJson(force);
 }

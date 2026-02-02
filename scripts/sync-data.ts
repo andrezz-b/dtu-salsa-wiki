@@ -31,7 +31,7 @@ function run(cmd: string, cwd?: string): void {
   execSync(cmd, { cwd, stdio: "inherit" });
 }
 
-function main(): void {
+export function syncData(): void {
   const dataPath = path.resolve(process.cwd(), DATA_DIR);
   const repoUrl = getRepoUrl();
 
@@ -55,4 +55,7 @@ function main(): void {
   console.log("✅ Data sync complete.");
 }
 
-main();
+import { fileURLToPath } from "node:url";
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  syncData();
+}

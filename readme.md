@@ -62,11 +62,13 @@ This project pulls content from an external **Obsidian Vault** (`dtu-salsa-data`
 
 ### 1. 📥 Data Sync & Import
 
-Scripts in `scripts/` handle fetching and importing content:
+Scripts in `scripts/` handle fetching and importing content, orchestrated by **`scripts/prepare.ts`**:
 
-- **`scripts/sync-data.ts`**: Clones or pulls the latest `dtu-salsa-data` repository into `obsidian-data/`. Runs automatically before dev/build.
-- **`scripts/import-obsidian.ts`**: Reads content from `obsidian-data/Moves` and `obsidian-data/Concepts`, transforms frontmatter, resolves internal links (`[[Link]]`), and populates `src/content/moves` and `src/content/concepts`. Also cleans up orphan files (handles deletions/renames).
-- **`scripts/check-changes.ts`**: Optimizes the build process by checking if the data has changed since the last import.
+- **`scripts/prepare.ts`**: The main entry point. Runs `sync-data`, `import-obsidian`, and `generateJson` in sequence.
+- **`scripts/sync-data.ts`**: Clones or pulls the latest `dtu-salsa-data` repository into `obsidian-data/`.
+- **`scripts/import-obsidian.ts`**: Imports Markdown files, resolves links, and cleans up orphans.
+- **`scripts/jsonGenerator.ts`**: Generates search indices. Optimizes by skipping if content hasn't changed.
+- **`scripts/check-changes.ts`**: Used internally by the import script to skip processing if `obsidian-data` hasn't changed.
 
 ### 2. 🤖 Auto-Deploy Trigger
 

@@ -88,33 +88,19 @@ export const normalizeRelationItems = (items: any[]): string[] => {
   return result;
 };
 
-async function main() {
-  // Configuration
-  const args = process.argv.slice(2);
-  const usage =
-    "Usage: npx tsx scripts/import-obsidian.ts --moves-out <path> --concepts-out <path> [--obsidian-data <path>]";
+export interface ImportOptions {
+  movesOut: string;
+  conceptsOut: string;
+  obsidianData: string;
+  force?: boolean;
+}
 
-  function getArg(name: string): string | undefined {
-    const index = args.indexOf(name);
-    if (index !== -1 && index + 1 < args.length) {
-      return args[index + 1];
-    }
-    return undefined;
-  }
+export async function importData(options: ImportOptions) {
+  const { movesOut, conceptsOut, obsidianData, force = false } = options;
 
-  const movesOutArg = getArg("--moves-out");
-  const conceptsOutArg = getArg("--concepts-out");
-  const obsidianDataArg = getArg("--obsidian-data") || "obsidian-data";
-
-  if (!movesOutArg || !conceptsOutArg) {
-    console.error("Error: Missing output paths.");
-    console.error(usage);
-    process.exit(1);
-  }
-
-  const OBSIDIAN_PATH = path.resolve(process.cwd(), obsidianDataArg);
-  const MOVES_OUT_PATH = path.resolve(process.cwd(), movesOutArg);
-  const CONCEPTS_OUT_PATH = path.resolve(process.cwd(), conceptsOutArg);
+  const OBSIDIAN_PATH = path.resolve(process.cwd(), obsidianData);
+  const MOVES_OUT_PATH = path.resolve(process.cwd(), movesOut);
+  const CONCEPTS_OUT_PATH = path.resolve(process.cwd(), conceptsOut);
 
   // Validate Obsidian Data Path
   const movesSourceDir = path.join(OBSIDIAN_PATH, "Moves");
@@ -146,7 +132,6 @@ async function main() {
   const CACHE_FILE = path.resolve(process.cwd(), ".obsidian-import-cache");
 
   // 0. Check for changes
-  const force = args.includes("--force");
 
   if (!force) {
     try {
@@ -382,5 +367,24 @@ async function main() {
 // Run main only if executed directly
 import { fileURLToPath } from "node:url";
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  main();
+  const args = process.argv.slice(2);
+  const getArg = (name: string): string | undefined => {
+    const index = args.indexOf(name);
+    if (index !== -1 && index + 1 < args.length) return args[index + 1];
+    return undefined;
+  };
+
+  const movesOut = getArg("--moves-out");
+  const conceptsOut = getArg("--concepts-out");
+  const obsidianData = getArg("--obsidian-data") || "obsidian-data";
+  const force = args.includes("--force");
+
+  if (!movesOut || !conceptsOut) {
+    console.error(
+      "Usage: npx tsx scripts/import-obsidian.ts --moves-out <path> --concepts-out <path> [--obsidian-data <path>]",
+    );
+    process.exit(1);
+  }
+
+  importData({ movesOut, conceptsOut, obsidianData, force });
 }
