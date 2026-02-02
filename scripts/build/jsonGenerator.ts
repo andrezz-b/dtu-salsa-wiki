@@ -6,9 +6,9 @@ import type {
   BaseFrontmatter,
   MoveFrontmatter,
   ConceptFrontmatter,
-} from "../src/types/content";
-import { PATHS } from "./constants.js";
-import { log } from "./logger.js";
+} from "../../src/types/content";
+import { PATHS } from "../utils/constants.js";
+import { log } from "../utils/logger.js";
 
 const CONTENT_DEPTH = 2;
 

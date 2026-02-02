@@ -12,8 +12,8 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { PATHS, GIT } from "./constants.js";
-import { log, sleep } from "./logger.js";
+import { PATHS, GIT } from "../utils/constants.js";
+import { log, sleep } from "../utils/logger.js";
 
 function getRepoUrl(): string {
   const token = process.env[GIT.TOKEN_ENV_VAR];

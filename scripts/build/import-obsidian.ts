@@ -3,8 +3,8 @@ import {
   updateCache,
   type ChangeCheckResult,
 } from "./check-changes.js";
-import { PATHS, CONTENT_FOLDERS } from "./constants.js";
-import { log } from "./logger.js";
+import { PATHS, CONTENT_FOLDERS } from "../utils/constants.js";
+import { log } from "../utils/logger.js";
 import fs from "node:fs";
 import { execSync } from "node:child_process";
 import path from "node:path";

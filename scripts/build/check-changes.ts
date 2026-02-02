@@ -9,8 +9,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { PATHS } from "./constants.js";
-import { log } from "./logger.js";
+import { PATHS } from "../utils/constants.js";
+import { log } from "../utils/logger.js";
 
 const CACHE_FILE = path.resolve(process.cwd(), PATHS.CACHE_FILE);
 

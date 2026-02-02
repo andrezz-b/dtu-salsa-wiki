@@ -13,8 +13,8 @@
 import { syncData } from "./sync-data.js";
 import { importData } from "./import-obsidian.js";
 import { generateJson } from "./jsonGenerator.js";
-import { PATHS } from "./constants.js";
-import { log } from "./logger.js";
+import { PATHS } from "../utils/constants.js";
+import { log } from "../utils/logger.js";
 
 async function main() {
   const args = process.argv.slice(2);
