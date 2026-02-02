@@ -51,22 +51,71 @@ const getData = <T extends BaseFrontmatter>(
   return getPaths.filter((page) => page.frontmatter && !page.frontmatter.draft);
 };
 
+const getLatestMtime = (folder: string): number => {
+  let maxTime = 0;
+  if (!fs.existsSync(folder)) return 0;
+
+  const files = fs.readdirSync(folder);
+  for (const file of files) {
+    const filepath = path.join(folder, file);
+    const stats = fs.statSync(filepath);
+    if (stats.isDirectory()) {
+      maxTime = Math.max(maxTime, getLatestMtime(filepath));
+    } else {
+      maxTime = Math.max(maxTime, stats.mtimeMs);
+    }
+  }
+  return maxTime;
+};
+
 try {
+  const args = process.argv.slice(2);
+  const force = args.includes("--force");
+
   // Create folder if it doesn't exist
   if (!fs.existsSync(JSON_FOLDER)) {
     fs.mkdirSync(JSON_FOLDER);
   }
 
-  // Create json files
-  const moves = getData("src/content/moves", 2);
-  const concepts = getData("src/content/concepts", 2);
+  // Check if update is needed
+  const outputFiles = ["moves.json", "concepts.json", "search.json"].map((f) =>
+    path.join(JSON_FOLDER, f),
+  );
 
-  fs.writeFileSync(`${JSON_FOLDER}/moves.json`, JSON.stringify(moves));
-  fs.writeFileSync(`${JSON_FOLDER}/concepts.json`, JSON.stringify(concepts));
+  const outputsExist = outputFiles.every((f) => fs.existsSync(f));
 
-  // Merge json files for search
-  const search = [...moves, ...concepts];
-  fs.writeFileSync(`${JSON_FOLDER}/search.json`, JSON.stringify(search));
+  let shouldRun = !outputsExist || force;
+
+  if (outputsExist && !force) {
+    const oldestOutputMtime = Math.min(
+      ...outputFiles.map((f) => fs.statSync(f).mtimeMs),
+    );
+    const latestContentMtime = Math.max(
+      getLatestMtime("src/content/moves"),
+      getLatestMtime("src/content/concepts"),
+    );
+
+    if (latestContentMtime > oldestOutputMtime) {
+      shouldRun = true;
+    } else {
+      console.log("JSONs are up to date. Skipping generation.");
+    }
+  }
+
+  if (shouldRun) {
+    console.log("Generating JSON files...");
+    // Create json files
+    const moves = getData("src/content/moves", 2);
+    const concepts = getData("src/content/concepts", 2);
+
+    fs.writeFileSync(`${JSON_FOLDER}/moves.json`, JSON.stringify(moves));
+    fs.writeFileSync(`${JSON_FOLDER}/concepts.json`, JSON.stringify(concepts));
+
+    // Merge json files for search
+    const search = [...moves, ...concepts];
+    fs.writeFileSync(`${JSON_FOLDER}/search.json`, JSON.stringify(search));
+    console.log("JSON generation complete.");
+  }
 } catch (err) {
   console.error(err);
 }
