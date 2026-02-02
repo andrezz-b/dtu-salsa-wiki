@@ -1,10 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import type { ContentItem, BaseFrontmatter } from "../src/types/content";
+import type {
+  ContentItem,
+  BaseFrontmatter,
+  MoveFrontmatter,
+  ConceptFrontmatter,
+} from "../src/types/content";
+import { PATHS } from "./constants.js";
+import { log } from "./logger.js";
 
 const CONTENT_DEPTH = 2;
-const JSON_FOLDER = "./.json";
 
 /**
  * Get data from markdown files in a folder
@@ -71,13 +77,13 @@ const getLatestMtime = (folder: string): number => {
 export function generateJson(force = false) {
   try {
     // Create folder if it doesn't exist
-    if (!fs.existsSync(JSON_FOLDER)) {
-      fs.mkdirSync(JSON_FOLDER);
+    if (!fs.existsSync(PATHS.JSON_FOLDER)) {
+      fs.mkdirSync(PATHS.JSON_FOLDER);
     }
 
     // Check if update is needed
     const outputFiles = ["moves.json", "concepts.json", "search.json"].map(
-      (f) => path.join(JSON_FOLDER, f),
+      (f) => path.join(PATHS.JSON_FOLDER, f),
     );
 
     const outputsExist = outputFiles.every((f) => fs.existsSync(f));
@@ -89,36 +95,43 @@ export function generateJson(force = false) {
         ...outputFiles.map((f) => fs.statSync(f).mtimeMs),
       );
       const latestContentMtime = Math.max(
-        getLatestMtime("src/content/moves"),
-        getLatestMtime("src/content/concepts"),
+        getLatestMtime(PATHS.CONTENT_MOVES),
+        getLatestMtime(PATHS.CONTENT_CONCEPTS),
       );
 
       if (latestContentMtime > oldestOutputMtime) {
         shouldRun = true;
       } else {
-        console.log("JSONs are up to date. Skipping generation.");
+        log.skip("JSONs are up to date. Skipping generation.");
       }
     }
 
     if (shouldRun) {
-      console.log("Generating JSON files...");
-      // Create json files
-      const moves = getData("src/content/moves", 2);
-      const concepts = getData("src/content/concepts", 2);
+      log.info("Generating JSON files...");
+      // Create json files with explicit type arguments
+      const moves = getData<MoveFrontmatter>(PATHS.CONTENT_MOVES, 2);
+      const concepts = getData<ConceptFrontmatter>(PATHS.CONTENT_CONCEPTS, 2);
 
-      fs.writeFileSync(`${JSON_FOLDER}/moves.json`, JSON.stringify(moves));
       fs.writeFileSync(
-        `${JSON_FOLDER}/concepts.json`,
+        path.join(PATHS.JSON_FOLDER, "moves.json"),
+        JSON.stringify(moves),
+      );
+      fs.writeFileSync(
+        path.join(PATHS.JSON_FOLDER, "concepts.json"),
         JSON.stringify(concepts),
       );
 
       // Merge json files for search
       const search = [...moves, ...concepts];
-      fs.writeFileSync(`${JSON_FOLDER}/search.json`, JSON.stringify(search));
-      console.log("JSON generation complete.");
+      fs.writeFileSync(
+        path.join(PATHS.JSON_FOLDER, "search.json"),
+        JSON.stringify(search),
+      );
+      log.success("JSON generation complete.");
     }
   } catch (err) {
-    console.error(err);
+    log.error(`JSON generation failed: ${err}`);
+    throw err;
   }
 }
 

@@ -12,47 +12,91 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-
-const DATA_DIR = "obsidian-data";
-const REPO_SSH = "git@github.com:andrezz-b/dtu-salsa-data.git";
+import { PATHS, GIT } from "./constants.js";
+import { log, sleep } from "./logger.js";
 
 function getRepoUrl(): string {
-  const token = process.env.DATA_REPO_TOKEN;
+  const token = process.env[GIT.TOKEN_ENV_VAR];
   if (token) {
     // Use HTTPS with token for CI
     return `https://${token}@github.com/andrezz-b/dtu-salsa-data.git`;
   }
   // Use SSH for local development
-  return REPO_SSH;
+  return GIT.REPO_SSH;
 }
 
 function run(cmd: string, cwd?: string): void {
-  console.log(`$ ${cmd}`);
+  log.cmd(cmd);
   execSync(cmd, { cwd, stdio: "inherit" });
 }
 
-export function syncData(): void {
-  const dataPath = path.resolve(process.cwd(), DATA_DIR);
+/**
+ * Run a command with exponential backoff retry for transient failures.
+ */
+async function runWithRetry(
+  cmd: string,
+  cwd?: string,
+  maxRetries = 3,
+): Promise<void> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      run(cmd, cwd);
+      return;
+    } catch (e) {
+      if (attempt === maxRetries) throw e;
+      const delay = 1000 * Math.pow(2, attempt - 1);
+      log.warn(`Attempt ${attempt} failed, retrying in ${delay}ms...`);
+      await sleep(delay);
+    }
+  }
+}
+
+/**
+ * Remove a directory with retry for transient file lock issues (Windows/IDE).
+ */
+function rmWithRetry(dir: string, retries = 3): void {
+  for (let i = 0; i < retries; i++) {
+    try {
+      fs.rmSync(dir, { recursive: true, force: true });
+      return;
+    } catch (e: any) {
+      if (i === retries - 1) throw e;
+      if (e.code === "EBUSY" || e.code === "ENOTEMPTY") {
+        // Brief synchronous delay before retry
+        const start = Date.now();
+        while (Date.now() - start < 200) {
+          /* spin */
+        }
+      }
+    }
+  }
+}
+
+export async function syncData(): Promise<void> {
+  const dataPath = path.resolve(process.cwd(), PATHS.OBSIDIAN_DATA);
   const repoUrl = getRepoUrl();
 
   if (fs.existsSync(dataPath)) {
     // Directory exists - pull latest
-    console.log(`📦 Updating ${DATA_DIR}...`);
+    log.info(`Updating ${PATHS.OBSIDIAN_DATA}...`);
     try {
-      run("git fetch --depth 1 origin main", dataPath);
+      await runWithRetry("git fetch --depth 1 origin main", dataPath);
       run("git reset --hard origin/main", dataPath);
+      run("git clean -fd", dataPath); // Remove untracked files
     } catch (e) {
-      console.warn("⚠️ Pull failed, re-cloning...");
-      fs.rmSync(dataPath, { recursive: true, force: true });
-      run(`git clone --depth 1 ${repoUrl} ${DATA_DIR}`);
+      log.warn("Pull failed, re-cloning...");
+      rmWithRetry(dataPath);
+      await runWithRetry(
+        `git clone --depth 1 ${repoUrl} ${PATHS.OBSIDIAN_DATA}`,
+      );
     }
   } else {
     // Directory doesn't exist - clone
-    console.log(`📦 Cloning ${DATA_DIR}...`);
-    run(`git clone --depth 1 ${repoUrl} ${DATA_DIR}`);
+    log.info(`Cloning ${PATHS.OBSIDIAN_DATA}...`);
+    await runWithRetry(`git clone --depth 1 ${repoUrl} ${PATHS.OBSIDIAN_DATA}`);
   }
 
-  console.log("✅ Data sync complete.");
+  log.success("Data sync complete.");
 }
 
 import { fileURLToPath } from "node:url";

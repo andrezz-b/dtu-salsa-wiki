@@ -1,4 +1,10 @@
-import { checkChanges } from "./check-changes.js";
+import {
+  checkChanges,
+  updateCache,
+  type ChangeCheckResult,
+} from "./check-changes.js";
+import { PATHS, CONTENT_FOLDERS } from "./constants.js";
+import { log } from "./logger.js";
 import fs from "node:fs";
 import { execSync } from "node:child_process";
 import path from "node:path";
@@ -102,26 +108,23 @@ export async function importData(options: ImportOptions) {
   const MOVES_OUT_PATH = path.resolve(process.cwd(), movesOut);
   const CONCEPTS_OUT_PATH = path.resolve(process.cwd(), conceptsOut);
 
-  // Validate Obsidian Data Path
-  const movesSourceDir = path.join(OBSIDIAN_PATH, "Moves");
-  const conceptsSourceDir = path.join(OBSIDIAN_PATH, "Concepts");
-
-  if (
-    !fs.existsSync(movesSourceDir) ||
-    !fs.statSync(movesSourceDir).isDirectory()
-  ) {
-    throw new Error(`Moves directory not found in ${OBSIDIAN_PATH}`);
-  }
-  if (
-    !fs.existsSync(conceptsSourceDir) ||
-    !fs.statSync(conceptsSourceDir).isDirectory()
-  ) {
-    throw new Error(`Concepts directory not found in ${OBSIDIAN_PATH}`);
+  // Validate Obsidian Data Path - check all required folders with helpful errors
+  for (const folder of CONTENT_FOLDERS) {
+    const fullPath = path.join(OBSIDIAN_PATH, folder);
+    if (!fs.existsSync(fullPath) || !fs.statSync(fullPath).isDirectory()) {
+      const available = fs.existsSync(OBSIDIAN_PATH)
+        ? fs.readdirSync(OBSIDIAN_PATH).join(", ")
+        : "(directory not found)";
+      throw new Error(
+        `Required folder "${folder}" not found in ${OBSIDIAN_PATH}.\n` +
+          `Available: ${available}`,
+      );
+    }
   }
 
-  console.log(`Importing from: ${OBSIDIAN_PATH}`);
-  console.log(`Moves output: ${MOVES_OUT_PATH}`);
-  console.log(`Concepts output: ${CONCEPTS_OUT_PATH}`);
+  log.info(`Importing from: ${OBSIDIAN_PATH}`);
+  log.info(`Moves output: ${MOVES_OUT_PATH}`);
+  log.info(`Concepts output: ${CONCEPTS_OUT_PATH}`);
 
   // Ensure output directories exist
   if (!fs.existsSync(MOVES_OUT_PATH))
@@ -129,27 +132,30 @@ export async function importData(options: ImportOptions) {
   if (!fs.existsSync(CONCEPTS_OUT_PATH))
     fs.mkdirSync(CONCEPTS_OUT_PATH, { recursive: true });
 
-  const CACHE_FILE = path.resolve(process.cwd(), ".obsidian-import-cache");
-
-  // 0. Check for changes
+  // 0. Check for changes using structured result
+  let changeResult: ChangeCheckResult | null = null;
 
   if (!force) {
     try {
       // Check specifically in Moves and Concepts folders
-      const hasChanges = checkChanges(["Moves", "Concepts"]);
+      changeResult = checkChanges([...CONTENT_FOLDERS]);
 
-      if (!hasChanges) {
+      if (!changeResult.hasChanges) {
         // Ensure we actually have output content before trusting NO_CHANGE
         const movesEmpty = fs.readdirSync(MOVES_OUT_PATH).length === 0;
         const conceptsEmpty = fs.readdirSync(CONCEPTS_OUT_PATH).length === 0;
 
         if (!movesEmpty && !conceptsEmpty) {
-          console.log("No relevant changes detected. Skipping import.");
+          // Update cache if needed (for irrelevant changes)
+          if (changeResult.shouldUpdateCache) {
+            updateCache(changeResult.currentCommit);
+          }
+          log.skip("No relevant changes detected. Skipping import.");
           return;
         }
       }
     } catch (e) {
-      console.warn("Change check failed, proceeding with import.", e);
+      log.warn(`Change check failed, proceeding with import. ${e}`);
     }
   }
 
@@ -174,10 +180,10 @@ export async function importData(options: ImportOptions) {
     }
   }
 
-  console.log("Scanning Obsidian files...");
+  log.info("Scanning Obsidian files...");
   scanDirectory(path.join(OBSIDIAN_PATH, "Moves"), "move");
   scanDirectory(path.join(OBSIDIAN_PATH, "Concepts"), "concept");
-  console.log(`Found ${fileMap.size} files.`);
+  log.info(`Found ${fileMap.size} files.`);
 
   // Track written slugs to clean up orphans later
   const writtenMoves = new Set<string>();
@@ -185,7 +191,7 @@ export async function importData(options: ImportOptions) {
 
   // 2. Process files
   for (const [title, info] of fileMap.entries()) {
-    console.log(`Processing: ${title} (${info.type})`);
+    log.info(`Processing: ${title} (${info.type})`);
     const content = fs.readFileSync(info.path, "utf-8");
     const parsed = matter(content);
     const data = parsed.data as ObsidianFrontmatter;
@@ -323,7 +329,6 @@ export async function importData(options: ImportOptions) {
 
     const newContent = matter.stringify(body, finalFrontmatter);
     fs.writeFileSync(outPath, newContent);
-    console.log(`Wrote: ${outPath}`);
 
     // Track written slug
     if (info.type === "move") {
@@ -341,7 +346,7 @@ export async function importData(options: ImportOptions) {
       if (!writtenSet.has(file)) {
         const orphanPath = path.join(dir, file);
         fs.unlinkSync(orphanPath);
-        console.log(`🗑️ Deleted orphan ${label}: ${file}`);
+        log.deleted(`Orphan ${label}: ${file}`);
       }
     }
   }
@@ -349,18 +354,19 @@ export async function importData(options: ImportOptions) {
   cleanOrphans(MOVES_OUT_PATH, writtenMoves, "move");
   cleanOrphans(CONCEPTS_OUT_PATH, writtenConcepts, "concept");
 
-  console.log("Import complete.");
+  log.success(`Import complete. Processed ${fileMap.size} files.`);
 
+  // Update cache with current commit
   try {
     const currentCommit = execSync("git rev-parse HEAD", {
       cwd: OBSIDIAN_PATH,
       encoding: "utf-8",
     }).trim();
     if (currentCommit) {
-      fs.writeFileSync(CACHE_FILE, currentCommit);
+      updateCache(currentCommit);
     }
   } catch (e) {
-    console.warn("Failed to update import cache file.", e);
+    log.warn(`Failed to update import cache file. ${e}`);
   }
 }
 
