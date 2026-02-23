@@ -15,7 +15,7 @@ related_moves:
   - sacala
   - espejo
   - enchufla
-  - noodle-complicado
+  - nudo-complicado
 ---
 ## ✍️ Description & Execution
 - This is a [Role Switch](/concepts/role-switch) move
@@ -36,7 +36,7 @@ related_moves:
   - 3 - Right hand on *followers* shoulder
 ---
 - This can be looped as you end in [Dile Que No Position](/concepts/dile-que-no-position)
-  - A funny combo is to do 2 switches (follower cooperates) into [Noodle Complicado](/moves/noodle-complicado)
+  - A funny combo is to do 2 switches (follower cooperates) into [Nudo Complicado](/moves/nudo-complicado)
 ## 🎥 Video
 - **Video Link:** 
 

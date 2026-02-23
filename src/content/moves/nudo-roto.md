@@ -1,5 +1,5 @@
 ---
-title: Noodle Roto
+title: Nudo Roto
 type: partner
 difficulty: 4
 level: advanced
@@ -8,19 +8,19 @@ updated_date: 2025-11-26T22:13:00.000Z
 tags:
   - salsa/move
 aliases:
-  - Broken Noodle
+  - Broken Nudo (Knot)
 related_concepts:
   - both-hands-hold
 related_moves:
-  - noodle-complicado
+  - nudo-complicado
   - enchufla
   - ronde
 video_urls:
-  - 'https://youtu.be/_6u0p5Hmyo0'
+  - 'https://youtu.be/1jO24p_vcjM'
 ---
 ## ✍️ Description & Execution
 ### Leader
-- Same start as [Noodle Complicado](/moves/noodle-complicado)
+- Same start as [Nudo Complicado](/moves/nudo-complicado)
 - 123 567 - Vuelta on the go
   - My right hand goes in front of her
   - My left hand goes over my head and behind
@@ -35,5 +35,5 @@ video_urls:
 ### Follower
 - 
 ## 🔗 Connections & Transitions
-- [Both Hands Hold](/concepts/both-hands-hold) right into [Noodle Complicado](/moves/noodle-complicado)
+- [Both Hands Hold](/concepts/both-hands-hold) right into [Nudo Complicado](/moves/nudo-complicado)
 

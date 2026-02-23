@@ -1,6 +1,6 @@
 ---
 title: Dame Dos
-type: partner
+type: rueda
 difficulty: 1.5
 level: beginner
 created_date: 2026-01-30T10:31:00.000Z

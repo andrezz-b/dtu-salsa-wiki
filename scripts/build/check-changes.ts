@@ -51,12 +51,15 @@ function getCurrentCommit(cwd: string): string | null {
  * @param foldersCheck - Limit change detection to specific folders (e.g., ["Moves", "Concepts"])
  * @returns ChangeCheckResult with change status and metadata
  */
-export function checkChanges(foldersCheck: string[] = []): ChangeCheckResult {
-  const obsidianPath = path.resolve(process.cwd(), PATHS.OBSIDIAN_DATA);
+export function checkChanges(
+  foldersCheck: string[] = [],
+  obsidianDir = PATHS.OBSIDIAN_DATA,
+): ChangeCheckResult {
+  const obsidianPath = path.resolve(process.cwd(), obsidianDir);
 
   // 1. Verify obsidian-data exists
   if (!fs.existsSync(obsidianPath)) {
-    log.warn(`${PATHS.OBSIDIAN_DATA} not found.`);
+    log.warn(`${obsidianDir} not found.`);
     return { hasChanges: true, currentCommit: "", shouldUpdateCache: false };
   }
 

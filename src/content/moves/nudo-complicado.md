@@ -1,5 +1,5 @@
 ---
-title: Noodle Complicado
+title: Nudo Complicado
 type: partner
 difficulty: 3.5
 level: advanced
@@ -18,7 +18,7 @@ related_moves:
   - coca-cola
   - enchufla
 video_urls:
-  - 'https://youtu.be/4WxGBBdXXZ0'
+  - 'https://youtu.be/HJVN79S_D4o'
 ---
 ## ✍️ Description & Execution
 ### Leader
