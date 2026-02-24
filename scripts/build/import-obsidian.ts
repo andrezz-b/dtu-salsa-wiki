@@ -1,15 +1,10 @@
-import {
-  checkChanges,
-  updateCache,
-  type ChangeCheckResult,
-} from "./check-changes.js";
-import { PATHS, CONTENT_FOLDERS } from "../utils/constants.js";
-import { log } from "../utils/logger.js";
+import { updateCache } from "./check-changes.js";
 import fs from "node:fs";
 import { execSync } from "node:child_process";
 import path from "node:path";
 import matter from "gray-matter";
 import Slugger from "github-slugger";
+import fsp from "node:fs/promises";
 
 // Types
 export interface ObsidianFrontmatter {
@@ -25,11 +20,15 @@ export interface ObsidianFrontmatter {
   video_urls?: string[];
   [key: string]: any;
 }
-
+const ContentType = {
+  MOVE: "move",
+  CONCEPT: "concept",
+} as const;
+export type ContentType = (typeof ContentType)[keyof typeof ContentType];
 export interface FileInfo {
   originalTitle: string;
   slug: string;
-  type: "move" | "concept";
+  type: ContentType;
   path: string;
 }
 
@@ -95,95 +94,87 @@ export const normalizeRelationItems = (items: any[]): string[] => {
 };
 
 export interface ImportOptions {
-  movesOut: string;
-  conceptsOut: string;
-  obsidianData: string;
+  movesOut?: string;
+  conceptsOut?: string;
+  obsidianData?: string;
   force?: boolean;
 }
 
-export async function importData(options: ImportOptions) {
-  const { movesOut, conceptsOut, obsidianData, force = false } = options;
+const validateImportExportFolders = async ({
+  PATHS,
+  CONTENT_FOLDERS,
+}: BuildConfig) => {
+  if (!fs.existsSync(PATHS.OBSIDIAN_DATA)) {
+    throw new Error(
+      `Obsidian data directory not found at ${PATHS.OBSIDIAN_DATA}.`,
+    );
+  }
 
-  const OBSIDIAN_PATH = path.resolve(process.cwd(), obsidianData);
-  const MOVES_OUT_PATH = path.resolve(process.cwd(), movesOut);
-  const CONCEPTS_OUT_PATH = path.resolve(process.cwd(), conceptsOut);
-
-  // Validate Obsidian Data Path - check all required folders with helpful errors
   for (const folder of CONTENT_FOLDERS) {
-    const fullPath = path.join(OBSIDIAN_PATH, folder);
-    if (!fs.existsSync(fullPath) || !fs.statSync(fullPath).isDirectory()) {
-      const available = fs.existsSync(OBSIDIAN_PATH)
-        ? fs.readdirSync(OBSIDIAN_PATH).join(", ")
-        : "(directory not found)";
+    const contentPath = path.join(PATHS.OBSIDIAN_DATA, folder);
+    if (!fs.existsSync(contentPath)) {
       throw new Error(
-        `Required folder "${folder}" not found in ${OBSIDIAN_PATH}.\n` +
-          `Available: ${available}`,
+        `Required folder "${folder}" not found in ${PATHS.OBSIDIAN_DATA}.`,
+      );
+    }
+
+    const stat = await fsp.stat(contentPath);
+    if (!stat.isDirectory()) {
+      throw new Error(
+        `Expected "${folder}" to be a directory in ${PATHS.OBSIDIAN_DATA}.`,
       );
     }
   }
 
-  log.info(`Importing from: ${OBSIDIAN_PATH}`);
-  log.info(`Moves output: ${MOVES_OUT_PATH}`);
-  log.info(`Concepts output: ${CONCEPTS_OUT_PATH}`);
+  if (!fs.existsSync(PATHS.CONTENT_MOVES))
+    await fsp.mkdir(PATHS.CONTENT_MOVES, { recursive: true });
+  if (!fs.existsSync(PATHS.CONTENT_CONCEPTS))
+    await fsp.mkdir(PATHS.CONTENT_CONCEPTS, { recursive: true });
+};
 
-  // Ensure output directories exist
-  if (!fs.existsSync(MOVES_OUT_PATH))
-    fs.mkdirSync(MOVES_OUT_PATH, { recursive: true });
-  if (!fs.existsSync(CONCEPTS_OUT_PATH))
-    fs.mkdirSync(CONCEPTS_OUT_PATH, { recursive: true });
+const getContentTitleInfoMap = async (
+  contentConfigs: Array<{ folder: string; contentType: ContentType }>,
+): Promise<Map<string, FileInfo>> => {
+  const map = new Map<string, FileInfo>();
 
-  // 0. Check for changes using structured result
-  let changeResult: ChangeCheckResult | null = null;
-
-  if (!force) {
-    try {
-      // Check specifically in Moves and Concepts folders
-      changeResult = checkChanges([...CONTENT_FOLDERS]);
-
-      if (!changeResult.hasChanges) {
-        // Ensure we actually have output content before trusting NO_CHANGE
-        const movesEmpty = fs.readdirSync(MOVES_OUT_PATH).length === 0;
-        const conceptsEmpty = fs.readdirSync(CONCEPTS_OUT_PATH).length === 0;
-
-        if (!movesEmpty && !conceptsEmpty) {
-          // Update cache if needed (for irrelevant changes)
-          if (changeResult.shouldUpdateCache) {
-            updateCache(changeResult.currentCommit);
-          }
-          log.skip("No relevant changes detected. Skipping import.");
-          return;
-        }
-      }
-    } catch (e) {
-      log.warn(`Change check failed, proceeding with import. ${e}`);
+  for (const { folder, contentType } of contentConfigs) {
+    // TODO: Support variations, use withFileTypes
+    const files = await fsp.readdir(folder);
+    for (const file of files) {
+      if (!file.endsWith(".md")) continue;
+      const filePath = path.join(folder, file);
+      const originalTitle = path.basename(file, ".md");
+      const slug = generateSlug(originalTitle);
+      map.set(originalTitle, {
+        originalTitle,
+        slug,
+        type: contentType,
+        path: filePath,
+      });
     }
   }
+
+  return map;
+};
+
+export const importData: TaskFunction<[ImportOptions], void> = async (
+  options,
+  config,
+) => {
+  const logger = config.logger;
+  await validateImportExportFolders(config);
 
   // 1. Scan files and build lookup map
-  const fileMap = new Map<string, FileInfo>();
-
-  function scanDirectory(dir: string, type: "move" | "concept") {
-    if (!fs.existsSync(dir)) return;
-    const files = fs.readdirSync(dir);
-    for (const file of files) {
-      if (file.endsWith(".md")) {
-        const filePath = path.join(dir, file);
-        const originalTitle = path.basename(file, ".md");
-        const slug = generateSlug(originalTitle);
-        fileMap.set(originalTitle, {
-          originalTitle,
-          slug,
-          type,
-          path: filePath,
-        });
-      }
-    }
-  }
-
-  log.info("Scanning Obsidian files...");
-  scanDirectory(path.join(OBSIDIAN_PATH, "Moves"), "move");
-  scanDirectory(path.join(OBSIDIAN_PATH, "Concepts"), "concept");
-  log.info(`Found ${fileMap.size} files.`);
+  const fileMap = await getContentTitleInfoMap([
+    {
+      folder: path.join(config.PATHS.OBSIDIAN_DATA, "Moves"),
+      contentType: ContentType.MOVE,
+    },
+    {
+      folder: path.join(config.PATHS.OBSIDIAN_DATA, "Concepts"),
+      contentType: ContentType.CONCEPT,
+    },
+  ]);
 
   // Track written slugs to clean up orphans later
   const writtenMoves = new Set<string>();
@@ -191,7 +182,7 @@ export async function importData(options: ImportOptions) {
 
   // 2. Process files
   for (const [title, info] of fileMap.entries()) {
-    log.info(`Processing: ${title} (${info.type})`);
+    logger.info(`Processing: ${title} (${info.type})`);
     const content = fs.readFileSync(info.path, "utf-8");
     const parsed = matter(content);
     const data = parsed.data as ObsidianFrontmatter;
@@ -209,6 +200,9 @@ export async function importData(options: ImportOptions) {
         if (typeof newFrontmatter.video_urls === "string") {
           newFrontmatter.video_urls = [newFrontmatter.video_urls];
         } else {
+          logger.error(
+            `Invalid video_urls format for ${title}. Expected string or array of strings.`,
+          );
           // Fallback or error? Let's just remove if invalid
           delete newFrontmatter.video_urls;
         }
@@ -220,7 +214,7 @@ export async function importData(options: ImportOptions) {
       const parsed = parseObsidianDate(data.created_date);
       if (parsed) newFrontmatter.created_date = parsed;
       else
-        console.warn(
+        logger.warn(
           `Failed to parse created_date for ${title}: ${data.created_date}`,
         );
     }
@@ -228,7 +222,7 @@ export async function importData(options: ImportOptions) {
       const parsed = parseObsidianDate(data.updated_date);
       if (parsed) newFrontmatter.updated_date = parsed;
       else
-        console.warn(
+        logger.warn(
           `Failed to parse updated_date for ${title}: ${data.updated_date}`,
         );
     }
@@ -245,7 +239,7 @@ export async function importData(options: ImportOptions) {
         if (target) {
           slugs.add(target.slug);
         } else {
-          console.warn(`Relation not found: ${cleanItem} in ${title}`);
+          logger.warn(`Relation not found: ${cleanItem} in ${title}`);
         }
       }
       return Array.from(slugs);
@@ -324,14 +318,17 @@ export async function importData(options: ImportOptions) {
     const finalFrontmatter = cleanFrontmatter(newFrontmatter);
 
     // Write file
-    const outDir = info.type === "move" ? MOVES_OUT_PATH : CONCEPTS_OUT_PATH;
+    const outDir =
+      info.type === ContentType.MOVE
+        ? config.PATHS.CONTENT_MOVES
+        : config.PATHS.CONTENT_CONCEPTS;
     const outPath = path.join(outDir, `${info.slug}.md`);
 
     const newContent = matter.stringify(body, finalFrontmatter);
     fs.writeFileSync(outPath, newContent);
 
     // Track written slug
-    if (info.type === "move") {
+    if (info.type === ContentType.MOVE) {
       writtenMoves.add(`${info.slug}.md`);
     } else {
       writtenConcepts.add(`${info.slug}.md`);
@@ -346,32 +343,21 @@ export async function importData(options: ImportOptions) {
       if (!writtenSet.has(file)) {
         const orphanPath = path.join(dir, file);
         fs.unlinkSync(orphanPath);
-        log.deleted(`Orphan ${label}: ${file}`);
+        logger.deleted(`Orphan ${label}: ${file}`);
       }
     }
   }
 
-  cleanOrphans(MOVES_OUT_PATH, writtenMoves, "move");
-  cleanOrphans(CONCEPTS_OUT_PATH, writtenConcepts, "concept");
+  cleanOrphans(config.PATHS.CONTENT_MOVES, writtenMoves, "move");
+  cleanOrphans(config.PATHS.CONTENT_CONCEPTS, writtenConcepts, "concept");
 
-  log.success(`Import complete. Processed ${fileMap.size} files.`);
-
-  // Update cache with current commit
-  try {
-    const currentCommit = execSync("git rev-parse HEAD", {
-      cwd: OBSIDIAN_PATH,
-      encoding: "utf-8",
-    }).trim();
-    if (currentCommit) {
-      updateCache(currentCommit);
-    }
-  } catch (e) {
-    log.warn(`Failed to update import cache file. ${e}`);
-  }
-}
+  logger.success(`Import complete. Processed ${fileMap.size} files.`);
+};
 
 // Run main only if executed directly
 import { fileURLToPath } from "node:url";
+import type { BuildConfig, TaskFunction } from "scripts/types.js";
+import { DefaultConfig } from "scripts/utils/config.js";
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   const getArg = (name: string): string | undefined => {
@@ -392,5 +378,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exit(1);
   }
 
-  importData({ movesOut, conceptsOut, obsidianData, force });
+  importData({ movesOut, conceptsOut, obsidianData, force }, DefaultConfig);
 }

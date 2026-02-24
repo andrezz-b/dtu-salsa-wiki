@@ -5,6 +5,7 @@ import path from "node:path";
 import os from "node:os";
 import matter from "gray-matter";
 import { importData, slugger } from "../scripts/build/import-obsidian.js";
+import type { BuildConfig } from "../scripts/types.js";
 
 // Helper to create a mock markdown file with frontmatter
 function createMockFile(
@@ -19,7 +20,10 @@ function createMockFile(
 }
 
 // Helper to read and parse output file
-function readOutputFile(filePath: string): { frontmatter: any; content: string } {
+function readOutputFile(filePath: string): {
+  frontmatter: any;
+  content: string;
+} {
   const raw = fs.readFileSync(filePath, "utf-8");
   const parsed = matter(raw);
   return { frontmatter: parsed.data, content: parsed.content };
@@ -32,6 +36,7 @@ describe("Import Obsidian Integration", () => {
   let conceptsSourcePath: string;
   let movesOutPath: string;
   let conceptsOutPath: string;
+  let testConfig: BuildConfig;
 
   before(() => {
     // Create temp directory structure
@@ -47,6 +52,31 @@ describe("Import Obsidian Integration", () => {
     fs.mkdirSync(conceptsSourcePath, { recursive: true });
     fs.mkdirSync(movesOutPath, { recursive: true });
     fs.mkdirSync(conceptsOutPath, { recursive: true });
+
+    // Create test config
+    testConfig = {
+      PATHS: {
+        OBSIDIAN_DATA: obsidianPath,
+        CACHE_FILE: path.join(tempDir, ".import-cache"),
+        JSON_FOLDER: path.join(tempDir, "json"),
+        CONTENT_MOVES: movesOutPath,
+        CONTENT_CONCEPTS: conceptsOutPath,
+      },
+      GIT: {
+        REPO_SSH: "",
+        REPO_HTTPS_TEMPLATE: "",
+        TOKEN_ENV_VAR: "",
+      },
+      CONTENT_FOLDERS: ["Moves", "Concepts"],
+      logger: {
+        info: () => {},
+        warn: () => {},
+        error: () => {},
+        success: () => {},
+        skip: () => {},
+        deleted: () => {},
+      },
+    };
   });
 
   after(() => {
@@ -89,12 +119,7 @@ describe("Import Obsidian Integration", () => {
     );
 
     // Run import
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     // Verify output files exist with slugified names
     assert.ok(
@@ -107,43 +132,51 @@ describe("Import Obsidian Integration", () => {
     );
 
     // Verify frontmatter includes title
-    const moveOutput = readOutputFile(path.join(movesOutPath, "cross-body-lead.md"));
+    const moveOutput = readOutputFile(
+      path.join(movesOutPath, "cross-body-lead.md"),
+    );
     assert.strictEqual(moveOutput.frontmatter.title, "Cross Body Lead");
     assert.deepStrictEqual(moveOutput.frontmatter.tags, ["basic"]);
   });
 
   it("should transform [[wiki links]] to markdown links", async () => {
     // Create files with wiki links
-    createMockFile(movesSourcePath, "Enchufla.md", {}, "Start with [[Cross Body Lead]].");
+    createMockFile(
+      movesSourcePath,
+      "Enchufla.md",
+      {},
+      "Start with [[Cross Body Lead]].",
+    );
     createMockFile(movesSourcePath, "Cross Body Lead.md", {}, "Basic move.");
     createMockFile(conceptsSourcePath, "Timing.md", {}, "Learn the timing.");
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
-    const enchuflaOutput = readOutputFile(path.join(movesOutPath, "enchufla.md"));
+    const enchuflaOutput = readOutputFile(
+      path.join(movesOutPath, "enchufla.md"),
+    );
     assert.ok(
-      enchuflaOutput.content.includes("[Cross Body Lead](/moves/cross-body-lead)"),
+      enchuflaOutput.content.includes(
+        "[Cross Body Lead](/moves/cross-body-lead)",
+      ),
       "Wiki link should be converted to markdown link",
     );
   });
 
   it("should handle wiki links with aliases [[Link|Alias]]", async () => {
-    createMockFile(movesSourcePath, "Enchufla.md", {}, "Do the [[Cross Body Lead|CBL]] first.");
+    createMockFile(
+      movesSourcePath,
+      "Enchufla.md",
+      {},
+      "Do the [[Cross Body Lead|CBL]] first.",
+    );
     createMockFile(movesSourcePath, "Cross Body Lead.md", {}, "Basic move.");
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
-    const enchuflaOutput = readOutputFile(path.join(movesOutPath, "enchufla.md"));
+    const enchuflaOutput = readOutputFile(
+      path.join(movesOutPath, "enchufla.md"),
+    );
     assert.ok(
       enchuflaOutput.content.includes("[CBL](/moves/cross-body-lead)"),
       "Alias should be used in link text",
@@ -160,16 +193,15 @@ describe("Import Obsidian Integration", () => {
     createMockFile(movesSourcePath, "Cross Body Lead.md", {}, "Basic.");
     createMockFile(movesSourcePath, "Dile Que No.md", {}, "Exit move.");
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
-    const enchuflaOutput = readOutputFile(path.join(movesOutPath, "enchufla.md"));
+    const enchuflaOutput = readOutputFile(
+      path.join(movesOutPath, "enchufla.md"),
+    );
     assert.ok(Array.isArray(enchuflaOutput.frontmatter.related_moves));
-    assert.ok(enchuflaOutput.frontmatter.related_moves.includes("cross-body-lead"));
+    assert.ok(
+      enchuflaOutput.frontmatter.related_moves.includes("cross-body-lead"),
+    );
     assert.ok(enchuflaOutput.frontmatter.related_moves.includes("dile-que-no"));
   });
 
@@ -186,31 +218,30 @@ describe("Import Obsidian Integration", () => {
     createMockFile(movesSourcePath, "Cross Body Lead.md", {}, "Setup move.");
     createMockFile(movesSourcePath, "Dile Que No.md", {}, "Exit move.");
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
-    const sombreroOutput = readOutputFile(path.join(movesOutPath, "sombrero.md"));
-    assert.deepStrictEqual(sombreroOutput.frontmatter.setup_moves, ["cross-body-lead"]);
-    assert.deepStrictEqual(sombreroOutput.frontmatter.exit_moves, ["dile-que-no"]);
+    const sombreroOutput = readOutputFile(
+      path.join(movesOutPath, "sombrero.md"),
+    );
+    assert.deepStrictEqual(sombreroOutput.frontmatter.setup_moves, [
+      "cross-body-lead",
+    ]);
+    assert.deepStrictEqual(sombreroOutput.frontmatter.exit_moves, [
+      "dile-que-no",
+    ]);
   });
 
   it("should delete orphan files in output directory", async () => {
     // Create an orphan file in output
-    fs.writeFileSync(path.join(movesOutPath, "orphan-move.md"), "orphan content");
+    fs.writeFileSync(
+      path.join(movesOutPath, "orphan-move.md"),
+      "orphan content",
+    );
 
     // Create only one source file
     createMockFile(movesSourcePath, "Enchufla.md", {}, "Content.");
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     // Orphan should be deleted
     assert.ok(
@@ -235,12 +266,7 @@ describe("Import Obsidian Integration", () => {
       "Content.",
     );
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     const output = readOutputFile(path.join(movesOutPath, "enchufla.md"));
     // gray-matter parses dates back as Date objects or strings depending on format
@@ -260,12 +286,7 @@ describe("Import Obsidian Integration", () => {
       "Content.",
     );
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     const output = readOutputFile(path.join(movesOutPath, "enchufla.md"));
     assert.ok(Array.isArray(output.frontmatter.video_urls));
@@ -282,12 +303,7 @@ describe("Import Obsidian Integration", () => {
       "Content.",
     );
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     const output = readOutputFile(path.join(movesOutPath, "enchufla.md"));
     assert.deepStrictEqual(output.frontmatter.video_urls, [
@@ -308,12 +324,7 @@ describe("Import Obsidian Integration", () => {
       "Content.",
     );
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     const output = readOutputFile(path.join(movesOutPath, "enchufla.md"));
     assert.strictEqual(output.frontmatter.difficulty, 3);
@@ -322,19 +333,28 @@ describe("Import Obsidian Integration", () => {
   });
 
   it("should link to concepts correctly from moves", async () => {
-    createMockFile(movesSourcePath, "Enchufla.md", {}, "Requires good [[Frame Connection]].");
-    createMockFile(conceptsSourcePath, "Frame Connection.md", {}, "Technique concept.");
+    createMockFile(
+      movesSourcePath,
+      "Enchufla.md",
+      {},
+      "Requires good [[Frame Connection]].",
+    );
+    createMockFile(
+      conceptsSourcePath,
+      "Frame Connection.md",
+      {},
+      "Technique concept.",
+    );
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
-    const enchuflaOutput = readOutputFile(path.join(movesOutPath, "enchufla.md"));
+    const enchuflaOutput = readOutputFile(
+      path.join(movesOutPath, "enchufla.md"),
+    );
     assert.ok(
-      enchuflaOutput.content.includes("[Frame Connection](/concepts/frame-connection)"),
+      enchuflaOutput.content.includes(
+        "[Frame Connection](/concepts/frame-connection)",
+      ),
       "Link to concept should use /concepts/ path",
     );
     assert.ok(
@@ -344,14 +364,14 @@ describe("Import Obsidian Integration", () => {
   });
 
   it("should not include self-references in related fields", async () => {
-    createMockFile(movesSourcePath, "Enchufla.md", {}, "The [[Enchufla]] is recursive.");
+    createMockFile(
+      movesSourcePath,
+      "Enchufla.md",
+      {},
+      "The [[Enchufla]] is recursive.",
+    );
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     const output = readOutputFile(path.join(movesOutPath, "enchufla.md"));
     // Self-reference should be transformed but not added to related_moves
@@ -371,12 +391,7 @@ describe("Import Obsidian Integration", () => {
     createMockFile(movesSourcePath, "Cross Body Lead.md", {}, "Setup.");
     createMockFile(movesSourcePath, "Dile Que No.md", {}, "Exit.");
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     const output = readOutputFile(path.join(movesOutPath, "enchufla.md"));
     assert.ok(output.frontmatter.related_moves.includes("cross-body-lead"));
@@ -386,16 +401,17 @@ describe("Import Obsidian Integration", () => {
   it("should convert tabs to spaces in content", async () => {
     createMockFile(movesSourcePath, "Enchufla.md", {}, "Line with\ttab.");
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     const output = readOutputFile(path.join(movesOutPath, "enchufla.md"));
-    assert.ok(!output.content.includes("\t"), "Tabs should be converted to spaces");
-    assert.ok(output.content.includes("Line with  tab."), "Content should have spaces");
+    assert.ok(
+      !output.content.includes("\t"),
+      "Tabs should be converted to spaces",
+    );
+    assert.ok(
+      output.content.includes("Line with  tab."),
+      "Content should have spaces",
+    );
   });
 
   it("should clean empty frontmatter fields", async () => {
@@ -410,12 +426,7 @@ describe("Import Obsidian Integration", () => {
       "Content.",
     );
 
-    await importData({
-      movesOut: movesOutPath,
-      conceptsOut: conceptsOutPath,
-      obsidianData: obsidianPath,
-      force: true,
-    });
+    await importData({ force: true }, testConfig);
 
     const output = readOutputFile(path.join(movesOutPath, "enchufla.md"));
     assert.strictEqual(output.frontmatter.tags, undefined);
