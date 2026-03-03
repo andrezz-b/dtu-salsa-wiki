@@ -34,8 +34,15 @@ export async function getStaticPaths() {
 
 const { concept, usedInMoves, usedInConcepts } = Astro.props;
 const { Content } = await render(concept);
-const { title, type, level, video_urls, related_concepts, related_moves } =
-  concept.data;
+const {
+  title,
+  type,
+  level,
+  video_urls,
+  related_concepts,
+  related_moves,
+  variations,
+} = concept.data;
 
 const videoIds = video_urls
   ? video_urls.map((url) => getYoutubeId(url)).filter((id) => id !== null)
@@ -47,6 +54,7 @@ const resolvedRelatedMoves = related_moves
 const resolvedRelatedConcepts = related_concepts
   ? await getEntries(related_concepts)
   : [];
+const resolvedVariations = variations ? await getEntries(variations) : [];
 ---
 
 <ContentLayout
@@ -65,6 +73,8 @@ const resolvedRelatedConcepts = related_concepts
     usedInMoves: usedInMoves,
     usedInConcepts: usedInConcepts,
   }}
+  variations={resolvedVariations}
+  variationsBasePath="/concepts"
 >
   <Content />
 </ContentLayout>

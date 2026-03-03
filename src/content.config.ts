@@ -16,6 +16,7 @@ const movesCollection = defineCollection({
     setup_moves: z.array(reference("moves")).optional(),
     exit_moves: z.array(reference("moves")).optional(),
     related_moves: z.array(reference("moves")).optional(),
+    variations: z.array(reference("moves")).optional(),
     tags: z.array(z.string()).default([]),
     created_date: z.date().optional(),
     updated_date: z.date().optional(),

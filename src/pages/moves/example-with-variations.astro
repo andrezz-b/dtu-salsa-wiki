@@ -1,0 +1,68 @@
+---
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { render } from "astro:content";
+import DifficultyAccordion from "@/layouts/helpers/DifficultyAccordion.astro";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+
+// Fetch all moves
+const allMoves = await getSinglePage("moves");
+
+// Hardcoded: Use Coca-Cola as the main move for this example
+const move = allMoves.find((m) => m.id === "coca-cola");
+if (!move) throw new Error("Coca-Cola move not found");
+
+// Hardcoded: Fetch multiple moves as example variations (8 moves to demonstrate overflow handling)
+const exampleVariations = allMoves.slice(0, 8);
+
+const { Content } = await render(move);
+const {
+  title,
+  type,
+  level,
+  difficulty,
+  leader_difficulty,
+  follower_difficulty,
+  aliases,
+} = move.data;
+---
+
+<ContentLayout
+  title={title}
+  type={type}
+  level={level}
+  videoIds={[]}
+  breadcrumbs={[
+    { label: "Home", href: "/" },
+    { label: "Moves", href: "/moves" },
+    { label: "Example with Variations" },
+  ]}
+  sidebarProps={{}}
+  variations={exampleVariations}
+  variationsBasePath="/moves"
+>
+  <div slot="header-bottom" class="flex flex-row items-start gap-4 mt-2">
+    <DifficultyAccordion
+      leaderDifficulty={leader_difficulty}
+      followerDifficulty={follower_difficulty}
+      overallDifficulty={difficulty}
+    />
+    {
+      aliases && aliases.length > 0 && (
+        <div class="flex flex-col gap-1 p-2">
+          <span class="text-gray-500 text-xs uppercase tracking-wider font-medium">
+            Also known as
+          </span>
+          <div class="flex flex-wrap gap-1.5">
+            {aliases.map((alias) => (
+              <span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm">
+                {alias}
+              </span>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+
+  <Content />
+</ContentLayout>
