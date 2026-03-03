@@ -93,13 +93,6 @@ export const normalizeRelationItems = (items: any[]): string[] => {
   return result;
 };
 
-export interface ImportOptions {
-  movesOut?: string;
-  conceptsOut?: string;
-  obsidianData?: string;
-  force?: boolean;
-}
-
 const validateImportExportFolders = async ({
   PATHS,
   CONTENT_FOLDERS,
@@ -157,10 +150,7 @@ const getContentTitleInfoMap = async (
   return map;
 };
 
-export const importData: TaskFunction<[ImportOptions], void> = async (
-  options,
-  config,
-) => {
+export const importData: TaskFunction = async (config) => {
   const logger = config.logger;
   await validateImportExportFolders(config);
 
@@ -357,26 +347,9 @@ export const importData: TaskFunction<[ImportOptions], void> = async (
 // Run main only if executed directly
 import { fileURLToPath } from "node:url";
 import type { BuildConfig, TaskFunction } from "scripts/types.js";
-import { DefaultConfig } from "scripts/utils/config.js";
+import { getConfigFromCli } from "scripts/utils/cli-config.js";
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const args = process.argv.slice(2);
-  const getArg = (name: string): string | undefined => {
-    const index = args.indexOf(name);
-    if (index !== -1 && index + 1 < args.length) return args[index + 1];
-    return undefined;
-  };
-
-  const movesOut = getArg("--moves-out");
-  const conceptsOut = getArg("--concepts-out");
-  const obsidianData = getArg("--obsidian-data") || "obsidian-data";
-  const force = args.includes("--force");
-
-  if (!movesOut || !conceptsOut) {
-    console.error(
-      "Usage: npx tsx scripts/import-obsidian.ts --moves-out <path> --concepts-out <path> [--obsidian-data <path>]",
-    );
-    process.exit(1);
-  }
-
-  importData({ movesOut, conceptsOut, obsidianData, force }, DefaultConfig);
+  const { config } = getConfigFromCli();
+  importData(config);
 }

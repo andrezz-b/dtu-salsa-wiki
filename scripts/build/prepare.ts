@@ -35,12 +35,7 @@ async function main() {
     const hasChangesResult = hasChanges(config.CONTENT_FOLDERS);
     log.step(2, 3, "Importing Content");
     if (hasChangesResult || force) {
-      await importData(
-        {
-          force: force,
-        },
-        config,
-      );
+      await importData(config);
       updateCacheWithCurrentCommit(config.PATHS.OBSIDIAN_DATA);
     } else {
       logger.skip("No changes detected in content folders. Skipping import.");

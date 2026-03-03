@@ -12,6 +12,7 @@ related_concepts:
 ---
 ## ✍️ Description
 - Right hand to right hand, arm wrestling like hold
+  - Thumbs should not closed
 - This hold usually occurs in the [Dile Que No Position](/concepts/dile-que-no-position)
 - Technically a [Crossed Hands](/concepts/crossed-hands) (with 1 hand), but we can ask for the other one
 ## 🎥 Media

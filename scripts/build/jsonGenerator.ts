@@ -142,11 +142,9 @@ export const generateJson: TaskFunction<[boolean], void> = (
 
 import { fileURLToPath } from "node:url";
 import type { TaskFunction } from "scripts/types.js";
-import { DefaultConfig } from "scripts/utils/config.js";
+import { getConfigFromCli } from "scripts/utils/cli-config.js";
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const args = process.argv.slice(2);
-  const force = args.includes("--force");
-  const config = DefaultConfig;
-  // TODO: Figure out how to pass cli config which overrides
+  const { config, force } = getConfigFromCli();
   generateJson(force, config);
 }
