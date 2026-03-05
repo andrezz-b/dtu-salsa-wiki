@@ -127,6 +127,7 @@ const hasHiddenVariations = hiddenVariations.length > 0;
                         {hasHiddenVariations && (
                           <>
                             <div
+                              id="variations-hidden"
                               class="variations-hidden hidden flex-wrap gap-2"
                               style="display: none;"
                             >
@@ -147,7 +148,11 @@ const hasHiddenVariations = hiddenVariations.length > 0;
                                 </a>
                               ))}
                             </div>
-                            <button class="show-more-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                            <button
+                              class="show-more-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                              aria-expanded="false"
+                              aria-controls="variations-hidden"
+                            >
                               <span>Show {hiddenVariations.length} more</span>
                               <svg
                                 class="w-4 h-4 transition-transform"
@@ -242,10 +247,12 @@ const hasHiddenVariations = hiddenVariations.length > 0;
         const isHidden = hiddenVariations.style.display === "none";
         if (isHidden) {
           hiddenVariations.style.display = "flex";
+          showMoreBtn.setAttribute("aria-expanded", "true");
           showMoreBtn.querySelector("span")!.textContent = "Show less";
           showMoreBtn.querySelector("svg")?.classList.add("rotate-180");
         } else {
           hiddenVariations.style.display = "none";
+          showMoreBtn.setAttribute("aria-expanded", "false");
           const count = hiddenVariations.children.length;
           showMoreBtn.querySelector("span")!.textContent = `Show ${count} more`;
           showMoreBtn.querySelector("svg")?.classList.remove("rotate-180");

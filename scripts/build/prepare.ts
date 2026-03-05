@@ -46,7 +46,7 @@ async function main() {
     generateJson(force, config);
 
     const duration = ((performance.now() - startTime) / 1000).toFixed(2);
-    console.log(`\n✅ Build preparation complete in ${duration}s!`);
+    log.info(`\n✅ Build preparation complete in ${duration}s!`);
   } catch (error) {
     log.error("Build preparation failed:");
     console.error(error);

@@ -140,13 +140,13 @@ const getContentTitleInfoMap = async (
       const basePath = file.isDirectory()
         ? path.join(folder, file.name)
         : folder;
-      const variaitons = [];
+      const variations = [];
       for (const nestedFile of nestedFiles) {
         if (!nestedFile.endsWith(".md")) continue;
         const filePath = path.join(basePath, nestedFile);
         const originalTitle = path.basename(nestedFile, ".md");
         const slug = generateSlug(originalTitle);
-        variaitons.push({ originalTitle, slug });
+        variations.push({ originalTitle, slug });
         map.set(originalTitle, {
           originalTitle,
           slug,
@@ -155,9 +155,9 @@ const getContentTitleInfoMap = async (
           variations: [],
         });
       }
-      for (const [index, variation] of variaitons.entries()) {
+      for (const [index, variation] of variations.entries()) {
         let item = map.get(variation.originalTitle);
-        item!.variations = variaitons.toSpliced(index, 1).map((i) => i.slug);
+        item!.variations = variations.toSpliced(index, 1).map((i) => i.slug);
       }
     }
   }

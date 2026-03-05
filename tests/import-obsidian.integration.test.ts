@@ -434,7 +434,7 @@ describe("Import Obsidian Integration", () => {
     assert.strictEqual(output.frontmatter.aliases, undefined);
     assert.strictEqual(output.frontmatter.related_moves, undefined);
   });
-  it.only("should add variations if moves are in the same folder", async () => {
+  it("should add variations if moves are in the same folder", async () => {
     const variationFolder = path.join(movesSourcePath, "Coca-Cola");
     await fsp.mkdir(variationFolder, { recursive: true });
     createMockFile(variationFolder, "Coca-Cola.md", {}, "Awesome move.");
@@ -444,7 +444,6 @@ describe("Import Obsidian Integration", () => {
     await importData(testConfig);
 
     const cocaCola = readOutputFile(path.join(movesOutPath, "coca-cola.md"));
-    console.log(await fsp.readdir(movesOutPath));
     assert.ok(cocaCola.frontmatter.variations.includes("coca-cola-two-hands"));
     assert.ok(cocaCola.frontmatter.variations.includes("enchufla"));
     const enchufla = readOutputFile(path.join(movesOutPath, "enchufla.md"));
