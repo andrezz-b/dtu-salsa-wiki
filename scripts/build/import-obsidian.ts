@@ -130,7 +130,6 @@ const getContentTitleInfoMap = async (
   const map = new Map<string, FileInfo>();
 
   for (const { folder, contentType } of contentConfigs) {
-    // TODO: Support variations, use withFileTypes
     const files = await fsp.readdir(folder, {
       withFileTypes: true,
     });
