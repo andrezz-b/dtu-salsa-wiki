@@ -1,4 +1,4 @@
-import movesData from ".json/moves.json";
+import movesData from "@json/moves.json";
 import BrowsePage, {
   relevanceSort,
   type FilterDefinition,
@@ -95,6 +95,34 @@ const sortOptions: SortOption<MoveItem>[] = [
     label: "Hardest First",
     sortFn: (a: MoveItem, b: MoveItem) =>
       (b.frontmatter.difficulty || 0) - (a.frontmatter.difficulty || 0),
+  },
+  {
+    id: "created-asc",
+    label: "Oldest First",
+    sortFn: (a: MoveItem, b: MoveItem) =>
+      new Date(a.frontmatter.created_date).getTime() -
+      new Date(b.frontmatter.created_date).getTime(),
+  },
+  {
+    id: "created-desc",
+    label: "Newest First",
+    sortFn: (a: MoveItem, b: MoveItem) =>
+      new Date(b.frontmatter.created_date).getTime() -
+      new Date(a.frontmatter.created_date).getTime(),
+  },
+  {
+    id: "updated-asc",
+    label: "Least Recently Updated",
+    sortFn: (a: MoveItem, b: MoveItem) =>
+      new Date(a.frontmatter.updated_date).getTime() -
+      new Date(b.frontmatter.updated_date).getTime(),
+  },
+  {
+    id: "updated-desc",
+    label: "Most Recently Updated",
+    sortFn: (a: MoveItem, b: MoveItem) =>
+      new Date(b.frontmatter.updated_date).getTime() -
+      new Date(a.frontmatter.updated_date).getTime(),
   },
 ];
 

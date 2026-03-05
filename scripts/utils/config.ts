@@ -1,4 +1,4 @@
-import type { BuildConfig } from "scripts/types";
+import type { BuildConfig } from "@scripts/types";
 import { CONTENT_FOLDERS, GIT, PATHS } from "./constants";
 import { log } from "./logger";
 
