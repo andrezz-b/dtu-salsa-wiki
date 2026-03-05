@@ -1,8 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "es6",
+    "target": "es2024",
     "allowJs": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,6 +11,7 @@
     "incremental": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
+      "@scripts/*": ["./scripts/*"],
       "@/components/*": ["./src/components/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/types/*": ["./src/types/*"],

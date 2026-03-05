@@ -14,7 +14,7 @@ import { syncData } from "./sync-data.js";
 import { importData } from "./import-obsidian.js";
 import { generateJson } from "./jsonGenerator.js";
 import { log } from "../utils/logger.js";
-import { DefaultConfig } from "scripts/utils/config.js";
+import { DefaultConfig } from "@scripts/utils/config.js";
 import { hasChanges, updateCacheWithCurrentCommit } from "./check-changes.js";
 
 async function main() {

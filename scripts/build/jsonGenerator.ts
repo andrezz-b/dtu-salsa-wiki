@@ -141,8 +141,8 @@ export const generateJson: TaskFunction<[boolean], void> = (
 };
 
 import { fileURLToPath } from "node:url";
-import type { TaskFunction } from "scripts/types.js";
-import { getConfigFromCli } from "scripts/utils/cli-config.js";
+import type { TaskFunction } from "@scripts/types.js";
+import { getConfigFromCli } from "@scripts/utils/cli-config.js";
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const { config, force } = getConfigFromCli();

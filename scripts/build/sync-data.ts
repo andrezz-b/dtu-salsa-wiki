@@ -100,8 +100,8 @@ export const syncData: TaskFunction = async (config) => {
 };
 
 import { fileURLToPath } from "node:url";
-import type { BuildConfig, TaskFunction } from "scripts/types.js";
-import { getConfigFromCli } from "scripts/utils/cli-config.js";
+import type { BuildConfig, TaskFunction } from "@scripts/types.js";
+import { getConfigFromCli } from "@scripts/utils/cli-config.js";
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const { config } = getConfigFromCli();

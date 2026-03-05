@@ -1,6 +1,4 @@
-import { updateCache } from "./check-changes.js";
 import fs from "node:fs";
-import { execSync } from "node:child_process";
 import path from "node:path";
 import matter from "gray-matter";
 import Slugger from "github-slugger";
@@ -30,6 +28,7 @@ export interface FileInfo {
   slug: string;
   type: ContentType;
   path: string;
+  variations: string[];
 }
 
 // Helpers
@@ -132,18 +131,35 @@ const getContentTitleInfoMap = async (
 
   for (const { folder, contentType } of contentConfigs) {
     // TODO: Support variations, use withFileTypes
-    const files = await fsp.readdir(folder);
+    const files = await fsp.readdir(folder, {
+      withFileTypes: true,
+    });
     for (const file of files) {
-      if (!file.endsWith(".md")) continue;
-      const filePath = path.join(folder, file);
-      const originalTitle = path.basename(file, ".md");
-      const slug = generateSlug(originalTitle);
-      map.set(originalTitle, {
-        originalTitle,
-        slug,
-        type: contentType,
-        path: filePath,
-      });
+      const nestedFiles = file.isDirectory()
+        ? await fsp.readdir(path.join(folder, file.name))
+        : [file.name];
+      const basePath = file.isDirectory()
+        ? path.join(folder, file.name)
+        : folder;
+      const variaitons = [];
+      for (const nestedFile of nestedFiles) {
+        if (!nestedFile.endsWith(".md")) continue;
+        const filePath = path.join(basePath, nestedFile);
+        const originalTitle = path.basename(nestedFile, ".md");
+        const slug = generateSlug(originalTitle);
+        variaitons.push({ originalTitle, slug });
+        map.set(originalTitle, {
+          originalTitle,
+          slug,
+          type: contentType,
+          path: filePath,
+          variations: [],
+        });
+      }
+      for (const [index, variation] of variaitons.entries()) {
+        let item = map.get(variation.originalTitle);
+        item!.variations = variaitons.toSpliced(index, 1).map((i) => i.slug);
+      }
     }
   }
 
@@ -181,6 +197,7 @@ export const importData: TaskFunction = async (config) => {
     // Transform Frontmatter
     const newFrontmatter: any = {
       title: title,
+      variations: info.variations,
       ...data,
     };
 
@@ -346,8 +363,8 @@ export const importData: TaskFunction = async (config) => {
 
 // Run main only if executed directly
 import { fileURLToPath } from "node:url";
-import type { BuildConfig, TaskFunction } from "scripts/types.js";
-import { getConfigFromCli } from "scripts/utils/cli-config.js";
+import type { BuildConfig, TaskFunction } from "@scripts/types.js";
+import { getConfigFromCli } from "@scripts/utils/cli-config.js";
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const { config } = getConfigFromCli();

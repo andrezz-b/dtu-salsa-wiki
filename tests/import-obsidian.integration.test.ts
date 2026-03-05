@@ -1,6 +1,7 @@
 import { describe, it, before, after, beforeEach } from "node:test";
 import assert from "node:assert";
 import fs from "node:fs";
+import fsp from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 import matter from "gray-matter";
@@ -432,5 +433,28 @@ describe("Import Obsidian Integration", () => {
     assert.strictEqual(output.frontmatter.tags, undefined);
     assert.strictEqual(output.frontmatter.aliases, undefined);
     assert.strictEqual(output.frontmatter.related_moves, undefined);
+  });
+  it.only("should add variations if moves are in the same folder", async () => {
+    const variationFolder = path.join(movesSourcePath, "Coca-Cola");
+    await fsp.mkdir(variationFolder, { recursive: true });
+    createMockFile(variationFolder, "Coca-Cola.md", {}, "Awesome move.");
+    createMockFile(variationFolder, "Coca-Cola Two Hands.md", {}, "Base move.");
+    createMockFile(variationFolder, "Enchufla.md", {}, "Base move content.");
+
+    await importData(testConfig);
+
+    const cocaCola = readOutputFile(path.join(movesOutPath, "coca-cola.md"));
+    console.log(await fsp.readdir(movesOutPath));
+    assert.ok(cocaCola.frontmatter.variations.includes("coca-cola-two-hands"));
+    assert.ok(cocaCola.frontmatter.variations.includes("enchufla"));
+    const enchufla = readOutputFile(path.join(movesOutPath, "enchufla.md"));
+    assert.ok(enchufla.frontmatter.variations.includes("coca-cola"));
+    assert.ok(enchufla.frontmatter.variations.includes("coca-cola-two-hands"));
+
+    const cocaColaTwoHands = readOutputFile(
+      path.join(movesOutPath, "coca-cola-two-hands.md"),
+    );
+    assert.ok(cocaColaTwoHands.frontmatter.variations.includes("coca-cola"));
+    assert.ok(cocaColaTwoHands.frontmatter.variations.includes("enchufla"));
   });
 });
