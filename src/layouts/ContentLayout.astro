@@ -7,6 +7,7 @@ import { YouTube } from "@astro-community/astro-embed-youtube";
 import { FaLink } from "react-icons/fa";
 import type { ComponentProps } from "astro/types";
 import type { BreadcrumbPart } from "@/components/ui/Breadcrumbs";
+import type { CollectionEntry } from "astro:content";
 
 interface Props {
   title: string;
@@ -15,6 +16,8 @@ interface Props {
   videoIds?: string[];
   breadcrumbs: BreadcrumbPart[];
   sidebarProps: ComponentProps<typeof ExplorerSidebar>;
+  variations?: CollectionEntry<"moves">[] | CollectionEntry<"concepts">[];
+  variationsBasePath?: string;
 }
 
 const {
@@ -24,8 +27,37 @@ const {
   videoIds = [],
   breadcrumbs,
   sidebarProps,
+  variations = [],
+  variationsBasePath = "/moves",
 } = Astro.props;
 const pageUrl = Astro.url.href;
+
+// Smart limit based on estimated space usage (characters)
+// Assume ~50-60 characters worth of content fits comfortably before needing "more"
+const estimateVariationWidth = (variation: any) => {
+  const titleLength = variation.data.title.length;
+  const levelBadgeWidth = variation.data.level ? 10 : 0; // Estimate for level dot + spacing
+  const paddingAndSpacing = 8; // px-3, gap-2, etc.
+  return titleLength + levelBadgeWidth + paddingAndSpacing;
+};
+
+let totalWidth = 0;
+let visibleCount = 0;
+const MAX_WIDTH = 200; // Characters worth of content
+
+for (const variation of variations) {
+  const width = estimateVariationWidth(variation);
+  if (totalWidth + width <= MAX_WIDTH || visibleCount === 0) {
+    totalWidth += width;
+    visibleCount++;
+  } else {
+    break;
+  }
+}
+
+const visibleVariations = variations.slice(0, visibleCount);
+const hiddenVariations = variations.slice(visibleCount);
+const hasHiddenVariations = hiddenVariations.length > 0;
 ---
 
 <Base title={title}>
@@ -66,6 +98,83 @@ const pageUrl = Astro.url.href;
                   />
                 </button>
               </h1>
+
+              {/* Variations Section */}
+              {
+                variations.length > 0 && (
+                  <div class="mt-4">
+                    <div class="flex flex-col gap-2">
+                      <span class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-medium">
+                        Variations
+                      </span>
+                      <div class="flex flex-wrap gap-2">
+                        {visibleVariations.map((variation) => (
+                          <a
+                            href={`${variationsBasePath}/${variation.id}`}
+                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                          >
+                            {variation.data.level && (
+                              <LevelBadge
+                                level={variation.data.level}
+                                variant="dot"
+                                size="sm"
+                                client:load
+                              />
+                            )}
+                            <span>{variation.data.title}</span>
+                          </a>
+                        ))}
+                        {hasHiddenVariations && (
+                          <>
+                            <div
+                              id="variations-hidden"
+                              class="variations-hidden hidden flex-wrap gap-2"
+                              style="display: none;"
+                            >
+                              {hiddenVariations.map((variation) => (
+                                <a
+                                  href={`${variationsBasePath}/${variation.id}`}
+                                  class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                                >
+                                  {variation.data.level && (
+                                    <LevelBadge
+                                      level={variation.data.level}
+                                      variant="dot"
+                                      size="sm"
+                                      client:load
+                                    />
+                                  )}
+                                  <span>{variation.data.title}</span>
+                                </a>
+                              ))}
+                            </div>
+                            <button
+                              class="show-more-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                              aria-expanded="false"
+                              aria-controls="variations-hidden"
+                            >
+                              <span>Show {hiddenVariations.length} more</span>
+                              <svg
+                                class="w-4 h-4 transition-transform"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M19 9l-7 7-7-7"
+                                />
+                              </svg>
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
 
               {/* Optional Header Content (e.g. Difficulty, Aliases) */}
               <slot name="header-bottom" />
@@ -125,6 +234,28 @@ const pageUrl = Astro.url.href;
           }, 1000);
         } catch (err) {
           console.error("Failed to copy link:", err);
+        }
+      });
+    }
+
+    // Variations: Inline Expand Button
+    const showMoreBtn = document.querySelector(".show-more-btn");
+    const hiddenVariations =
+      document.querySelector<HTMLElement>(".variations-hidden");
+    if (showMoreBtn && hiddenVariations) {
+      showMoreBtn.addEventListener("click", () => {
+        const isHidden = hiddenVariations.style.display === "none";
+        if (isHidden) {
+          hiddenVariations.style.display = "flex";
+          showMoreBtn.setAttribute("aria-expanded", "true");
+          showMoreBtn.querySelector("span")!.textContent = "Show less";
+          showMoreBtn.querySelector("svg")?.classList.add("rotate-180");
+        } else {
+          hiddenVariations.style.display = "none";
+          showMoreBtn.setAttribute("aria-expanded", "false");
+          const count = hiddenVariations.children.length;
+          showMoreBtn.querySelector("span")!.textContent = `Show ${count} more`;
+          showMoreBtn.querySelector("svg")?.classList.remove("rotate-180");
         }
       });
     }

@@ -12,10 +12,9 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { PATHS, GIT } from "../utils/constants.js";
-import { log, sleep } from "../utils/logger.js";
+import { sleep } from "../utils/logger.js";
 
-function getRepoUrl(): string {
+function getRepoUrl({ GIT }: BuildConfig): string {
   const token = process.env[GIT.TOKEN_ENV_VAR];
   if (token) {
     // Use HTTPS with token for CI
@@ -26,7 +25,6 @@ function getRepoUrl(): string {
 }
 
 function run(cmd: string, cwd?: string): void {
-  log.cmd(cmd);
   execSync(cmd, { cwd, stdio: "inherit" });
 }
 
@@ -45,7 +43,6 @@ async function runWithRetry(
     } catch (e) {
       if (attempt === maxRetries) throw e;
       const delay = 1000 * Math.pow(2, attempt - 1);
-      log.warn(`Attempt ${attempt} failed, retrying in ${delay}ms...`);
       await sleep(delay);
     }
   }
@@ -72,34 +69,41 @@ function rmWithRetry(dir: string, retries = 3): void {
   }
 }
 
-export async function syncData(): Promise<void> {
-  const dataPath = path.resolve(process.cwd(), PATHS.OBSIDIAN_DATA);
-  const repoUrl = getRepoUrl();
+export const syncData: TaskFunction = async (config) => {
+  const logger = config.logger;
+  const dataPath = path.resolve(process.cwd(), config.PATHS.OBSIDIAN_DATA);
+  const repoUrl = getRepoUrl(config);
 
   if (fs.existsSync(dataPath)) {
     // Directory exists - pull latest
-    log.info(`Updating ${PATHS.OBSIDIAN_DATA}...`);
+    logger.info(`Updating ${config.PATHS.OBSIDIAN_DATA}...`);
     try {
       await runWithRetry("git fetch --depth 1 origin main", dataPath);
       run("git reset --hard origin/main", dataPath);
       run("git clean -fd", dataPath); // Remove untracked files
     } catch (e) {
-      log.warn("Pull failed, re-cloning...");
+      logger.warn("Pull failed, re-cloning...");
       rmWithRetry(dataPath);
       await runWithRetry(
-        `git clone --depth 1 ${repoUrl} ${PATHS.OBSIDIAN_DATA}`,
+        `git clone --depth 1 ${repoUrl} ${config.PATHS.OBSIDIAN_DATA}`,
       );
     }
   } else {
     // Directory doesn't exist - clone
-    log.info(`Cloning ${PATHS.OBSIDIAN_DATA}...`);
-    await runWithRetry(`git clone --depth 1 ${repoUrl} ${PATHS.OBSIDIAN_DATA}`);
+    logger.info(`Cloning ${config.PATHS.OBSIDIAN_DATA}...`);
+    await runWithRetry(
+      `git clone --depth 1 ${repoUrl} ${config.PATHS.OBSIDIAN_DATA}`,
+    );
   }
 
-  log.success("Data sync complete.");
-}
+  logger.success("Data sync complete.");
+};
 
 import { fileURLToPath } from "node:url";
+import type { BuildConfig, TaskFunction } from "@scripts/types.js";
+import { getConfigFromCli } from "@scripts/utils/cli-config.js";
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  syncData();
+  const { config } = getConfigFromCli();
+  syncData(config);
 }

@@ -18,8 +18,8 @@ export interface BaseFrontmatter {
   type?: string;
   level?: string;
   tags?: string[];
-  created_date?: string;
-  updated_date?: string;
+  created_date: string;
+  updated_date: string;
   related_moves?: string[];
   related_concepts?: string[];
 }
@@ -35,6 +35,7 @@ export interface MoveFrontmatter extends BaseFrontmatter {
   exit_moves?: string[];
   aliases?: string[];
   video_urls?: string[];
+  variations?: string[];
 }
 
 /**

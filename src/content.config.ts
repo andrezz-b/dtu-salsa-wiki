@@ -16,9 +16,10 @@ const movesCollection = defineCollection({
     setup_moves: z.array(reference("moves")).optional(),
     exit_moves: z.array(reference("moves")).optional(),
     related_moves: z.array(reference("moves")).optional(),
+    variations: z.array(reference("moves")).optional(),
     tags: z.array(z.string()).default([]),
-    created_date: z.date().optional(),
-    updated_date: z.date().optional(),
+    created_date: z.date(),
+    updated_date: z.date(),
     draft: z.boolean().optional(),
   }),
 });
@@ -32,8 +33,8 @@ const conceptsCollection = defineCollection({
     video_urls: z.array(z.string().url()).optional(),
     related_concepts: z.array(reference("concepts")).optional(),
     related_moves: z.array(reference("moves")).optional(),
-    created_date: z.date().optional(),
-    updated_date: z.date().optional(),
+    created_date: z.date(),
+    updated_date: z.date(),
     draft: z.boolean().optional(),
   }),
 });

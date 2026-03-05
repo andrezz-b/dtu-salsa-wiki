@@ -51,12 +51,15 @@ function getCurrentCommit(cwd: string): string | null {
  * @param foldersCheck - Limit change detection to specific folders (e.g., ["Moves", "Concepts"])
  * @returns ChangeCheckResult with change status and metadata
  */
-export function checkChanges(foldersCheck: string[] = []): ChangeCheckResult {
-  const obsidianPath = path.resolve(process.cwd(), PATHS.OBSIDIAN_DATA);
+function checkChanges(
+  foldersCheck: string[] = [],
+  obsidianDir = PATHS.OBSIDIAN_DATA,
+): ChangeCheckResult {
+  const obsidianPath = path.resolve(process.cwd(), obsidianDir);
 
   // 1. Verify obsidian-data exists
   if (!fs.existsSync(obsidianPath)) {
-    log.warn(`${PATHS.OBSIDIAN_DATA} not found.`);
+    log.warn(`${obsidianDir} not found.`);
     return { hasChanges: true, currentCommit: "", shouldUpdateCache: false };
   }
 
@@ -134,6 +137,21 @@ export function checkChanges(foldersCheck: string[] = []): ChangeCheckResult {
 export function updateCache(commit: string): void {
   if (commit) {
     fs.writeFileSync(CACHE_FILE, commit);
+  }
+}
+
+export function updateCacheWithCurrentCommit(obsidianDir: string): void {
+  // Update cache with current commit
+  try {
+    const currentCommit = execSync("git rev-parse HEAD", {
+      cwd: obsidianDir,
+      encoding: "utf-8",
+    }).trim();
+    if (currentCommit) {
+      updateCache(currentCommit);
+    }
+  } catch (e) {
+    console.log(`Failed to update import cache file. ${e}`);
   }
 }
 

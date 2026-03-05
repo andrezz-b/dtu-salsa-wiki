@@ -29,3 +29,5 @@ pnpm-debug.log*
 
 # data repo (cloned at build time)
 obsidian-data/
+src/content/moves/
+src/content/concepts/
