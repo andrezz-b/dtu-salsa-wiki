@@ -1,0 +1,47 @@
+---
+import { extractVideoData } from "@/lib/utils/video";
+import { YouTube } from "@astro-community/astro-embed-youtube";
+
+interface Props {
+  videoUrls?: string[];
+}
+
+const { videoUrls = [] } = Astro.props;
+
+// Process all video URLs
+const videos = videoUrls
+  .map((url) => extractVideoData(url))
+  .filter((video) => video !== null);
+---
+
+{
+  videos.length > 0 && (
+    <div class="grid grid-cols-1 gap-6 mb-10">
+      {videos.map((video) =>
+        video.isShort ? (
+          // YouTube Short - 9:16 aspect ratio (portrait)
+          <div class="yt-short-wrapper rounded-lg overflow-hidden shadow-lg max-w-md w-full">
+            <YouTube id={video.id} params="rel=0" />
+          </div>
+        ) : (
+          // Regular YouTube video - default 16:9 aspect ratio
+          <div class="rounded-lg overflow-hidden shadow-lg">
+            <YouTube id={video.id} params="rel=0" />
+          </div>
+        ),
+      )}
+    </div>
+  )
+}
+
+<style is:global>
+  /* Override aspect ratio for YouTube Shorts */
+  .yt-short-wrapper lite-youtube {
+    aspect-ratio: 9 / 16 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .yt-short-wrapper lite-youtube::before {
+    padding-bottom: 0 !important;
+  }
+</style>

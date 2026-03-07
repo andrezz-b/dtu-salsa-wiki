@@ -13,7 +13,7 @@
     "clean": "rm -rf node_modules package-lock.json .astro .json dist",
     "generate-json": "npx tsx scripts/build/jsonGenerator.ts",
     "remove-darkmode": "node scripts/tools/removeDarkmode.js && npm run format",
-    "import-obsidian": "npx tsx scripts/build/import-obsidian.ts --moves-out src/content/moves --concepts-out src/content/concepts --obsidian-data obsidian-data",
+    "import-obsidian": "npx tsx scripts/build/import-obsidian.ts",
     "sync-data": "npx tsx scripts/build/sync-data.ts",
     "prepare-data": "npx tsx scripts/build/prepare.ts",
     "test": "npx tsx --test tests/*.test.ts"
