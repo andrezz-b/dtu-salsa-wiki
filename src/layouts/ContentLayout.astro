@@ -44,7 +44,7 @@ const estimateVariationWidth = (variation: any) => {
 let totalWidth = 0;
 let visibleCount = 0;
 const MAX_WIDTH = 200; // Characters worth of content
-console.log(videoUrls);
+
 for (const variation of variations) {
   const width = estimateVariationWidth(variation);
   if (totalWidth + width <= MAX_WIDTH || visibleCount === 0) {
