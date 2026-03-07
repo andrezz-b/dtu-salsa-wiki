@@ -1,7 +1,6 @@
 ---
 import { getSinglePage } from "@/lib/contentParser.astro";
 import { render, getEntries } from "astro:content";
-import { getYoutubeId } from "@/lib/utils/video";
 import ContentLayout from "@/layouts/ContentLayout.astro";
 
 export async function getStaticPaths() {
@@ -44,10 +43,6 @@ const {
   variations,
 } = concept.data;
 
-const videoIds = video_urls
-  ? video_urls.map((url) => getYoutubeId(url)).filter((id) => id !== null)
-  : [];
-
 const resolvedRelatedMoves = related_moves
   ? await getEntries(related_moves)
   : [];
@@ -61,7 +56,7 @@ const resolvedVariations = variations ? await getEntries(variations) : [];
   title={title}
   type={type}
   level={level}
-  videoIds={videoIds}
+  videoUrls={video_urls}
   breadcrumbs={[
     { label: "Home", href: "/" },
     { label: "Concepts", href: "/concepts" },

@@ -3,7 +3,7 @@ import Base from "@/layouts/Base.astro";
 import ExplorerSidebar from "@/layouts/helpers/ExplorerSidebar.astro";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import LevelBadge from "@/components/ui/LevelBadge";
-import { YouTube } from "@astro-community/astro-embed-youtube";
+import VideoGallery from "@/components/VideoGallery.astro";
 import { FaLink } from "react-icons/fa";
 import type { ComponentProps } from "astro/types";
 import type { BreadcrumbPart } from "@/components/ui/Breadcrumbs";
@@ -13,7 +13,7 @@ interface Props {
   title: string;
   type: string;
   level?: string;
-  videoIds?: string[];
+  videoUrls?: string[];
   breadcrumbs: BreadcrumbPart[];
   sidebarProps: ComponentProps<typeof ExplorerSidebar>;
   variations?: CollectionEntry<"moves">[] | CollectionEntry<"concepts">[];
@@ -24,7 +24,7 @@ const {
   title,
   type,
   level,
-  videoIds = [],
+  videoUrls = [],
   breadcrumbs,
   sidebarProps,
   variations = [],
@@ -44,7 +44,7 @@ const estimateVariationWidth = (variation: any) => {
 let totalWidth = 0;
 let visibleCount = 0;
 const MAX_WIDTH = 200; // Characters worth of content
-
+console.log(videoUrls);
 for (const variation of variations) {
   const width = estimateVariationWidth(variation);
   if (totalWidth + width <= MAX_WIDTH || visibleCount === 0) {
@@ -182,17 +182,7 @@ const hasHiddenVariations = hiddenVariations.length > 0;
           </div>
 
           {/* Videos */}
-          {
-            videoIds.length > 0 && (
-              <div class="grid grid-cols-1 gap-6 mb-10">
-                {videoIds.map((id) => (
-                  <div class="rounded-lg overflow-hidden shadow-lg">
-                    <YouTube id={id} params="rel=0" />
-                  </div>
-                ))}
-              </div>
-            )
-          }
+          <VideoGallery videoUrls={videoUrls} />
 
           {/* Content */}
           <div
