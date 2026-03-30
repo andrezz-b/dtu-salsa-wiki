@@ -60,48 +60,55 @@ const videos = videoUrls
 }
 
 <script>
-  // Tab functionality
-  const tabs = document.querySelectorAll(".video-tab");
-  const slides = document.querySelectorAll(".video-slide");
+  initializeVideoTabs();
+  document.addEventListener("astro:page-load", () => {
+    initializeVideoTabs();
+  });
 
-  // Function to pause any playing YouTube video
-  function pauseCurrentVideo() {
-    slides.forEach((slide) => {
-      const iframe = slide.querySelector("iframe");
-      if (iframe && iframe.contentWindow) {
-        // Send pause command to YouTube iframe
-        iframe.contentWindow.postMessage(
-          '{"event":"command","func":"pauseVideo","args":""}',
-          "*",
-        );
-      }
-    });
-  }
+  function initializeVideoTabs() {
+    // Tab functionality
+    const tabs = document.querySelectorAll(".video-tab");
+    const slides = document.querySelectorAll(".video-slide");
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const index = parseInt(tab.getAttribute("data-tab-index") || "0");
-
-      // Pause currently playing video before switching
-      pauseCurrentVideo();
-
-      // Update tabs
-      tabs.forEach((t, i) => {
-        if (i === index) {
-          t.classList.remove("video-tab-inactive");
-          t.classList.add("video-tab-active");
-        } else {
-          t.classList.remove("video-tab-active");
-          t.classList.add("video-tab-inactive");
+    // Function to pause any playing YouTube video
+    function pauseCurrentVideo() {
+      slides.forEach((slide) => {
+        const iframe = slide.querySelector("iframe");
+        if (iframe && iframe.contentWindow) {
+          // Send pause command to YouTube iframe
+          iframe.contentWindow.postMessage(
+            '{"event":"command","func":"pauseVideo","args":""}',
+            "https://www.youtube-nocookie.com",
+          );
         }
       });
+    }
 
-      // Update slides
-      slides.forEach((slide, i) => {
-        slide.classList.toggle("hidden", i !== index);
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const index = parseInt(tab.getAttribute("data-tab-index") || "0");
+
+        // Pause currently playing video before switching
+        pauseCurrentVideo();
+
+        // Update tabs
+        tabs.forEach((t, i) => {
+          if (i === index) {
+            t.classList.remove("video-tab-inactive");
+            t.classList.add("video-tab-active");
+          } else {
+            t.classList.remove("video-tab-active");
+            t.classList.add("video-tab-inactive");
+          }
+        });
+
+        // Update slides
+        slides.forEach((slide, i) => {
+          slide.classList.toggle("hidden", i !== index);
+        });
       });
     });
-  });
+  }
 </script>
 
 <style is:global>
