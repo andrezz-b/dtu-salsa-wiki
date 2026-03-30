@@ -23,10 +23,13 @@ const videos = videoUrls
         {videos.map((video, index) => (
           <div
             data-video-index={index}
-            class={`video-slide ${index === 0 ? "" : "hidden"} ${video.isShort ? "yt-short-wrapper flex justify-center" : ""}`}
+            class={`video-slide ${index === 0 ? "" : "hidden"}`}
           >
             {video.isShort ? (
-              <div class="max-w-md w-full" id={`video-container-${index}`}>
+              <div
+                class="max-w-md w-full yt-short-wrapper"
+                id={`video-container-${index}`}
+              >
                 <YouTube id={video.id} params="rel=0&enablejsapi=1" />
               </div>
             ) : (
@@ -48,11 +51,6 @@ const videos = videoUrls
             >
               {index === 0 && <FaStar />}
               Video {index + 1}
-              {video.isShort && (
-                <span class="text-xs px-1.5 py-0.5 rounded bg-accent/20 dark:bg-darkmode-accent/20">
-                  Short
-                </span>
-              )}
             </button>
           ))}
         </div>
@@ -74,7 +72,7 @@ const videos = videoUrls
         // Send pause command to YouTube iframe
         iframe.contentWindow.postMessage(
           '{"event":"command","func":"pauseVideo","args":""}',
-          "*"
+          "*",
         );
       }
     });
