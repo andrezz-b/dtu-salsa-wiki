@@ -146,6 +146,19 @@
   @apply absolute right-3 top-3 h-8 w-8 rounded-full bg-light text-center leading-8 text-text-dark dark:bg-darkmode-light dark:text-darkmode-text-dark;
 }
 
+/* video gallery tabs */
+.video-tab {
+  @apply flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 font-medium text-sm transition-all duration-300 whitespace-nowrap;
+}
+
+.video-tab-active {
+  @apply border-accent dark:border-darkmode-accent bg-accent/10 dark:bg-darkmode-accent/10 text-accent dark:text-darkmode-accent;
+}
+
+.video-tab-inactive {
+  @apply border-border dark:border-darkmode-border bg-white dark:bg-darkmode-body text-text dark:text-darkmode-text hover:border-accent/50 dark:hover:border-darkmode-accent/50;
+}
+
 /* content style */
 .content {
   @apply prose max-w-none;
