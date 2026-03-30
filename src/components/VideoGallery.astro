@@ -1,6 +1,7 @@
 ---
 import { extractVideoData } from "@/lib/utils/video";
 import { YouTube } from "@astro-community/astro-embed-youtube";
+import { FaStar } from "react-icons/fa";
 
 interface Props {
   videoUrls?: string[];
@@ -16,23 +17,99 @@ const videos = videoUrls
 
 {
   videos.length > 0 && (
-    <div class="grid grid-cols-1 gap-6 mb-10">
-      {videos.map((video) =>
-        video.isShort ? (
-          // YouTube Short - 9:16 aspect ratio (portrait)
-          <div class="yt-short-wrapper rounded-lg overflow-hidden shadow-lg max-w-md w-full">
-            <YouTube id={video.id} params="rel=0" />
+    <div class="mb-10">
+      {/* Video Display Area */}
+      <div class="rounded-lg ">
+        {videos.map((video, index) => (
+          <div
+            data-video-index={index}
+            class={`video-slide ${index === 0 ? "" : "hidden"}`}
+          >
+            {video.isShort ? (
+              <div
+                class="max-w-md w-full yt-short-wrapper"
+                id={`video-container-${index}`}
+              >
+                <YouTube id={video.id} params="rel=0&enablejsapi=1" />
+              </div>
+            ) : (
+              <div id={`video-container-${index}`}>
+                <YouTube id={video.id} params="rel=0&enablejsapi=1" />
+              </div>
+            )}
           </div>
-        ) : (
-          // Regular YouTube video - default 16:9 aspect ratio
-          <div class="rounded-lg overflow-hidden shadow-lg">
-            <YouTube id={video.id} params="rel=0" />
-          </div>
-        ),
+        ))}
+      </div>
+
+      {/* Tabs - Only show if multiple videos */}
+      {videos.length > 1 && (
+        <div class="flex items-center gap-2 mt-4 overflow-x-auto pb-2">
+          {videos.map((video, index) => (
+            <button
+              data-tab-index={index}
+              class={`video-tab ${index === 0 ? "video-tab-active" : "video-tab-inactive"}`}
+            >
+              {index === 0 && <FaStar />}
+              Video {index + 1}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   )
 }
+
+<script>
+  initializeVideoTabs();
+  document.addEventListener("astro:page-load", () => {
+    initializeVideoTabs();
+  });
+
+  function initializeVideoTabs() {
+    // Tab functionality
+    const tabs = document.querySelectorAll(".video-tab");
+    const slides = document.querySelectorAll(".video-slide");
+
+    // Function to pause any playing YouTube video
+    function pauseCurrentVideo() {
+      slides.forEach((slide) => {
+        const iframe = slide.querySelector("iframe");
+        if (iframe && iframe.contentWindow) {
+          // Send pause command to YouTube iframe
+          iframe.contentWindow.postMessage(
+            '{"event":"command","func":"pauseVideo","args":""}',
+            "https://www.youtube-nocookie.com",
+          );
+        }
+      });
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const index = parseInt(tab.getAttribute("data-tab-index") || "0");
+
+        // Pause currently playing video before switching
+        pauseCurrentVideo();
+
+        // Update tabs
+        tabs.forEach((t, i) => {
+          if (i === index) {
+            t.classList.remove("video-tab-inactive");
+            t.classList.add("video-tab-active");
+          } else {
+            t.classList.remove("video-tab-active");
+            t.classList.add("video-tab-inactive");
+          }
+        });
+
+        // Update slides
+        slides.forEach((slide, i) => {
+          slide.classList.toggle("hidden", i !== index);
+        });
+      });
+    });
+  }
+</script>
 
 <style is:global>
   /* Override aspect ratio for YouTube Shorts */
