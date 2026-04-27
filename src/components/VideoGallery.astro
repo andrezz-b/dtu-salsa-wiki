@@ -20,25 +20,32 @@ const videos = videoUrls
     <div class="mb-10">
       {/* Video Display Area */}
       <div class="rounded-lg ">
-        {videos.map((video, index) => (
-          <div
-            data-video-index={index}
-            class={`video-slide ${index === 0 ? "" : "hidden"}`}
-          >
-            {video.isShort ? (
-              <div
-                class="max-w-md w-full yt-short-wrapper"
-                id={`video-container-${index}`}
-              >
-                <YouTube id={video.id} params="rel=0&enablejsapi=1" />
-              </div>
-            ) : (
-              <div id={`video-container-${index}`}>
-                <YouTube id={video.id} params="rel=0&enablejsapi=1" />
-              </div>
-            )}
-          </div>
-        ))}
+        {videos.map((video, index) => {
+          const paramParts = ["rel=0", "enablejsapi=1"];
+          if (video.start !== undefined)
+            paramParts.push(`start=${video.start}`);
+          if (video.end !== undefined) paramParts.push(`end=${video.end}`);
+          const params = paramParts.join("&");
+          return (
+            <div
+              data-video-index={index}
+              class={`video-slide ${index === 0 ? "" : "hidden"}`}
+            >
+              {video.isShort ? (
+                <div
+                  class="max-w-md w-full yt-short-wrapper"
+                  id={`video-container-${index}`}
+                >
+                  <YouTube id={video.id} params={params} />
+                </div>
+              ) : (
+                <div id={`video-container-${index}`}>
+                  <YouTube id={video.id} params={params} />
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Tabs - Only show if multiple videos */}
